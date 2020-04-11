@@ -2,6 +2,7 @@ package com.d2w.dahada;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,5 +25,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button tohome = (Button)findViewById(R.id.tohomescreen);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent2);
+            }
+        });
+
+
     }
 }
