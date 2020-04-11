@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home_DaeGeun">
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="9dp"
+        app:layout_constraintBottom_toTopOf="@id/button_recipe"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:srcCompat="@drawable/_" />
+
+    <Button
+        android:id="@+id/button_recipe"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginBottom="300dp"
+        android:background="@drawable/recipe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button_diet"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"></Button>
+
+    <Button
+        android:id="@+id/button_diet"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="166dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginBottom="300dp"
+        android:background="@drawable/lunch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/button_recipe"
+        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+
+    <Button
+        android:id="@+id/button_shopping"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="276dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginBottom="300dp"
+        android:background="@drawable/supermarket"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/button_diet"
+        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+
+
+    <Button
+        android:id="@+id/button__LoginPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:text="돌아가기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textView_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:text="추천 레시피"
+        app:layout_constraintEnd_toEndOf="@+id/button_recipe"
+        app:layout_constraintTop_toBottomOf="@+id/button_recipe" />
+
+    <TextView
+        android:id="@+id/textView_diet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:text="식단 만들기"
+        app:layout_constraintEnd_toEndOf="@+id/button_diet"
+        app:layout_constraintTop_toBottomOf="@+id/button_diet" />
+
+    <TextView
+        android:id="@+id/textView_shopping"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:text="쇼핑하기"
+        app:layout_constraintEnd_toEndOf="@id/button_shopping"
+        app:layout_constraintTop_toBottomOf="@id/button_shopping" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
