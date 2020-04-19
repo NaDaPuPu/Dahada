@@ -4,27 +4,27 @@
 
     <item
         android:id="@+id/tab1"
-        android:icon="@android:drawable/ic_dialog_info"
-        android:title="커뮤니티"
+        android:icon="@drawable/home"
+        android:title="홈"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tab2"
-        app:showAsAction="ifRoom"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_email"
-        android:title="캘린더" />
+        android:icon="@drawable/calender"
+        android:title="캘린더"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tab3"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@drawable/community"
         android:title="커뮤니티"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tab4"
-        android:icon="@android:drawable/ic_dialog_info"
-        android:title="커뮤니티"
+        android:icon="@drawable/notice"
+        android:title="알림"
         app:showAsAction="ifRoom" />
 
     <item
