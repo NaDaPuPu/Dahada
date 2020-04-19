@@ -2,7 +2,6 @@ package com.d2w.dahada;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,21 +11,24 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.d2w.dahada.data.bottombar.calender;
+import com.d2w.dahada.data.bottombar.Calender;
+import com.d2w.dahada.data.bottombar.Mypage;
 import com.d2w.dahada.data.login.LoginActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    calender calender;
+    Calender calender;
+    Mypage mypage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calender = new calender();
+        calender = new Calender();
+        mypage = new Mypage();
 
         /*getSupportFragmentManager().beginTransaction().replace(R.id.container, calender).commit();*/
 
@@ -35,14 +37,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.tab1:
+                    case R.id.tab2:
                         Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.container, calender).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, calender).commit();
+
+                        return true;
+
+                    case R.id.tab5:
+                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mypage).commit();
 
                         return true;
                 }
-
                 return false;
             }
         });
@@ -67,11 +73,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
-
-    }
+}
 

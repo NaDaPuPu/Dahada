@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
 
-public class calender extends Fragment {
+public class Calender extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
