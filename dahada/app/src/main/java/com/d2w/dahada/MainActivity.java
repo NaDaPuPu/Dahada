@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.tab1:
-                        Toast.makeText(getApplicationContext(), "홈", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "홈", Toast.LENGTH_LONG).show();
                         findViewById(R.id.container).setVisibility(View.INVISIBLE);
                         findViewById(R.id.main_Layout).setVisibility(View.VISIBLE);
                         return true;
 
                     case R.id.tab2:
-                        Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, calender).commit();
                         getSupportFragmentManager().beginTransaction().commit();
                         findViewById(R.id.container).setVisibility(View.VISIBLE);
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.tab3:
-                        Toast.makeText(getApplicationContext(), "커뮤니티", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "커뮤니티", Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, community).commit();
                         getSupportFragmentManager().beginTransaction().commit();
                         findViewById(R.id.container).setVisibility(View.VISIBLE);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.tab4:
-                        Toast.makeText(getApplicationContext(), "알림", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "알림", Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, notice).commit();
                         getSupportFragmentManager().beginTransaction().commit();
                         findViewById(R.id.container).setVisibility(View.VISIBLE);
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.tab5:
-                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, mypage).commit();
                         getSupportFragmentManager().beginTransaction().commit();
                         findViewById(R.id.container).setVisibility(View.VISIBLE);
