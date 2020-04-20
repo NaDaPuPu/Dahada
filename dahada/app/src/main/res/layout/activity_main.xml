@@ -10,7 +10,7 @@
         android:id="@+id/toLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/dahada_1"
+        android:background="@color/dahada_2"
         android:text="로그인하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
