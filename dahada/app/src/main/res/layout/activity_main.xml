@@ -10,7 +10,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemBackground="@color/colorPrimary"
+        app:itemBackground="@color/dahada_1"
         app:itemIconTint="@color/cardview_light_background"
         app:itemTextColor="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,7 +81,6 @@
             app:layout_constraintLeft_toRightOf="@+id/button_diet"
             app:layout_constraintStart_toStartOf="@+id/imageView3" />
 
-
         <Button
             android:id="@+id/button_exercisemap"
             android:layout_width="90dp"
@@ -103,8 +102,7 @@
             android:text="돌아가기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            app:layout_constraintStart_toStartOf="parent" ></Button>
 
         <TextView
             android:id="@+id/textView_recipe"
