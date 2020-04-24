@@ -47,8 +47,8 @@
 
         <Button
             android:id="@+id/button_recipe"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_marginStart="56dp"
             android:layout_marginLeft="56dp"
             android:layout_marginBottom="300dp"
@@ -59,8 +59,8 @@
 
         <Button
             android:id="@+id/button_diet"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_marginStart="166dp"
             android:layout_marginLeft="100dp"
             android:layout_marginBottom="300dp"
@@ -71,8 +71,8 @@
 
         <Button
             android:id="@+id/button_shopping"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_marginStart="276dp"
             android:layout_marginLeft="300dp"
             android:layout_marginBottom="300dp"
@@ -84,15 +84,40 @@
 
         <Button
             android:id="@+id/button_exercisemap"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_marginStart="56dp"
             android:layout_marginLeft="56dp"
-            android:layout_marginBottom="170dp"
+            android:layout_marginBottom="180dp"
             android:background="@drawable/exercisemap"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/button_diet"
             app:layout_constraintStart_toStartOf="@+id/imageView3" />
+
+        <Button
+            android:id="@+id/button_rec_exercise"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="166dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="180dp"
+            android:background="@drawable/gym"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/button_shopping"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"/>
+
+        <Button
+            android:id="@+id/button_circle"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="276dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginBottom="180dp"
+            android:background="@drawable/circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/button_rec_exercise"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"/>
+
 
         <Button
             android:id="@+id/button__LoginPage"
@@ -111,8 +136,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="10dp"
             android:text="추천 레시피"
             android:textColor="@color/dahada_1"
             app:layout_constraintEnd_toEndOf="@+id/button_recipe"
@@ -123,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginRight="12dp"
             android:text="식단 만들기"
             android:textColor="@color/dahada_1"
@@ -135,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginRight="12dp"
             android:text="쇼핑하기"
             android:textColor="@color/dahada_1"
@@ -147,13 +172,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginRight="12dp"
             android:text="내 운동코스"
             android:textColor="@color/dahada_1"
             app:layout_constraintEnd_toEndOf="@id/button_exercisemap"
             app:layout_constraintTop_toBottomOf="@id/button_exercisemap" />
 
+        <TextView
+            android:id="@+id/textView_rec_exercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="12dp"
+            android:text="추천 운동법"
+            android:textColor="@color/dahada_1"
+            app:layout_constraintEnd_toEndOf="@id/button_rec_exercise"
+            app:layout_constraintTop_toBottomOf="@id/button_rec_exercise"/>
+
+        <TextView
+            android:id="@+id/textView_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="12dp"
+            android:text="아직 공백"
+            android:textColor="@color/dahada_1"
+            app:layout_constraintEnd_toEndOf="@id/button_circle"
+            app:layout_constraintTop_toBottomOf="@id/button_circle"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
