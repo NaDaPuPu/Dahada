@@ -5,9 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.d2w.dahada.R;
@@ -26,10 +24,14 @@ public class Calender extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.calender, container, false);
 
-        calendarView = (CalendarView) getView().findViewById(R.id.CalendarView);
-        myDate = (TextView) getView().findViewById(R.id.myDate);
+        calendarView = (CalendarView) v.findViewById(R.id.CalendarView);
+        myDate = (TextView) v.findViewById(R.id.myDate);
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -38,10 +40,7 @@ public class Calender extends Fragment {
                 myDate.setText(data);
             }
         });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.calender, container, false);
+        return v;
     }
 }
