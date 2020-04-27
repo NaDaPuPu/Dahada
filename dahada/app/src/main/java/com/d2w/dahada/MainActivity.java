@@ -16,12 +16,14 @@ import com.d2w.dahada.data.bottombar.Notice;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
 public class MainActivity extends AppCompatActivity {
 
     Calender calender;
     Community community;
     Notice notice;
     Mypage mypage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
