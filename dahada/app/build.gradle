@@ -4,6 +4,19 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    allprojects {
+        repositories {
+            google()
+
+            // If you're using a version of Gradle lower than 4.1, you must
+            // instead use:
+            //
+            // maven {
+            //     url 'https://maven.google.com'
+            // }
+        }
+    }
+
     defaultConfig {
         applicationId "com.d2w.dahada"
         minSdkVersion 16
@@ -25,6 +38,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

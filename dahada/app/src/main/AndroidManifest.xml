@@ -3,12 +3,16 @@
     package="com.d2w.dahada">
 
     <application
+
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".HomeActivity" />
         <activity
             android:name=".data.login.LoginActivity"
             android:label="@string/title_activity_login" />
