@@ -94,7 +94,6 @@
             app:layout_constraintLeft_toRightOf="@+id/button_diet"
             app:layout_constraintStart_toStartOf="@+id/imageView3" />
 
-
         <Button
             android:id="@+id/button_exercisemap"
             android:layout_width="65dp"
@@ -141,8 +140,7 @@
             android:text="돌아가기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            app:layout_constraintStart_toStartOf="parent" ></Button>
 
         <TextView
             android:id="@+id/textView_recipe"
