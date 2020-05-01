@@ -5,20 +5,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.d2w.dahada.MyPageList;
-import com.d2w.dahada.MyPageListAdapter;
-import com.d2w.dahada.OnMyPageListItemClickListener;
+import com.d2w.dahada.data.mypage.MyPageList;
+import com.d2w.dahada.data.mypage.MyPageListAdapter;
+import com.d2w.dahada.data.mypage.OnMyPageListItemClickListener;
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.login.LoginActivity;
-
-import static androidx.recyclerview.widget.LinearLayoutManager.*;
 
 public class Mypage extends Fragment {
     RecyclerView recyclerView;

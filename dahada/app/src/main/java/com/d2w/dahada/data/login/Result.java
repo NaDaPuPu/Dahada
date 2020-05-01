@@ -1,4 +1,4 @@
-package com.d2w.dahada.data;
+package com.d2w.dahada.data.login;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.

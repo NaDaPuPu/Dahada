@@ -1,4 +1,4 @@
-package com.d2w.dahada.data;
+package com.d2w.dahada.data.login;
 
 import com.d2w.dahada.data.model.LoggedInUser;
 

@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.d2w.dahada.data.LoginRepository;
-import com.d2w.dahada.data.Result;
 import com.d2w.dahada.data.model.LoggedInUser;
 import com.d2w.dahada.R;
 
