@@ -1,5 +1,6 @@
 package com.d2w.dahada.data.activity_main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,10 @@ import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_main.DietActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.MapActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.RecipeActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.ResExerActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.ShoppingActivity;
 
 public class Main extends Fragment implements View.OnClickListener {
 
@@ -38,27 +43,31 @@ public class Main extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.button_recipe:
-                Toast.makeText(getActivity(), "추천 레시피", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), RecipeActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_diet:
-                Toast.makeText(getActivity(), "내 레시피", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), DietActivity.class);
+                intent = new Intent(getActivity(), DietActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.button_shopping:
-                Toast.makeText(getActivity(), "쇼핑하기", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), ShoppingActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_exercise_map:
-                Toast.makeText(getActivity(), "내 운동코스", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), MapActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_rec_exercise:
-                Toast.makeText(getActivity(), "추천 운동법", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), ResExerActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_circle:
