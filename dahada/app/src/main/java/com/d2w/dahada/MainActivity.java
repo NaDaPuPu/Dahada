@@ -9,17 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.d2w.dahada.data.bottombar.Calender;
-import com.d2w.dahada.data.bottombar.Community;
-import com.d2w.dahada.data.bottombar.Main;
-import com.d2w.dahada.data.bottombar.Mypage;
-import com.d2w.dahada.data.bottombar.Notice;
+import com.d2w.dahada.data.activity_main.Calender;
+import com.d2w.dahada.data.activity_main.Community;
+import com.d2w.dahada.data.activity_main.Main;
+import com.d2w.dahada.data.activity_main.Mypage;
+import com.d2w.dahada.data.activity_main.Notice;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

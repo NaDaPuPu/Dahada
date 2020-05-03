@@ -1,4 +1,4 @@
-package com.d2w.dahada.data.bottombar;
+package com.d2w.dahada.data.activity_main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
