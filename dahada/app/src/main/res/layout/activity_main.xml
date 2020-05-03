@@ -3,214 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
 
     tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemBackground="@color/dahada_1"
-        app:itemIconTint="@color/cardview_light_background"
+        app:itemIconTint="@drawable/bottom_navigation_tint_color"
         app:itemTextColor="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom" />
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-
-    </FrameLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_Layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-
-
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:layout_marginBottom="9dp"
-            app:layout_constraintBottom_toTopOf="@id/button_recipe"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            app:srcCompat="@drawable/_" />
-
-        <Button
-            android:id="@+id/button_recipe"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="300dp"
-            android:background="@drawable/recipe"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/button_diet"
-            app:layout_constraintStart_toStartOf="@+id/imageView"></Button>
-
-        <Button
-            android:id="@+id/button_diet"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="166dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginBottom="300dp"
-            android:background="@drawable/lunch"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/button_recipe"
-            app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-        <Button
-            android:id="@+id/button_shopping"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="276dp"
-            android:layout_marginLeft="300dp"
-            android:layout_marginBottom="300dp"
-            android:background="@drawable/supermarket"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/button_diet"
-            app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-        <Button
-            android:id="@+id/button_exercisemap"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="180dp"
-            android:background="@drawable/exercisemap"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/button_diet"
-            app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-        <Button
-            android:id="@+id/button_rec_exercise"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="166dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="180dp"
-            android:background="@drawable/gym"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/button_shopping"
-            app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-        <Button
-            android:id="@+id/button_circle"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="276dp"
-            android:layout_marginLeft="300dp"
-            android:layout_marginBottom="180dp"
-            android:background="@drawable/circle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/button_rec_exercise"
-            app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-
-        <Button
-            android:id="@+id/button__LoginPage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="70dp"
-            android:background="@color/dahada_1"
-            android:text="@string/txt_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" ></Button>
-
-        <TextView
-            android:id="@+id/textView_recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/txt_rec_recipe"
-            android:textColor="@color/dahada_1"
-            app:layout_constraintEnd_toEndOf="@+id/button_recipe"
-            app:layout_constraintTop_toBottomOf="@+id/button_recipe" />
-
-        <TextView
-            android:id="@+id/textView_diet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="12dp"
-            android:text="@string/txt_diet_recipe"
-            android:textColor="@color/dahada_1"
-            app:layout_constraintEnd_toEndOf="@+id/button_diet"
-            app:layout_constraintTop_toBottomOf="@+id/button_diet" />
-
-        <TextView
-            android:id="@+id/textView_shopping"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="12dp"
-            android:text="@string/txt_shopping"
-            android:textColor="@color/dahada_1"
-            app:layout_constraintEnd_toEndOf="@id/button_shopping"
-            app:layout_constraintTop_toBottomOf="@id/button_shopping" />
-
-        <TextView
-            android:id="@+id/textView_exercisemap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="12dp"
-            android:text="@string/txt_my_exercisemap"
-            android:textColor="@color/dahada_1"
-            app:layout_constraintEnd_toEndOf="@id/button_exercisemap"
-            app:layout_constraintTop_toBottomOf="@id/button_exercisemap" />
-
-        <TextView
-            android:id="@+id/textView_rec_exercise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/txt_rec_exercise"
-            android:textColor="@color/dahada_1"
-            app:layout_constraintEnd_toEndOf="@id/button_rec_exercise"
-            app:layout_constraintTop_toBottomOf="@id/button_rec_exercise" />
-
-        <TextView
-            android:id="@+id/textView_circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="12dp"
-            android:text="@string/txt_blank"
-            android:textColor="@color/dahada_1"
-            app:layout_constraintEnd_toEndOf="@id/button_circle"
-            app:layout_constraintTop_toBottomOf="@id/button_circle" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

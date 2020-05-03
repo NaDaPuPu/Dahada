@@ -21,7 +21,7 @@ public class MyPageListAdapter extends RecyclerView.Adapter<MyPageListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.mypage_list_item, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.fragment_mypage_list_item, viewGroup, false);
         return new ViewHolder(itemView, this);
     }
     @Override

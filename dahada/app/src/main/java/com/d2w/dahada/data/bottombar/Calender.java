@@ -23,20 +23,19 @@ public class Calender extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.calender, container, false);
+        View v = inflater.inflate(R.layout.fragment_calender, container, false);
 
-        calendarView = (CalendarView) v.findViewById(R.id.CalendarView);
-        myDate = (TextView) v.findViewById(R.id.myDate);
+        calendarView = v.findViewById(R.id.CalendarView);
+        myDate = v.findViewById(R.id.myDate);
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int i, int i1, int i2) {
-                String data = (i1 + 1) + "/" + i2 + "/" + i;
+                String data = i + "/" + (i1 + 1) + "/" + i2;
                 myDate.setText(data);
             }
         });
