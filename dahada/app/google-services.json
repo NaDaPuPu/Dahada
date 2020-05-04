@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "602889049641",
+    "firebase_url": "https://dahada-7ce30.firebaseio.com",
+    "project_id": "dahada-7ce30",
+    "storage_bucket": "dahada-7ce30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602889049641:android:5912e458ed8e7d873eae38",
+        "android_client_info": {
+          "package_name": "com.d2w.dahada"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "602889049641-b7vlitcg50jvr3tr1gd93thkirjen19o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.d2w.dahada",
+            "certificate_hash": "982fd1a2bcd2c2b06d314cd2aa47925703c61ca8"
+          }
+        },
+        {
+          "client_id": "602889049641-nmeij73de9ekjahsggct0b6s8k0q2lqn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8SQkFYlkSkzONaH0MzNOjRG2PMi8dRcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "602889049641-nmeij73de9ekjahsggct0b6s8k0q2lqn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
