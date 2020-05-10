@@ -23,7 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_rec_recipe"
-                android:textColor="@color/dahada_1"
                 app:layout_constraintEnd_toEndOf="@+id/button_recipe"
                 app:layout_constraintStart_toStartOf="@+id/button_recipe"
                 app:layout_constraintTop_toBottomOf="@+id/button_recipe" />
@@ -34,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_my_exercisemap"
-                android:textColor="@color/dahada_1"
                 app:layout_constraintEnd_toEndOf="@id/button_exercise_map"
                 app:layout_constraintStart_toStartOf="@+id/button_exercise_map"
                 app:layout_constraintTop_toBottomOf="@id/button_exercise_map" />
@@ -45,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_rec_exercise"
-                android:textColor="@color/dahada_1"
                 app:layout_constraintEnd_toEndOf="@id/button_rec_exercise"
                 app:layout_constraintStart_toStartOf="@+id/button_rec_exercise"
                 app:layout_constraintTop_toBottomOf="@id/button_rec_exercise" />
@@ -56,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_blank"
-                android:textColor="@color/dahada_1"
                 app:layout_constraintEnd_toEndOf="@id/button_circle"
                 app:layout_constraintStart_toStartOf="@+id/button_circle"
                 app:layout_constraintTop_toBottomOf="@id/button_circle" />
@@ -67,7 +63,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_diet_recipe"
-                android:textColor="@color/dahada_1"
                 app:layout_constraintEnd_toEndOf="@+id/button_diet"
                 app:layout_constraintStart_toStartOf="@+id/button_diet"
                 app:layout_constraintTop_toBottomOf="@+id/button_diet" />
@@ -78,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_shopping"
-                android:textColor="@color/dahada_1"
                 app:layout_constraintEnd_toEndOf="@id/button_shopping"
                 app:layout_constraintStart_toStartOf="@+id/button_shopping"
                 app:layout_constraintTop_toBottomOf="@id/button_shopping" />
