@@ -3,10 +3,7 @@ package com.d2w.dahada;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-
-
-
-
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static Activity mainActivity;
 
     Main main;
     Calender calender;
@@ -53,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainActivity = MainActivity.this;
 
         main = new Main();
         calender = new Calender();
