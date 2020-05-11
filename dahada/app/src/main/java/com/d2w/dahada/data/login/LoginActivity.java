@@ -120,6 +120,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             dialog.dismiss();
             Toast.makeText(getApplicationContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             finish();
+        } else {
+            dialog.dismiss();
+            Toast.makeText(getApplicationContext(), "로그인에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
         }
     }
 
