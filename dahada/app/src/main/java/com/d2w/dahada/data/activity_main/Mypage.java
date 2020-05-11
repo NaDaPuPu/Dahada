@@ -1,5 +1,7 @@
 package com.d2w.dahada.data.activity_main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,7 +52,6 @@ public class Mypage extends Fragment implements View.OnClickListener{
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-            Toast.makeText(getContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             button_login.setText(R.string.mypage_logout);
         } else {
             button_login.setText(R.string.mypage_login);
@@ -69,9 +70,7 @@ public class Mypage extends Fragment implements View.OnClickListener{
                     Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                 } else if (button_login.getText() == getString(R.string.mypage_logout)) {
-                    signOut();
-                    Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-                    button_login.setText(R.string.mypage_login);
+                    showMessage();
                 }
                 break;
             case R.id.button_notice:
@@ -84,5 +83,30 @@ public class Mypage extends Fragment implements View.OnClickListener{
                 Toast.makeText(getContext(), "환경설정", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void showMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("알림");
+        builder.setMessage("로그아웃 하시겠습니까?");
+
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                signOut();
+                Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                button_login.setText(R.string.mypage_login);
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

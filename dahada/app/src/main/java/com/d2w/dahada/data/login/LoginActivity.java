@@ -1,9 +1,8 @@
 package com.d2w.dahada.data.login;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.d2w.dahada.MainActivity;
 import com.d2w.dahada.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,7 +30,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final MainActivity  mainactivity = (MainActivity) MainActivity.mainActivity;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
@@ -39,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInClient mGoogleSignInClient;
 
     SignInButton signInButton;
+    ProgressDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        progressDialog("로그인 중입니다.");
+
     }
 
     @Override
@@ -115,6 +117,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
+            dialog.dismiss();
+            Toast.makeText(getApplicationContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -126,5 +130,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 signIn();
                 break;
         }
+    }
+
+    private void progressDialog(String message) {
+        dialog = new ProgressDialog(LoginActivity.this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(message);
+
+        dialog.show();
     }
 }
