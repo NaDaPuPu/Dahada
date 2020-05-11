@@ -118,8 +118,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
-            Toast.makeText(getApplicationContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), user.getDisplayName() + "로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             finish();
+        } else {
+
         }
     }
 
