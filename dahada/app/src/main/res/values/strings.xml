@@ -13,12 +13,19 @@
     <string name="login_failed">"로그인 실패"</string>
     <string name="list_login">로그인</string>
 
+<!--    MainActivity    -->
     <string name="icon_home">홈</string>
     <string name="icon_calendar">캘린더</string>
     <string name="icon_community">커뮤니티</string>
     <string name="icon_notice">알림</string>
     <string name="icon_mypage">마이페이지</string>
     <string name="icon_search">검색</string>
+<!--    MypageFragment  -->
+    <string name="mypage_login">로그인</string>
+    <string name="mypage_logout">로그아웃</string>
+    <string name="mypage_notice">공지사항</string>
+    <string name="mypage_question">문의하기</string>
+    <string name="mypage_option">환경설정</string>
 
     <string name="fragment_notice">알림 프래그먼트</string>
     <string name="fragment_community">커뮤니티 프래그먼트</string>

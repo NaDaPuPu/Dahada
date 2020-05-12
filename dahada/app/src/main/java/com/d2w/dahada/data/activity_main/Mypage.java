@@ -1,83 +1,112 @@
 package com.d2w.dahada.data.activity_main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.d2w.dahada.MainActivity;
-import com.d2w.dahada.data.mypage.MyPageList;
-import com.d2w.dahada.data.mypage.MyPageListAdapter;
-import com.d2w.dahada.data.mypage.OnMyPageListItemClickListener;
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class Mypage extends Fragment {
-    RecyclerView recyclerView;
-    MyPageListAdapter adapter;
+public class Mypage extends Fragment implements View.OnClickListener{
 
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
     private FirebaseAuth mAuth;
+
+    Button button_login, button_notice, button_question, button_setting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mypage, container, false);
 
         mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        button_login = v.findViewById(R.id.button_log);
+        button_notice = v.findViewById(R.id.button_notice);
+        button_question = v.findViewById(R.id.button_question);
+        button_setting = v.findViewById(R.id.button_setting);
 
-        adapter = new MyPageListAdapter();
-
-
-
-        if (mAuth.getCurrentUser() != null) {
-            adapter.addItem(new MyPageList("로그아웃"));
-        } else {
-            adapter.addItem(new MyPageList(getString(R.string.list_login)));
-        }
-        adapter.addItem(new MyPageList("공지사항"));
-        adapter.addItem(new MyPageList("문의 게시판"));
-        adapter.addItem(new MyPageList("환경설정"));
-
-        recyclerView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new OnMyPageListItemClickListener() {
-            @Override
-            public void onItemClick(MyPageListAdapter.ViewHolder holder, View view, int position) {
-                MyPageList item = adapter.getItem(position);
-
-                if (item.getName() == getString(R.string.list_login)) {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
-                    refresh();
-                } else if (item.getName() == "로그아웃") {
-                    signOut();
-                    refresh();
-                }
-                else {
-                    Toast.makeText(getContext(), "아이템 선택됨 : " + item.getName(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        button_login.setOnClickListener(this);
+        button_notice.setOnClickListener(this);
+        button_question.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
 
         return v;
     }
 
-    private void signOut() {
-        FirebaseAuth.getInstance().signOut();
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            button_login.setText(R.string.mypage_logout);
+        } else {
+            button_login.setText(R.string.mypage_login);
+        }
     }
 
-    private void refresh(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
+    private void signOut() {
+        mAuth.signOut();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_log:
+                if (button_login.getText() == getString(R.string.mypage_login)) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                } else if (button_login.getText() == getString(R.string.mypage_logout)) {
+                    showMessage();
+                }
+                break;
+            case R.id.button_notice:
+                Toast.makeText(getContext(), "공지사항", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button_question:
+                Toast.makeText(getContext(), "문의하기", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button_setting:
+                Toast.makeText(getContext(), "환경설정", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void showMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("알림");
+        builder.setMessage("로그아웃 하시겠습니까?");
+
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                signOut();
+                Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                button_login.setText(R.string.mypage_login);
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
