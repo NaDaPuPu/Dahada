@@ -72,8 +72,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        progressDialog("로그인 중입니다.");
-
     }
 
     @Override
@@ -90,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch (ApiException e) {
                 Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(getApplicationContext(),  "로그인에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         }
     }
@@ -112,7 +111,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Snackbar.make(findViewById(R.id.container), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-                        dialog.dismiss();
                     }
                 });
     }
@@ -120,6 +118,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
             Toast.makeText(getApplicationContext(), user.getDisplayName() + "로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
             finish();
         } else {
 
@@ -131,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.sign_in_button:
                 signIn();
+                progressDialog("로그인 중입니다.");
                 break;
         }
     }
