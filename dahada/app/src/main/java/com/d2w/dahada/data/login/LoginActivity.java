@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // If sign in fails, display a message to the user.
                             Snackbar.make(findViewById(R.id.container), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
+                            Toast.makeText(getApplicationContext(),  "로그인에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();
                     }
