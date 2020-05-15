@@ -16,6 +16,7 @@ import com.d2w.dahada.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class RecipeFragment1 extends Fragment {
@@ -24,10 +25,41 @@ public class RecipeFragment1 extends Fragment {
 
     }
 
+    RecyclerView recyclerView;
+    List<RecipeItem> itemList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.main_recipe_1, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //initData();
+
+        recyclerView.setAdapter(new ItemAdapter(initData()));
+
         return view;
 
+    }
+    private List<RecipeItem> initData() {
+
+        itemList = new ArrayList<>();
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+        itemList.add(new RecipeItem(R.drawable.dahada, "레시피이름", 150, 300));
+
+
+
+
+        return itemList;
     }
 }
