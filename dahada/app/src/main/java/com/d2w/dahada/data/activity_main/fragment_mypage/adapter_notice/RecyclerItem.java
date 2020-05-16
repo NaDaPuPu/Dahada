@@ -1,29 +1,33 @@
 package com.d2w.dahada.data.activity_main.fragment_mypage.adapter_notice;
 
-import android.graphics.drawable.Drawable;
-
 public class RecyclerItem {
-    private Drawable iconDrawable ;
-    private String titleStr ;
-    private String descStr ;
+    private String titleStr;
+    private String dateStr;
+    private String contentStr;
 
-    public void setIcon(Drawable icon) {
-        iconDrawable = icon ;
+    public RecyclerItem(String date, String title, String content) {
+        this.dateStr = date;
+        this.titleStr = title;
+        this.contentStr = content;
     }
+
     public void setTitle(String title) {
         titleStr = title ;
     }
-    public void setDesc(String desc) {
-        descStr = desc ;
+    public void setContent(String content) {
+        contentStr = content;
+    }
+    public void setDate(String date) {
+        dateStr = date;
     }
 
-    public Drawable getIcon() {
-        return this.iconDrawable ;
-    }
     public String getTitle() {
-        return this.titleStr ;
+        return this.titleStr;
     }
-    public String getDesc() {
-        return this.descStr ;
+    public String getContent() {
+        return this.contentStr;
+    }
+    public String getDate() {
+        return this.dateStr;
     }
 }

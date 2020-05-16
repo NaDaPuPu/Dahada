@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NoticePost"></activity>
-        <activity android:name=".data.activity_main.fragment_mypage.NoticeActivity" />
+        <activity android:name=".data.activity_main.fragment_mypage.NoticeActivity"
+            android:label="@string/mypage_notice"/>
         <activity
             android:name=".data.login.LoginActivity"
             android:label="@string/title_activity_login"
