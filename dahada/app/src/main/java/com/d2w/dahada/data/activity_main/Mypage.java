@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.activity_main.fragment_mypage.NoticeActivity;
 import com.d2w.dahada.data.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,7 +75,8 @@ public class Mypage extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.button_notice:
-                Toast.makeText(getContext(), "공지사항", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity().getApplicationContext(), NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.button_question:
                 Toast.makeText(getContext(), "문의하기", Toast.LENGTH_SHORT).show();
