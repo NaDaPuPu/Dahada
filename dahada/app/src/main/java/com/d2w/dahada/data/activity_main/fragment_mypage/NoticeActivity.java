@@ -14,13 +14,11 @@ import com.d2w.dahada.data.activity_main.fragment_mypage.adapter_notice.Recycler
 import com.d2w.dahada.data.activity_main.fragment_mypage.adapter_notice.RecyclerNoticeAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
