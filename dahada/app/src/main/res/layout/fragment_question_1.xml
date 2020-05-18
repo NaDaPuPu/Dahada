@@ -30,12 +30,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:autofillHints=""
                 android:background="@android:color/white"
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:padding="6dp"
-                android:autofillHints="" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/emailText"
