@@ -1,29 +1,53 @@
 package com.d2w.dahada.data.activity_main.fragment_mypage.question;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.activity_main.fragment_mypage.Question;
+import com.d2w.dahada.data.activity_main.fragment_mypage.QuestionActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class QuestionFragment1 extends Fragment {
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+
+    AlertDialog.Builder alertDialogBuilder;
     EditText content, emailText;
+    Button sendButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question_1, container, false);
 
-        Spinner spinner = v.findViewById(R.id.spinner);
+        mAuth = FirebaseAuth.getInstance();
+
+        final Spinner spinner = v.findViewById(R.id.spinner);
 
         content = v.findViewById(R.id.content);
         emailText = v.findViewById(R.id.emailText);
+        sendButton = v.findViewById(R.id.sendButton);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -72,6 +96,43 @@ public class QuestionFragment1 extends Fragment {
 
             }
         });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogBuilder = new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setTitle("알림")
+                        .setMessage("문의를 보내시겠습니까?")
+                        .setCancelable(false)
+
+                        // 확인 시
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                Date date = new Date(System.currentTimeMillis());
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Question question = new Question(mAuth.getUid(), format.format(date), spinner.getSelectedItemPosition(), content.getText().toString(), emailText.getText().toString());
+
+                                db.collection("mypage/question/questions").document(question.getType() + " " + question.getDate() + " " + question.getEmail()).set(question);
+                                Toast.makeText(getContext(), "문의를 보냈습니다.", Toast.LENGTH_SHORT).show();
+                                getActivity().finish();
+                            }
+                        })
+
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
+
         return v;
     }
 }

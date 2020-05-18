@@ -11,10 +11,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".data.activity_main.fragment_mypage.QuestionActivity"
-            android:label="@string/mypage_question" />
+            android:label="@string/mypage_question"
+            android:launchMode="singleTop" />
         <activity
             android:name=".data.activity_main.fragment_mypage.NoticeActivity"
-            android:label="@string/mypage_notice" />
+            android:label="@string/mypage_notice"
+            android:launchMode="singleTop" />
         <activity
             android:name=".data.login.LoginActivity"
             android:label="@string/title_activity_login"

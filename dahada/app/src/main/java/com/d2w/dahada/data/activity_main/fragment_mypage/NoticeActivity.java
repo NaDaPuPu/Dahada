@@ -27,7 +27,7 @@ public class NoticeActivity extends AppCompatActivity {
 
     RecyclerNoticeAdapter adapter;
 
-    SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+    SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
     Date date;
 
     @Override
