@@ -50,6 +50,8 @@ public class ViewHolderQuestion extends RecyclerView.ViewHolder {
         content.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         if (answer.getText().toString() != "") {
             answer.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        } else {
+            answer.setVisibility(View.GONE);
         }
     }
 
