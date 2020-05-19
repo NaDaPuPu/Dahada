@@ -31,7 +31,6 @@ public class RecipeFragment1 extends Fragment {
 
     public RecipeFragment1() {
     }
-
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<RecipeItem> arrayList;
@@ -40,7 +39,6 @@ public class RecipeFragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.main_recipe_1, container, false);
 
         Log.d("test","check2");
@@ -51,7 +49,7 @@ public class RecipeFragment1 extends Fragment {
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test","check3");
-        databaseReference = database.getReference("Diet"); // DB 테이블 연결
+        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

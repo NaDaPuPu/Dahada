@@ -21,33 +21,29 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
     private ArrayList<RecipeItem> arrayList;
     private Context context;
 
-    public ItemAdapter(ArrayList<RecipeItem> arrayList, Context context) { //Diet객체와 arrlist를 연결
+    public ItemAdapter(ArrayList<RecipeItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
-
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_recipe_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.main_recipe_list_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
-
         return holder;
     }
-
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         Glide.with(holder.itemView)
-                .load(arrayList.get(position).getPicture()) //firebase데이터를 받아 이미지와 text로 로드
+                .load(arrayList.get(position).getRecipeImage())
                 .into(holder.iv_picture);
-        holder.tv_id.setText(arrayList.get(position).getId());
-        holder.tv_cal.setText(String.valueOf(arrayList.get(position).getCal()));
+        holder.tv_id.setText(arrayList.get(position).getRecipeName());
+        holder.tv_cal.setText(String.valueOf(arrayList.get(position).getRecipeKcal()));
     }
-
     @Override
     public int getItemCount() {
         return arrayList.size();
-
     }
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
@@ -60,7 +56,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
             this.iv_picture = itemView.findViewById(R.id.iv_picture);
             this.tv_id = itemView.findViewById(R.id.tv_id);
             this.tv_cal = itemView.findViewById(R.id.tv_cal);
-
         }
     }
 }

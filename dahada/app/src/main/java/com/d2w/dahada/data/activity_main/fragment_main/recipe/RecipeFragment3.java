@@ -46,7 +46,7 @@ public class RecipeFragment3 extends Fragment {
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test","check3");
-        databaseReference = database.getReference("Diet"); // DB 테이블 연결
+        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -1,37 +1,41 @@
 package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
 public class RecipeItem {
-    private String picture;
-    private String id;
-    private int cal;
+    private String RecipeImage;
+    private String RecipeName;
+    private int RecipeKcal;
 
-    public RecipeItem(String picture, String id, int cal) {
-        this.picture = picture;
-        this.id = id;
-        this.cal = cal;
+    public RecipeItem(String recipeImage, String recipeName, int recipeKcal) {
+        RecipeImage = recipeImage;
+        RecipeName = recipeName;
+        RecipeKcal = recipeKcal;
     }
 
-    public String getPicture() {
-        return picture;
+    public RecipeItem() {
+
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public String getRecipeImage() {
+        return RecipeImage;
     }
 
-    public String getId() {
-        return id;
+    public void setRecipeImage(String recipeImage) {
+        RecipeImage = recipeImage;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getRecipeName() {
+        return RecipeName;
     }
 
-    public int getCal() {
-        return cal;
+    public void setRecipeName(String recipeName) {
+        RecipeName = recipeName;
     }
 
-    public void setCal(int cal) {
-        this.cal = cal;
+    public int getRecipeKcal() {
+        return RecipeKcal;
+    }
+
+    public void setRecipeKcal(int recipeKcal) {
+        RecipeKcal = recipeKcal;
     }
 }
