@@ -1,47 +1,37 @@
 package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
 public class RecipeItem {
-    private int recipe_Image;
-    private String recipe_name;
-    private int recipe_gram;
-    private int recipe_kcal;
+    private String picture;
+    private String id;
+    private int cal;
 
-    public RecipeItem(int recipe_Image, String recipe_name, int recipe_gram, int recipe_kcal) {
-        this.recipe_Image = recipe_Image;
-        this.recipe_name = recipe_name;
-        this.recipe_gram = recipe_gram;
-        this.recipe_kcal = recipe_kcal;
+    public RecipeItem(String picture, String id, int cal) {
+        this.picture = picture;
+        this.id = id;
+        this.cal = cal;
     }
 
-    public int getRecipe_Image() {
-        return recipe_Image;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setRecipe_Image(int recipe_Image) {
-        this.recipe_Image = recipe_Image;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
-    public String getRecipe_name() {
-        return recipe_name;
+    public String getId() {
+        return id;
     }
 
-    public void setRecipe_name(String recipe_name) {
-        this.recipe_name = recipe_name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public int getRecipe_gram() {
-        return recipe_gram;
+    public int getCal() {
+        return cal;
     }
 
-    public void setRecipe_gram(int recipe_gram) {
-        this.recipe_gram = recipe_gram;
-    }
-
-    public int getRecipe_kcal() {
-        return recipe_kcal;
-    }
-
-    public void setRecipe_kcal(int recipe_kcal) {
-        this.recipe_kcal = recipe_kcal;
+    public void setCal(int cal) {
+        this.cal = cal;
     }
 }

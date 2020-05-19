@@ -1,5 +1,6 @@
 package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,54 +10,56 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.d2w.dahada.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHolder> {
 
-    List<RecipeItem> itemListl;
+    private ArrayList<RecipeItem> arrayList;
+    private Context context;
 
-    public ItemAdapter(List<RecipeItem> itemList) {
-
-        this.itemListl=itemList;
+    public ItemAdapter(ArrayList<RecipeItem> arrayList, Context context) { //Diet객체와 arrlist를 연결
+        this.arrayList = arrayList;
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_recipe_list_item,parent,false);
-        ViewHolder viewholder = new ViewHolder(view);
+    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_recipe_list_item, parent, false);
+        CustomViewHolder holder = new CustomViewHolder(view);
 
-
-        return viewholder;
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
-
-        holder.itemImage.setImageResource(itemListl.get(position).getRecipe_Image());
-        holder.itemname.setText(itemListl.get(position).getRecipe_name());
-
+    public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+        Glide.with(holder.itemView)
+                .load(arrayList.get(position).getPicture()) //firebase데이터를 받아 이미지와 text로 로드
+                .into(holder.iv_picture);
+        holder.tv_id.setText(arrayList.get(position).getId());
+        holder.tv_cal.setText(String.valueOf(arrayList.get(position).getCal()));
     }
 
     @Override
     public int getItemCount() {
-        return itemListl.size();
+        return arrayList.size();
+
     }
+    public class CustomViewHolder extends RecyclerView.ViewHolder {
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView iv_picture;
+        TextView tv_id;
+        TextView tv_cal;
 
-        ImageView itemImage;
-        TextView itemname;
-        TextView itemgram;
-        TextView itemkcal;
-
-        public ViewHolder(@NonNull View itemView) {
+        public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemImage = itemView.findViewById(R.id.iv_profile);
-            itemname = itemView.findViewById(R.id.txt_recipename);
-
+            this.iv_picture = itemView.findViewById(R.id.iv_picture);
+            this.tv_id = itemView.findViewById(R.id.tv_id);
+            this.tv_cal = itemView.findViewById(R.id.tv_cal);
 
         }
     }
