@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".LoadingActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
             android:name=".data.activity_main.fragment_mypage.QuestionActivity"
             android:label="@string/mypage_question"
             android:launchMode="singleTop" />
