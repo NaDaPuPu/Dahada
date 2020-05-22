@@ -17,13 +17,7 @@ import android.widget.Toast;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_mypage.Question;
-import com.d2w.dahada.data.activity_main.fragment_mypage.QuestionActivity;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -31,14 +25,13 @@ import java.util.Date;
 
 public class QuestionFragment1 extends Fragment {
     private FirebaseAuth mAuth;
-    private GoogleSignInClient mGoogleSignInClient;
 
     AlertDialog.Builder alertDialogBuilder;
     EditText content, emailText;
     Button sendButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question_1, container, false);
 
         mAuth = FirebaseAuth.getInstance();
@@ -80,7 +73,7 @@ public class QuestionFragment1 extends Fragment {
                         content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
                                 "- 문제발생게시판 : \n" +
                                 "- 문제발생일시 : \n" +
-                                "- 문의내용 :");
+                                "- 문의내용 : ");
                         break;
                     case 5:
                         content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
@@ -111,9 +104,19 @@ public class QuestionFragment1 extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                                 Date date = new Date(System.currentTimeMillis());
+                                String contentStr = content.getText().toString();
+                                int startIndex = contentStr.indexOf("문의내용 : ");
+                                int endIndex = contentStr.length();
+                                String title;
+
+                                if (endIndex - startIndex >= 20) {
+                                    title = contentStr.substring(startIndex + 7, startIndex + 27);
+                                } else {
+                                    title = contentStr.substring(startIndex + 7, endIndex);
+                                }
 
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                Question question = new Question(mAuth.getUid(), format.format(date), spinner.getSelectedItemPosition(), content.getText().toString(), emailText.getText().toString());
+                                Question question = new Question(mAuth.getUid(), format.format(date), spinner.getSelectedItemPosition(), title, contentStr, null, emailText.getText().toString());
 
                                 db.collection("mypage/question/questions").document(question.getType() + " " + question.getDate() + " " + question.getEmail()).set(question);
                                 Toast.makeText(getContext(), "문의를 보냈습니다.", Toast.LENGTH_SHORT).show();
