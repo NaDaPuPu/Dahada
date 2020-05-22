@@ -9,13 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".data.activity_main.fragment_mypage.QuestionActivity"
+            android:label="@string/mypage_question"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".data.activity_main.fragment_mypage.NoticeActivity"
+            android:label="@string/mypage_notice"
+            android:launchMode="singleTop" />
         <activity
             android:name=".data.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:launchMode="singleTop" />
-
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,28 +30,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".data.activity_main.fragment_main.DietActivity"
             android:label="내 레시피"
-            android:launchMode="singleTop"></activity>
-
-        <activity android:name=".data.activity_main.fragment_main.RecipeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".data.activity_main.fragment_main.RecipeActivity"
             android:label="추천 레시피"
-            android:launchMode="singleTop"></activity>
-
-        <activity android:name=".data.activity_main.fragment_main.MapActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".data.activity_main.fragment_main.MapActivity"
             android:label="내 운동 코스"
-            android:launchMode="singleTop"></activity>
-
-        <activity android:name=".data.activity_main.fragment_main.ResExerActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".data.activity_main.fragment_main.ResExerActivity"
             android:label="추천 운동법"
-            android:launchMode="singleTop"></activity>
-
-        <activity android:name=".data.activity_main.fragment_main.ShoppingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".data.activity_main.fragment_main.ShoppingActivity"
             android:label="쇼핑"
-            android:launchMode="singleTop"></activity>
-
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>
