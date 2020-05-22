@@ -46,6 +46,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RecipeFragment1 recipeFragment1 = new RecipeFragment1();
+                RecipeDetail1 recipeDetail1 = new RecipeDetail1();
                 
             }
         });
