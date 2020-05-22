@@ -13,14 +13,14 @@
     <string name="login_failed">"로그인 실패"</string>
     <string name="list_login">로그인</string>
 
-<!--    MainActivity    -->
+    <!--    MainActivity    -->
     <string name="icon_home">홈</string>
     <string name="icon_calendar">캘린더</string>
     <string name="icon_community">커뮤니티</string>
     <string name="icon_notice">알림</string>
     <string name="icon_mypage">마이페이지</string>
     <string name="icon_search">검색</string>
-<!--    MypageFragment  -->
+    <!--    MypageFragment  -->
     <string name="mypage_login">로그인</string>
     <string name="mypage_logout">로그아웃</string>
     <string name="mypage_notice">공지사항</string>
@@ -37,4 +37,7 @@
     <string name="txt_my_exercisemap">내 운동코스</string>
     <string name="txt_rec_exercise">추천 운동법</string>
     <string name="txt_blank">공백</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

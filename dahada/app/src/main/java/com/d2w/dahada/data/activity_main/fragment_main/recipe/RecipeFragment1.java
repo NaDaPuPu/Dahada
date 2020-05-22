@@ -47,6 +47,8 @@ public class RecipeFragment1 extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         arrayList = new ArrayList<>();
 
+
+
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test","check3");
         databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
