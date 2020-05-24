@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.d2w.dahada">
 
-    <meta-data android:name="com.d2w.dahada" android:value="cfbae38277a643d67c2cd60cb8c96db9"/>
-
-    <uses-permission android:name="android.permission.INTERNET">
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">
-    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -81,6 +79,8 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="cfbae38277a643d67c2cd60cb8c96db9"/>
     </application>
 
 </manifest>
