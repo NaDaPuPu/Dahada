@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,11 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class RecipeFragment1 extends Fragment {
+public class RecipeFragment1 extends Fragment  {
     private ItemAdapter adapter;
 
     public RecipeFragment1() {
     }
+
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<RecipeItem> arrayList;
@@ -41,16 +43,15 @@ public class RecipeFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_recipe_1, container, false);
 
-        Log.d("test","check2");
+
+        Log.d("test", "check2");
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         arrayList = new ArrayList<>();
 
-
-
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
-        Log.d("test","check3");
+        Log.d("test", "check3");
         databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -61,10 +62,12 @@ public class RecipeFragment1 extends Fragment {
                     RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
                     arrayList.add(recipeItem);
                 }
-                Log.d("TEST",String.valueOf(arrayList.size()));
-                adapter = new ItemAdapter(arrayList,getContext());
+                Log.d("TEST", String.valueOf(arrayList.size()));
+                adapter = new ItemAdapter(arrayList, getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+
             }
 
 
@@ -73,13 +76,15 @@ public class RecipeFragment1 extends Fragment {
 
                 Log.e("Fragment1", String.valueOf(databaseError.toException()));
             }
+
         });
 
 
-
-        Log.d("test","check5");
+        Log.d("test", "check5");
 
         return view;
 
     }
+
+
 }

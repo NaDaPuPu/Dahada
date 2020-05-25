@@ -26,7 +26,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
 
     @NonNull
     @Override
-    public DietAdapter.CustomViewHolderDiet onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomViewHolderDiet onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.diet_list_item, parent, false);
         CustomViewHolderDiet holder = new CustomViewHolderDiet(view);
