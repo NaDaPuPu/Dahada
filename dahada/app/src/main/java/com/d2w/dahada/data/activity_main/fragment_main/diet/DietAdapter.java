@@ -19,6 +19,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
     private ArrayList<DietItem> arrayList;
     private Context context;
 
+
     public DietAdapter(ArrayList<DietItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
