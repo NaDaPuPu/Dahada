@@ -43,7 +43,7 @@
             android:label="내 운동 코스"
             android:launchMode="singleTop" />
         <activity
-            android:name=".data.activity_main.fragment_main.ResExerActivity"
+            android:name=".data.activity_main.fragment_main.RecExerActivity"
             android:label="추천 운동법"
             android:launchMode="singleTop" />
         <activity

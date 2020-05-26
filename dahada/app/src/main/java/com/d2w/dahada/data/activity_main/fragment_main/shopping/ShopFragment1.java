@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.d2w.dahada.R;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.ItemAdapter;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +35,7 @@ public class ShopFragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_myshop_1, container, false);
+        View view = inflater.inflate(R.layout.frag_shop_1, container, false);
 
 
         Log.d("test", "check2");

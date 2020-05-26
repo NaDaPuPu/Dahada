@@ -1,6 +1,5 @@
 package com.d2w.dahada.data.activity_main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_main.DietActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.MapActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.RecipeActivity;
-import com.d2w.dahada.data.activity_main.fragment_main.ResExerActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.RecExerActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.ShoppingActivity;
 
 public class Main extends Fragment implements View.OnClickListener {
@@ -66,7 +65,7 @@ public class Main extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.button_rec_exercise:
-                intent = new Intent(getActivity(), ResExerActivity.class);
+                intent = new Intent(getActivity(), RecExerActivity.class);
                 startActivity(intent);
                 break;
 
