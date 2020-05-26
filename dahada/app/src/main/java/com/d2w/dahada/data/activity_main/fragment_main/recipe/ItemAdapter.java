@@ -26,9 +26,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
     private ArrayList<RecipeItem> arrayList;
     private Context context;
 
-
-
-
     public ItemAdapter(ArrayList<RecipeItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;

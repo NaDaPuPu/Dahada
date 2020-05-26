@@ -1,21 +1,19 @@
-package com.d2w.dahada.data.activity_main.fragment_main.recipe;
+package com.d2w.dahada.data.activity_main.fragment_main.shopping;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.d2w.dahada.MainActivity;
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.activity_main.fragment_main.recipe.ItemAdapter;
+import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,49 +21,47 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
 
-public class RecipeFragment1 extends Fragment  {
-    private ItemAdapter adapter;
+public class ShopFragment1 extends Fragment {
 
-    public RecipeFragment1() {
+    private ShopAdapter shopAdapter;
+
+    public ShopFragment1() {
     }
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<RecipeItem> arrayList;
+    private ArrayList<ShopItem> shopItemArrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_recipe_1, container, false);
+        View view = inflater.inflate(R.layout.frag_myshop_1, container, false);
 
 
         Log.d("test", "check2");
-        recyclerView = view.findViewById(R.id.rcp_recyclerview);
+        recyclerView = view.findViewById(R.id.shop_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        arrayList = new ArrayList<>();
+        shopItemArrayList = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test", "check3");
-        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
+        databaseReference = database.getReference("ShopItem"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                arrayList.clear();
+                shopItemArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
-                    arrayList.add(recipeItem);
+                    ShopItem shopItem = snapshot.getValue(ShopItem.class);
+                    shopItemArrayList.add(shopItem);
                 }
-                Log.d("TEST", String.valueOf(arrayList.size()));
-                adapter = new ItemAdapter(arrayList, getContext());
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                Log.d("TEST", String.valueOf(shopItemArrayList.size()));
+                shopAdapter = new ShopAdapter(shopItemArrayList, getContext());
+                recyclerView.setAdapter(shopAdapter);
+                shopAdapter.notifyDataSetChanged();
 
 
             }
@@ -85,6 +81,4 @@ public class RecipeFragment1 extends Fragment  {
         return view;
 
     }
-
-
 }
