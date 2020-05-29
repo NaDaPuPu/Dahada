@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
 
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(context, RecipeDetails1.class);
+                context.startActivity(intent);
                 Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }
         });

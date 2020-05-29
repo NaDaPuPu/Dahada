@@ -50,6 +50,8 @@
             android:name=".data.activity_main.fragment_main.ShoppingActivity"
             android:label="쇼핑"
             android:launchMode="singleTop" />
+
+        <activity android:name=".data.activity_main.fragment_main.recipe.RecipeDetails1"/>
     </application>
 
 </manifest>
