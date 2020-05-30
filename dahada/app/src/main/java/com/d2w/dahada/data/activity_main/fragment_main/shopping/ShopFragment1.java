@@ -38,14 +38,14 @@ public class ShopFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.frag_shop_1, container, false);
 
 
-        Log.d("test", "check2");
+        Log.d("test", "shop_check2");
         recyclerView = view.findViewById(R.id.shop_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         shopItemArrayList = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
-        Log.d("test", "check3");
+        Log.d("test", "shop_check3");
         databaseReference = database.getReference("ShopItem"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -56,7 +56,7 @@ public class ShopFragment1 extends Fragment {
                     ShopItem shopItem = snapshot.getValue(ShopItem.class);
                     shopItemArrayList.add(shopItem);
                 }
-                Log.d("TEST", String.valueOf(shopItemArrayList.size()));
+                Log.d("shop_TEST", String.valueOf(shopItemArrayList.size()));
                 shopAdapter = new ShopAdapter(shopItemArrayList, getContext());
                 recyclerView.setAdapter(shopAdapter);
                 shopAdapter.notifyDataSetChanged();

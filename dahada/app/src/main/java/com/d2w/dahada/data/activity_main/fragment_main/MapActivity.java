@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.d2w.dahada.R;
 
 public class MapActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

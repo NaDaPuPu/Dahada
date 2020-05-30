@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.activity_main.fragment_main.shopping.ShopAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +55,7 @@ public class RecipeDetails1 extends AppCompatActivity {
                     arrayList.add(recipeItem);
                 }
                 Log.d("TEST", String.valueOf(arrayList.size()));
+
 
 
             }

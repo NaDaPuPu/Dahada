@@ -7,10 +7,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_main.recipe.SectionPageAdapter;
+import com.d2w.dahada.data.activity_main.fragment_main.rex_ex.RecEx_SectionPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecExerActivity extends AppCompatActivity {
-    SectionPageAdapter sectionPageAdapter;
+    RecEx_SectionPageAdapter recEx_sectionPageAdapter;
     ViewPager viewPager;
 
     @Override
@@ -21,21 +22,17 @@ public class RecExerActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.rec_ex_tablayout);
 
         tabLayout.addTab((tabLayout.newTab().setText("전체")));
-        tabLayout.addTab((tabLayout.newTab().setText("인기")));
         tabLayout.addTab((tabLayout.newTab().setText("전신")));
-        tabLayout.addTab((tabLayout.newTab().setText("어깨/가슴")));
-        tabLayout.addTab((tabLayout.newTab().setText("허리")));
-        tabLayout.addTab((tabLayout.newTab().setText("복부")));
-        tabLayout.addTab((tabLayout.newTab().setText("허벅지")));
-        tabLayout.addTab((tabLayout.newTab().setText("종아리")));
-        tabLayout.addTab((tabLayout.newTab().setText("체형교정")));
+        tabLayout.addTab((tabLayout.newTab().setText("상체")));
+        tabLayout.addTab((tabLayout.newTab().setText("하체")));
+
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        recEx_sectionPageAdapter = new RecEx_SectionPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
         viewPager = findViewById(R.id.rec_ex_viewPager);
-        viewPager.setAdapter(sectionPageAdapter);
+        viewPager.setAdapter(recEx_sectionPageAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
@@ -45,7 +42,7 @@ public class RecExerActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                sectionPageAdapter.notifyDataSetChanged();
+                recEx_sectionPageAdapter.notifyDataSetChanged();
             }
 
             @Override
