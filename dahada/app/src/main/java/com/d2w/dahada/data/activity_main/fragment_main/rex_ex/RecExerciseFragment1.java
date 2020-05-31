@@ -15,24 +15,26 @@ import com.d2w.dahada.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class RecExerciseFragment1 extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+    RecyclerView recyclerView;
+    Vector<Movie> movies = new Vector<Movie>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rec_exercise_1, container, false);
 
-        List<Movie> contents = new ArrayList<>();
-        contents.add(new Movie("MuFg23Tj7i0", "마일리 사이러스 하체운동"));
-        contents.add(new Movie("MuFg23Tj7i0", "마일리 사이러스 하체운동2"));
-
         recyclerView = view.findViewById(R.id.rec_ex_1_recyclerview);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new RecEx_RecyclerAdapter(contents));
+
+        movies.add( new Movie("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/eWEF1Zrmdow\" frameborder=\"0\" allowfullscreen></iframe>", "동영상1 제목을 적으세요.") );
+
+        RecEx_RecyclerAdapter recEx_recyclerAdapter = new RecEx_RecyclerAdapter(movies);
+
+        recyclerView.setAdapter(recEx_recyclerAdapter);
 
         return view;
     }
