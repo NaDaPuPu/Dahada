@@ -3,7 +3,6 @@ package com.d2w.dahada;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.d2w.dahada.data.activity_main.Calender;
+import com.d2w.dahada.data.activity_main.CalendarFragment;
 import com.d2w.dahada.data.activity_main.Community;
 import com.d2w.dahada.data.activity_main.Main;
 import com.d2w.dahada.data.activity_main.Mypage;
@@ -24,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     Main main;
-    Calender calender;
+    CalendarFragment calendarFragment;
     Community community;
     Notice notice;
     Mypage mypage;
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
         main = new Main();
-        calender = new Calender();
+        calendarFragment = new CalendarFragment();
         community = new Community();
         notice = new Notice();
         mypage = new Mypage();
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab2:
 //                        Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, calender).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarFragment).commit();
                         return true;
 
                     case R.id.tab3:
