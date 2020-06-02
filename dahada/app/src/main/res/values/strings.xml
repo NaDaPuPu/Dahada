@@ -42,6 +42,10 @@
     <string name="txt_my_exercisemap">내 운동코스</string>
     <string name="txt_rec_exercise">추천 운동법</string>
     <string name="txt_blank">공백</string>
+    <string name="txt_shop_gmarket">지마켓</string>
+    <string name="txt_shop_ssg">SSG</string>
+    <string name="txt_shop_kurly">마켓컬리</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

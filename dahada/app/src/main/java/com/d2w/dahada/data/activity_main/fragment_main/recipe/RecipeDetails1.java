@@ -1,18 +1,13 @@
 package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.d2w.dahada.R;
-import com.d2w.dahada.data.activity_main.fragment_main.shopping.ShopAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

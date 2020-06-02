@@ -1,12 +1,16 @@
 package com.d2w.dahada.data.activity_main.fragment_main.shopping;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,61 +26,36 @@ import java.util.ArrayList;
 
 public class ShopFragment1 extends Fragment {
 
-    private ShopAdapter shopAdapter;
-
-    public ShopFragment1() {
-    }
-
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ShopItem> shopItemArrayList;
-    private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_shop_1, container, false);
-
-
-        Log.d("test", "shop_check2");
-        recyclerView = view.findViewById(R.id.shop_recyclerview);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        shopItemArrayList = new ArrayList<>();
-
-        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
-        Log.d("test", "shop_check3");
-        databaseReference = database.getReference("ShopItem"); // DB 테이블 연결
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        Button button14 = (Button) view.findViewById(R.id.button14);
+        button14.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                shopItemArrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ShopItem shopItem = snapshot.getValue(ShopItem.class);
-                    shopItemArrayList.add(shopItem);
-                }
-                Log.d("shop_TEST", String.valueOf(shopItemArrayList.size()));
-                shopAdapter = new ShopAdapter(shopItemArrayList, getContext());
-                recyclerView.setAdapter(shopAdapter);
-                shopAdapter.notifyDataSetChanged();
-
-
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.gmarket.co.kr"));
+                startActivity(myIntent);
             }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Log.e("Fragment1", String.valueOf(databaseError.toException()));
-            }
-
         });
-
-
-        Log.d("test", "check5");
-
+        Button button15 = (Button) view.findViewById(R.id.button15);
+        button15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ssg.com"));
+                startActivity(myIntent);
+            }
+        });
+        Button button16 = (Button) view.findViewById(R.id.button16);
+        button16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kurly.com"));
+                startActivity(myIntent);
+            }
+        });
         return view;
-
     }
+
+
 }

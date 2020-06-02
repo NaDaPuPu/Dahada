@@ -7,10 +7,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_main.recipe.SectionPageAdapter;
+import com.d2w.dahada.data.activity_main.fragment_main.shopping.Shop_SectionPage;
 import com.google.android.material.tabs.TabLayout;
 
 public class ShoppingActivity extends AppCompatActivity {
-    SectionPageAdapter sectionPageAdapter;
+    Shop_SectionPage shop_sectionPage;
     ViewPager shop_viewPager;
 
     @Override
@@ -20,15 +21,15 @@ public class ShoppingActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.shop_tablayout);
 
-        tabLayout.addTab((tabLayout.newTab().setText("유제품")));
-        tabLayout.addTab((tabLayout.newTab().setText("고기")));
-        tabLayout.addTab((tabLayout.newTab().setText("채소")));
+        tabLayout.addTab((tabLayout.newTab().setText("마켓")));
+        tabLayout.addTab((tabLayout.newTab().setText("닭가슴살")));
+        tabLayout.addTab((tabLayout.newTab().setText("샐러드")));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        shop_sectionPage = new Shop_SectionPage(getSupportFragmentManager(), tabLayout.getTabCount());
 
         shop_viewPager = findViewById(R.id.shop_viewPager);
-        shop_viewPager.setAdapter(sectionPageAdapter);
+        shop_viewPager.setAdapter(shop_sectionPage);
         shop_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
@@ -38,7 +39,7 @@ public class ShoppingActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 shop_viewPager.setCurrentItem(tab.getPosition());
-                sectionPageAdapter.notifyDataSetChanged();
+                shop_sectionPage.notifyDataSetChanged();
             }
 
             @Override
