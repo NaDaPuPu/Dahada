@@ -2,6 +2,7 @@ package com.d2w.dahada.data.activity_main.fragment_calendar;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.d2w.dahada.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -34,7 +35,7 @@ public class EventDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.setSelectionDrawable(drawable);
+        // view.setSelectionDrawable(drawable); // 테두리 표시
         view.addSpan(new DotSpan(5, color)); // 날짜 밑에 점
     }
 }

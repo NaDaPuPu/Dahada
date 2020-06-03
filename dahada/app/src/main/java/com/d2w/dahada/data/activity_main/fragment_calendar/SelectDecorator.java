@@ -1,8 +1,9 @@
 package com.d2w.dahada.data.activity_main.fragment_calendar;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -13,15 +14,15 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
+import io.opencensus.trace.Span;
 
-/**
- * Decorate a day by making the text big and bold
- */
-public class OneDayDecorator implements DayViewDecorator {
+public class SelectDecorator implements DayViewDecorator {
+    private final Drawable drawable;
     private CalendarDay date;
 
-    public OneDayDecorator() {
-        date = CalendarDay.today();
+    public SelectDecorator(CalendarDay selectedDate , Activity context) {
+        date = selectedDate;
+        drawable = context.getResources().getDrawable(R.drawable.circledrawable);
     }
 
     @Override
@@ -32,6 +33,9 @@ public class OneDayDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         view.addSpan(new StyleSpan(Typeface.BOLD));
-        view.addSpan(new ForegroundColorSpan(Color.parseColor("#BECFA3")));
+        view.addSpan(new ForegroundColorSpan(Color.WHITE));
+        view.addSpan(new RelativeSizeSpan(1.4f));
+        view.setBackgroundDrawable(drawable);
+        //view.setSelectionDrawable(drawable);
     }
 }
