@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_calendar.EventDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.OneDayDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.SaturdayDecorator;
+import com.d2w.dahada.data.activity_main.fragment_calendar.Schedule;
 import com.d2w.dahada.data.activity_main.fragment_calendar.SundayDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -25,21 +27,28 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 
 public class CalendarFragment extends Fragment {
     View v;
-    private String kcal, shot_Day;
+    private String shot_Day;
     MaterialCalendarView materialCalendarView;
     EditText kcalText;
     Button buttonInput;
+
+    ArrayList<Schedule> scheduleList = new ArrayList<>();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,10 +66,37 @@ public class CalendarFragment extends Fragment {
                 new SundayDecorator(),
                 new SaturdayDecorator(),
                 new OneDayDecorator());
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
+            String line = null;
+            Log.d("BufferedReader", "나 실행됐어요");
 
-        String[] result = {"2020.05.18", "2020.06.18", "2020.08.18", "2020.09.18"};
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] readedContent = line.split(" ");
+                String rdate = readedContent[0];
+                String rkcal = readedContent[1];
+                Log.d("doInBackground", rdate + " " + rkcal);
 
-        new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+                Schedule schedule = new Schedule(simpleDateFormat.parse(rdate), Integer.parseInt(rkcal));
+                scheduleList.add(schedule);
+            }
+            bufferedReader.close();
+
+            String[] result = new String[scheduleList.size()];
+            for (int i = 0; i < scheduleList.size(); i++) {
+                result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
+                Log.d("result", result[i]);
+            }
+
+            new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             // 날짜 선택 시
@@ -73,6 +109,13 @@ public class CalendarFragment extends Fragment {
                 int Day = date.getDay();
 
                 shot_Day = Year + "." + Month + "." + Day;
+
+                for (int i = 0; i < scheduleList.size(); i++) {
+                    if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
+                        kcalText.setText(scheduleList.get(i).getKcal() + "");
+                    }
+                }
+
             }
         });
 
@@ -81,11 +124,45 @@ public class CalendarFragment extends Fragment {
         buttonInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = shot_Day + " " + kcalText.getText() + "\n";
+                String content = "";
                 try {
-                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(getContext().getFilesDir() + "savedCalendar", true));
+                    File directory = getActivity().getFilesDir();
+                    File file = new File(directory, "savedCalendar");
+                    FileWriter fileWriter = new FileWriter(getActivity().getFilesDir() + "savedCalendar", false);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()));
+                    int currentsize = scheduleList.size();
+                    boolean isChanged = false;
+
+                    if (currentsize == 0) {
+                        scheduleList.add(schedule);
+                        isChanged = true;
+                    }
+
+                    for (int i = 0; i < currentsize; i++) {
+                        if (simpleDateFormat.format(scheduleList.get(i).getDate()).equals(simpleDateFormat.format(schedule.getDate()))) {
+                            scheduleList.set(i, schedule);
+                            isChanged = true;
+                        } else if (i == currentsize - 1 && !isChanged) {
+                            scheduleList.add(schedule);
+                        }
+                    }
+
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i) .getKcal() + "\n";
+                    }
                     bufferedWriter.write(content);
-                } catch (IOException e) {
+                    bufferedWriter.close();
+
+                    String[] result = new String[scheduleList.size()];
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
+                    }
+
+                    new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+
+                    kcalText.setText("");
+                } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
             }
@@ -123,30 +200,6 @@ public class CalendarFragment extends Fragment {
                 calendar.set(year, month - 1, day);
                 CalendarDay calendarDay = CalendarDay.from(calendar);
                 dates.add(calendarDay);
-            }
-
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
-                String line = null;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    String[] readedContent = line.split(" ");
-                    String rdate = readedContent[0];
-                    String rkcal = readedContent[1];
-
-                    String[] time = rdate.split("\\."); // "."으로 하면 X
-                    int year = Integer.parseInt(time[0]);
-                    int month = Integer.parseInt(time[1]);
-                    int day = Integer.parseInt(time[2]);
-
-                    calendar.set(year, month - 1, day);
-                    CalendarDay calendarDay = CalendarDay.from(calendar);
-                    dates.add(calendarDay);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
             return dates;
         }
