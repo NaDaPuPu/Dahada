@@ -13,6 +13,7 @@ import com.d2w.dahada.data.activity_main.fragment_main.community.FirebaseID;
 import com.d2w.dahada.data.activity_main.fragment_main.community.Post;
 import com.d2w.dahada.data.activity_main.fragment_main.community.PostActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.community.PostAdapter;
+import com.d2w.dahada.data.model.LoggedInUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,7 @@ public class CommunityActivity extends AppCompatActivity implements View.OnClick
 
     private PostAdapter mAdapter;
     private List<Post> mDatas;
+    private List<LoggedInUser> mlogingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class CommunityActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onStart() {
         super.onStart();
+        mlogingData = new ArrayList<>();
         mDatas = new ArrayList<>();
         mStore.collection(FirebaseID.post)
                 //여기서부터 실시간으로 정보 불러오는 코드
@@ -57,7 +60,7 @@ public class CommunityActivity extends AppCompatActivity implements View.OnClick
                             for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
                                 Map<String, Object> shot = snap.getData();
                                 String documentId = String.valueOf(shot.get(FirebaseID.documentId));
-                                //String nickname = String.valueOf(shot.get(FirebaseID.nickname));
+                                String user = String.valueOf(shot.get(FirebaseID.user));
                                 String title = String.valueOf(shot.get(FirebaseID.title));
                                 String contents = String.valueOf(shot.get(FirebaseID.contents));
                                 Post data = new Post(documentId, title, contents);
