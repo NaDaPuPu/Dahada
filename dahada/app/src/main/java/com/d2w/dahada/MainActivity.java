@@ -3,7 +3,6 @@ package com.d2w.dahada;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.d2w.dahada.data.activity_main.Calender;
-import com.d2w.dahada.data.activity_main.Community;
 import com.d2w.dahada.data.activity_main.Main;
 import com.d2w.dahada.data.activity_main.Mypage;
 import com.d2w.dahada.data.activity_main.Notice;
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     Main main;
     Calender calender;
-    Community community;
     Notice notice;
     Mypage mypage;
 
@@ -56,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         main = new Main();
         calender = new Calender();
-        community = new Community();
         notice = new Notice();
         mypage = new Mypage();
 
@@ -78,16 +74,11 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.tab3:
-//                        Toast.makeText(getApplicationContext(), "커뮤니티", Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, community).commit();
-                        return true;
-
-                    case R.id.tab4:
 //                        Toast.makeText(getApplicationContext(), "알림", Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, notice).commit();
                         return true;
 
-                    case R.id.tab5:
+                    case R.id.tab4:
 //                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, mypage).commit();
                         return true;

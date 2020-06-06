@@ -79,6 +79,18 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".data.activity_main.fragment_main.CommunityActivity"
+            android:label="커뮤니티"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".data.activity_main.fragment_main.community.PostActivity"
+            android:label="글작성"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="cfbae38277a643d67c2cd60cb8c96db9"/>
     </application>

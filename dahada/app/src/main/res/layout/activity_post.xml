@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".data.activity_main.fragment_main.community.PostActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/post_title_edit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            tools:ignore="HardcodeText"/>
+
+        <Button
+            android:id="@+id/post_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/secondary_text_dark"
+            android:text="save"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/post_contents_edit"
+        android:layout_width="387dp"
+        android:layout_height="187dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:hint="Contents"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="16sp"
+        />
+
+</LinearLayout>

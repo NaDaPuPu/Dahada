@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.activity_main.fragment_main.CommunityActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.DietActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.MapActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.RecipeActivity;
@@ -71,7 +72,8 @@ public class Main extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.button_circle:
-                Toast.makeText(getActivity(), "공백", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), CommunityActivity.class);
+                startActivity(intent);
                 break;
 
             default:
