@@ -7,7 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,13 +17,18 @@ import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_calendar.EventDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.OneDayDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.SaturdayDecorator;
-import com.d2w.dahada.data.activity_main.fragment_calendar.SelectDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.SundayDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,9 +36,10 @@ import java.util.concurrent.Executors;
 
 public class CalendarFragment extends Fragment {
     View v;
-    private String kcal, menu, shot_Day;
+    private String kcal, shot_Day;
     MaterialCalendarView materialCalendarView;
-    SelectDecorator selectDecorator;
+    EditText kcalText;
+    Button buttonInput;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,21 +66,31 @@ public class CalendarFragment extends Fragment {
             // 날짜 선택 시
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                materialCalendarView.removeDecorator(selectDecorator);
-                selectDecorator = new SelectDecorator(date, getActivity());
-                materialCalendarView.addDecorator(selectDecorator);
+                materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
 
                 int Year = date.getYear();
                 int Month = date.getMonth() + 1;
                 int Day = date.getDay();
 
                 shot_Day = Year + "." + Month + "." + Day;
-
-                materialCalendarView.clearSelection();
-
-                Toast.makeText(getContext(), shot_Day, Toast.LENGTH_SHORT).show();
             }
         });
+
+        kcalText = v.findViewById(R.id.kcal);
+        buttonInput = v.findViewById(R.id.buttonInput);
+        buttonInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = shot_Day + " " + kcalText.getText() + "\n";
+                try {
+                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(getContext().getFilesDir() + "savedCalendar", true));
+                    bufferedWriter.write(content);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return v;
     }
 
@@ -106,6 +123,30 @@ public class CalendarFragment extends Fragment {
                 calendar.set(year, month - 1, day);
                 CalendarDay calendarDay = CalendarDay.from(calendar);
                 dates.add(calendarDay);
+            }
+
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
+                String line = null;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    String[] readedContent = line.split(" ");
+                    String rdate = readedContent[0];
+                    String rkcal = readedContent[1];
+
+                    String[] time = rdate.split("\\."); // "."으로 하면 X
+                    int year = Integer.parseInt(time[0]);
+                    int month = Integer.parseInt(time[1]);
+                    int day = Integer.parseInt(time[2]);
+
+                    calendar.set(year, month - 1, day);
+                    CalendarDay calendarDay = CalendarDay.from(calendar);
+                    dates.add(calendarDay);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return dates;
         }
