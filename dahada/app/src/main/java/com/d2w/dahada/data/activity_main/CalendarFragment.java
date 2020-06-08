@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
@@ -44,8 +46,10 @@ public class CalendarFragment extends Fragment {
     View v;
     private String shot_Day;
     MaterialCalendarView materialCalendarView;
+    ConstraintLayout inputContainer, outputContainer;
     EditText kcalText;
-    Button buttonInput;
+    TextView kcalText2, dateText;
+    Button buttonInput, buttonCancel, buttonEdit;
 
     ArrayList<Schedule> scheduleList = new ArrayList<>();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
@@ -53,6 +57,20 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_calendar, container, false);
+        // 컨테이너
+        inputContainer = v.findViewById(R.id.inputContainer);
+        outputContainer = v.findViewById(R.id.outputContainer);
+
+        // 텍스트
+        kcalText = v.findViewById(R.id.kcal);
+        kcalText2 = v.findViewById(R.id.kcal2);
+        dateText = v.findViewById(R.id.date);
+
+        // 버튼
+        buttonInput = v.findViewById(R.id.buttonInput);
+        buttonCancel = v.findViewById(R.id.buttonCancel);
+        buttonEdit = v.findViewById(R.id.buttonEdit);
+
         materialCalendarView = v.findViewById(R.id.calendarView);
 
         materialCalendarView.state().edit()
@@ -103,6 +121,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
+                boolean ifEquals = false;
 
                 int Year = date.getYear();
                 int Month = date.getMonth() + 1;
@@ -110,18 +129,22 @@ public class CalendarFragment extends Fragment {
 
                 shot_Day = Year + "." + Month + "." + Day;
 
+                dateText.setText("date : " + shot_Day);
+
                 for (int i = 0; i < scheduleList.size(); i++) {
                     if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
-                        kcalText.setText(scheduleList.get(i).getKcal() + "");
+                        kcalText2.setText("kcal : " + scheduleList.get(i).getKcal() + "kcal");
+                        ifEquals = true;
                     }
                 }
 
+                if (!ifEquals) {
+                    kcalText2.setText("kcal : ");
+                }
             }
         });
 
-        kcalText = v.findViewById(R.id.kcal);
-        buttonInput = v.findViewById(R.id.buttonInput);
-        buttonInput.setOnClickListener(new View.OnClickListener() {
+        buttonInput.setOnClickListener(new View.OnClickListener() { // 입력 버튼
             @Override
             public void onClick(View v) {
                 String content = "";
@@ -161,10 +184,30 @@ public class CalendarFragment extends Fragment {
 
                     new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
+                    kcalText2.setText("kcal : " + kcalText.getText());
                     kcalText.setText("");
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
+
+                inputContainer.setVisibility(View.GONE);
+                outputContainer.setVisibility(View.VISIBLE);
+            }
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputContainer.setVisibility(View.GONE);
+                outputContainer.setVisibility(View.VISIBLE);
+            }
+        });
+
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputContainer.setVisibility(View.VISIBLE);
+                outputContainer.setVisibility(View.GONE);
             }
         });
 
