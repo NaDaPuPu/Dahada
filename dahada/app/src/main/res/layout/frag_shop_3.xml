@@ -1,71 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/shop_rec"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <Button
-        android:id="@+id/btn_shop_gmarktet"
+        android:id="@+id/btn_shop_pocketsalad"
         android:layout_width="65dp"
         android:layout_height="65dp"
+        android:layout_marginTop="241dp"
         android:layout_marginEnd="27dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/ic_launcher_background"
-        android:text="G"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_ssg"
-        app:layout_constraintEnd_toStartOf="@+id/btn_shop_ssg" />
-
+        android:text="Pocket"
+        app:layout_constraintBottom_toTopOf="@+id/text_shop_pocketsalad"
+        app:layout_constraintEnd_toStartOf="@+id/btn_shop_salady"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_shop_ssg"
+        android:id="@+id/btn_shop_salady"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginTop="241dp"
         android:background="@drawable/ic_launcher_background"
-        android:text="SSG"
+        android:text="salady"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_shop_kurly"
+        android:id="@+id/btn_shop_saladdays"
         android:layout_width="65dp"
         android:layout_height="65dp"
+        android:layout_marginTop="241dp"
         android:layout_marginEnd="80dp"
         android:background="@drawable/ic_launcher_background"
-        android:text="M"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_ssg"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="days"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
-        android:id="@+id/text_shop_gmarket"
+        android:id="@+id/text_shop_pocketsalad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
-        android:text="지마켓"
-        app:layout_constraintEnd_toEndOf="@+id/btn_shop_gmarktet"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_gmarktet" />
+        android:layout_marginEnd="40dp"
+        android:text="포켓샐러드"
+        app:layout_constraintEnd_toStartOf="@+id/text_shop_salady"
+        app:layout_constraintTop_toBottomOf="@+id/btn_shop_pocketsalad" />
 
     <TextView
-        android:id="@+id/text_shop_ssg"
+        android:id="@+id/text_shop_salady"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="8dp"
-        android:text="SSG"
-        app:layout_constraintStart_toStartOf="@+id/btn_shop_ssg"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_ssg" />
+        android:text="샐러디"
+        app:layout_constraintStart_toStartOf="@+id/btn_shop_salady"
+        app:layout_constraintTop_toBottomOf="@+id/btn_shop_salady" />
 
     <TextView
-        android:id="@+id/text_shop_kurly"
+        android:id="@+id/text_shop_saladdays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="마켓컬리"
-        app:layout_constraintEnd_toEndOf="@+id/btn_shop_kurly"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_kurly" />
+        android:text="샐러데이즈"
+        app:layout_constraintStart_toEndOf="@+id/text_shop_salady"
+        app:layout_constraintTop_toBottomOf="@+id/btn_shop_saladdays" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,24 +30,24 @@ public class ShopFragment1 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_shop_1, container, false);
-        Button button14 = (Button) view.findViewById(R.id.button14);
-        button14.setOnClickListener(new View.OnClickListener() {
+        Button btn_shop_gmarket = (Button) view.findViewById(R.id.btn_shop_gmarktet);
+        btn_shop_gmarket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.gmarket.co.kr"));
                 startActivity(myIntent);
             }
         });
-        Button button15 = (Button) view.findViewById(R.id.button15);
-        button15.setOnClickListener(new View.OnClickListener() {
+        Button btn_shop_ssg = (Button) view.findViewById(R.id.btn_shop_ssg);
+        btn_shop_ssg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ssg.com"));
                 startActivity(myIntent);
             }
         });
-        Button button16 = (Button) view.findViewById(R.id.button16);
-        button16.setOnClickListener(new View.OnClickListener() {
+        Button btn_shop_kurly = (Button) view.findViewById(R.id.btn_shop_kurly);
+        btn_shop_kurly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kurly.com"));
