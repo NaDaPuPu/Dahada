@@ -47,8 +47,8 @@ public class CalendarFragment extends Fragment {
     private String shot_Day;
     MaterialCalendarView materialCalendarView;
     ConstraintLayout inputContainer, outputContainer;
-    EditText kcalText;
-    TextView kcalText2, dateText;
+    EditText kcalText, menuText;
+    TextView kcalText2, menuText2, dateText;
     Button buttonInput, buttonCancel, buttonEdit;
 
     ArrayList<Schedule> scheduleList = new ArrayList<>();
@@ -64,6 +64,8 @@ public class CalendarFragment extends Fragment {
         // 텍스트
         kcalText = v.findViewById(R.id.kcal);
         kcalText2 = v.findViewById(R.id.kcal2);
+        menuText = v.findViewById(R.id.menu);
+        menuText2 = v.findViewById(R.id.menu2);
         dateText = v.findViewById(R.id.date);
 
         // 버튼
@@ -93,9 +95,10 @@ public class CalendarFragment extends Fragment {
                 String[] readedContent = line.split(" ");
                 String rdate = readedContent[0];
                 String rkcal = readedContent[1];
+                String rmenu = readedContent[2];
                 Log.d("doInBackground", rdate + " " + rkcal);
 
-                Schedule schedule = new Schedule(simpleDateFormat.parse(rdate), Integer.parseInt(rkcal));
+                Schedule schedule = new Schedule(simpleDateFormat.parse(rdate), Integer.parseInt(rkcal), rmenu);
                 scheduleList.add(schedule);
             }
             bufferedReader.close();
@@ -133,13 +136,15 @@ public class CalendarFragment extends Fragment {
 
                 for (int i = 0; i < scheduleList.size(); i++) {
                     if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
-                        kcalText2.setText("kcal : " + scheduleList.get(i).getKcal() + "kcal");
+                        kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
+                        menuText2.setText("menu : " + scheduleList.get(i).getMenu());
                         ifEquals = true;
                     }
                 }
 
                 if (!ifEquals) {
                     kcalText2.setText("kcal : ");
+                    menuText2.setText("menu : ");
                 }
             }
         });
@@ -153,7 +158,7 @@ public class CalendarFragment extends Fragment {
                     File file = new File(directory, "savedCalendar");
                     FileWriter fileWriter = new FileWriter(getActivity().getFilesDir() + "savedCalendar", false);
                     BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()));
+                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()), menuText.getText().toString());
                     int currentsize = scheduleList.size();
                     boolean isChanged = false;
 
@@ -172,7 +177,7 @@ public class CalendarFragment extends Fragment {
                     }
 
                     for (int i = 0; i < scheduleList.size(); i++) {
-                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i) .getKcal() + "\n";
+                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i).getKcal() + " " + scheduleList.get(i).getMenu() + "\n";
                     }
                     bufferedWriter.write(content);
                     bufferedWriter.close();
@@ -185,7 +190,9 @@ public class CalendarFragment extends Fragment {
                     new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
                     kcalText2.setText("kcal : " + kcalText.getText());
+                    menuText2.setText("menu :" + menuText.getText());
                     kcalText.setText("");
+                    menuText.setText("");
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
@@ -200,6 +207,8 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 inputContainer.setVisibility(View.GONE);
                 outputContainer.setVisibility(View.VISIBLE);
+                kcalText.setText("");
+                menuText.setText("");
             }
         });
 
@@ -208,6 +217,11 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 inputContainer.setVisibility(View.VISIBLE);
                 outputContainer.setVisibility(View.GONE);
+
+                if (!kcalText2.getText().toString().equals("kcal : ")) {
+                    kcalText.setText(kcalText2.getText().toString().substring(7));
+                    menuText.setText(menuText2.getText().toString().substring(7));
+                }
             }
         });
 
