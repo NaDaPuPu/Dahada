@@ -1,70 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_shop_ranking_chiken"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="241dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rankingdakcom"
-        app:layout_constraintBottom_toTopOf="@+id/text_shop_ranking_chiken"
-        app:layout_constraintEnd_toStartOf="@+id/btn_shop_the_benefood"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_shop_the_benefood"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="241dp"
-        android:background="@drawable/thebenefood"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp">
 
-    <Button
-        android:id="@+id/btn_shop_sleek_market"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginEnd="80dp"
-        android:background="@drawable/sleekmarket"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_the_benefood"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <LinearLayout
+        android:layout_width="110dp"
+        android:layout_height="140dp"
+        android:orientation="vertical">
 
+        <Button
+            android:id="@+id/btn_shop_the_benefood"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/thebenefood" />
 
-    <TextView
-        android:id="@+id/text_shop_ranking_chiken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="35dp"
-        android:text="랭킹닭컴"
-        app:layout_constraintEnd_toStartOf="@+id/text_shop_the_benefood"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_ranking_chiken" />
+        <TextView
+            android:id="@+id/text_shop_the_benefood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="더베네푸드"
+            android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/text_shop_the_benefood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="더베네푸드"
-        app:layout_constraintStart_toStartOf="@+id/btn_shop_the_benefood"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_the_benefood" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/text_shop_sleek_market"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="8dp"
-        android:text="슬릭마켓"
-        app:layout_constraintStart_toEndOf="@+id/text_shop_the_benefood"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_sleek_market" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="145dp"
+        android:layout_marginTop="10dp">
+
+    <LinearLayout
+        android:layout_width="110dp"
+        android:layout_height="140dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_shop_ranking_chiken"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/rankingdakcom" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/text_shop_ranking_chiken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:text="랭킹닭컴" />
+
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="275dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_shop_sleek_market"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/sleekmarket" />
+
+
+        <TextView
+            android:id="@+id/text_shop_sleek_market"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:text="슬릭마켓" />
+
+    </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

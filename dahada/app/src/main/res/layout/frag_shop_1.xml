@@ -1,68 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/shop_rec"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp">
 
-    <Button
-        android:id="@+id/btn_shop_gmarktet"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginEnd="27dp"
-        android:background="@drawable/gmarket"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_ssg"
-        app:layout_constraintEnd_toStartOf="@+id/btn_shop_ssg" />
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_shop_ssg"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/ssg" />
+
+            <TextView
+                android:id="@+id/text_shop_ssg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="SSG"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="145dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_shop_gmarktet"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/gmarket" />
 
 
-    <Button
-        android:id="@+id/btn_shop_ssg"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="241dp"
-        android:background="@drawable/ssg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/text_shop_gmarket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:text="지마켓" />
 
-    <Button
-        android:id="@+id/btn_shop_kurly"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginEnd="80dp"
-        android:background="@drawable/marketkurly"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_ssg"
-        app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/text_shop_gmarket"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
-        android:text="지마켓"
-        app:layout_constraintEnd_toEndOf="@+id/btn_shop_gmarktet"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_gmarktet" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="275dp"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:id="@+id/text_shop_ssg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
-        android:text="SSG"
-        app:layout_constraintStart_toStartOf="@+id/btn_shop_ssg"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_ssg" />
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_shop_kurly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="마켓컬리"
-        app:layout_constraintEnd_toEndOf="@+id/btn_shop_kurly"
-        app:layout_constraintTop_toBottomOf="@+id/btn_shop_kurly" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_shop_kurly"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/marketkurly" />
+
+
+            <TextView
+                android:id="@+id/text_shop_kurly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:text="마켓컬리" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>
