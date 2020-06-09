@@ -11,8 +11,7 @@
         android:layout_marginTop="241dp"
         android:layout_marginEnd="27dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="Pocket"
+        android:background="@drawable/pocketsalad"
         app:layout_constraintBottom_toTopOf="@+id/text_shop_pocketsalad"
         app:layout_constraintEnd_toStartOf="@+id/btn_shop_salady"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,8 +21,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginTop="241dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="salady"
+        android:background="@drawable/salady"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +32,7 @@
         android:layout_height="65dp"
         android:layout_marginTop="241dp"
         android:layout_marginEnd="80dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="days"
+        android:background="@drawable/saladdays"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

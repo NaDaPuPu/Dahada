@@ -12,8 +12,7 @@
         android:layout_marginTop="241dp"
         android:layout_marginEnd="27dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="R"
+        android:background="@drawable/rankingdakcom"
         app:layout_constraintBottom_toTopOf="@+id/text_shop_ranking_chiken"
         app:layout_constraintEnd_toStartOf="@+id/btn_shop_the_benefood"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,8 +22,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginTop="241dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="The"
+        android:background="@drawable/thebenefood"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +32,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginEnd="80dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="Sleek"
+        android:background="@drawable/sleekmarket"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_the_benefood"
         app:layout_constraintEnd_toEndOf="parent" />
 

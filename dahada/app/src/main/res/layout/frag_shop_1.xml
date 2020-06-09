@@ -12,8 +12,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginEnd="27dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="G"
+        android:background="@drawable/gmarket"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_ssg"
         app:layout_constraintEnd_toStartOf="@+id/btn_shop_ssg" />
 
@@ -23,8 +22,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginTop="241dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="SSG"
+        android:background="@drawable/ssg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +32,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginEnd="80dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="M"
+        android:background="@drawable/marketkurly"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_shop_ssg"
         app:layout_constraintEnd_toEndOf="parent" />
 
