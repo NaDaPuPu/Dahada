@@ -89,14 +89,12 @@ public class CalendarFragment extends Fragment {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
             String line = null;
-            Log.d("BufferedReader", "나 실행됐어요");
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] readedContent = line.split(" ");
                 String rdate = readedContent[0];
                 String rkcal = readedContent[1];
                 String rmenu = readedContent[2];
-                Log.d("doInBackground", rdate + " " + rkcal);
 
                 Schedule schedule = new Schedule(simpleDateFormat.parse(rdate), Integer.parseInt(rkcal), rmenu);
                 scheduleList.add(schedule);
@@ -106,7 +104,6 @@ public class CalendarFragment extends Fragment {
             String[] result = new String[scheduleList.size()];
             for (int i = 0; i < scheduleList.size(); i++) {
                 result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
-                Log.d("result", result[i]);
             }
 
             new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
@@ -247,7 +244,6 @@ public class CalendarFragment extends Fragment {
             ArrayList<CalendarDay> dates = new ArrayList<>();
 
             for (int i = 0; i < Time_Result.length; i++) {
-                Log.d("time", Time_Result[i]);
 
                 String[] time = Time_Result[i].split("\\."); // "."으로 하면 X
                 int year = Integer.parseInt(time[0]);
