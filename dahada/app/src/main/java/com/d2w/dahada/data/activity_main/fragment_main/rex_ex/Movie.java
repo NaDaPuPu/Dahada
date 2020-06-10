@@ -10,4 +10,20 @@ public class Movie {
         this.videoId = videoId;
         this.videoname = videoname;
     }
+
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
+    }
+
+    public String getVideoname() {
+        return videoname;
+    }
+
+    public void setVideoname(String videoname) {
+        this.videoname = videoname;
+    }
 }

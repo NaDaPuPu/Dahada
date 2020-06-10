@@ -4,9 +4,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment1;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment2;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment3;
 
 public class RecEx_SectionPageAdapter extends FragmentStatePagerAdapter {
     int num;
