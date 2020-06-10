@@ -2,10 +2,9 @@ package com.d2w.dahada;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import com.d2w.dahada.data.activity_main.Mypage;
 import com.d2w.dahada.data.activity_main.Notice;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 
 public class MainActivity extends AppCompatActivity {
 
