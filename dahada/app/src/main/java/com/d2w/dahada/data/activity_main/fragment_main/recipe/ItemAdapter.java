@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +36,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.main_recipe_list_item, parent, false);
-        CustomViewHolder holder = new CustomViewHolder(view);
+        final CustomViewHolder holder = new CustomViewHolder(view);
+
+
+        holder.item.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RecipeDetails1.class);
+                context.startActivity(intent);
+                Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return holder;
     }
     @Override
@@ -43,15 +59,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
         holder.tv_id.setText(arrayList.get(position).getRecipeName());
         holder.tv_cal.setText(String.valueOf(arrayList.get(position).getRecipeKcal()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecipeFragment1 recipeFragment1 = new RecipeFragment1();
-                RecipeDetail1 recipeDetail1 = new RecipeDetail1();
-                
-            }
-        });
-
     }
     @Override
     public int getItemCount() {
@@ -59,16 +66,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
     }
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
-
+        CardView item;
         ImageView iv_picture;
         TextView tv_id;
         TextView tv_cal;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            this.item = itemView.findViewById(R.id.cardview_item);
             this.iv_picture = itemView.findViewById(R.id.iv_picture);
             this.tv_id = itemView.findViewById(R.id.tv_id);
             this.tv_cal = itemView.findViewById(R.id.tv_cal);
+
         }
 
 

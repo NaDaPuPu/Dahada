@@ -3,4 +3,7 @@
     <item name="toolbar" type="id" />
     <item name="pager" type="id" />
     <item name="tablayout" type="id" />
+    <item name="shop_cardview" type="id" />
+    <item name="button12" type="id" />
+    <item name="button15" type="id" />
 </resources>

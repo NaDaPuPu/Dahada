@@ -2,19 +2,11 @@ package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.d2w.dahada.MainActivity;
 import com.d2w.dahada.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,31 +15,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
 
-public class RecipeFragment1 extends Fragment  {
+public class RecipeDetails1 extends AppCompatActivity {
+
     private ItemAdapter adapter;
 
-    public RecipeFragment1() {
+    public RecipeDetails1() {
     }
 
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+
     private ArrayList<RecipeItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_recipe_1, container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_recipe_detail1);
 
-
-        Log.d("test", "check2");
-        recyclerView = view.findViewById(R.id.rcp_recyclerview);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         arrayList = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
@@ -60,12 +45,12 @@ public class RecipeFragment1 extends Fragment  {
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
+                    Log.d("RecipeItem : ", recipeItem.getRecipeName());
+                    Log.d("RecipeItem : ", recipeItem.getRecipeImage());
                     arrayList.add(recipeItem);
                 }
                 Log.d("TEST", String.valueOf(arrayList.size()));
-                adapter = new ItemAdapter(arrayList, getContext());
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+
 
 
             }
@@ -74,17 +59,10 @@ public class RecipeFragment1 extends Fragment  {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                Log.e("Fragment1", String.valueOf(databaseError.toException()));
+                Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));
             }
 
         });
 
-
-        Log.d("test", "check5");
-
-        return view;
-
     }
-
-
 }

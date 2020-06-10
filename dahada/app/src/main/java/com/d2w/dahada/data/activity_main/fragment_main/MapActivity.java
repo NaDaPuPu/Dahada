@@ -10,6 +10,7 @@ import com.d2w.dahada.R;
 import net.daum.mf.map.api.MapView;
 
 public class MapActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

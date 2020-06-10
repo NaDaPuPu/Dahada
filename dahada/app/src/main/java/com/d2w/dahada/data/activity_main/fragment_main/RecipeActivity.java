@@ -20,33 +20,33 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_recipe);
+                setContentView(R.layout.main_recipe);
 
-        TabLayout tabLayout = findViewById(R.id.tablayout);
+                TabLayout tabLayout = findViewById(R.id.tablayout);
 
-        tabLayout.addTab((tabLayout.newTab().setText("식사용 식단")));
-        tabLayout.addTab((tabLayout.newTab().setText("가벼운 식단")));
-        tabLayout.addTab((tabLayout.newTab().setText("다이어트 간식")));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                tabLayout.addTab((tabLayout.newTab().setText("식사용 식단")));
+                tabLayout.addTab((tabLayout.newTab().setText("가벼운 식단")));
+                tabLayout.addTab((tabLayout.newTab().setText("다이어트 간식")));
+                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
-        viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(sectionPageAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                viewPager = findViewById(R.id.viewPager);
+                viewPager.setAdapter(sectionPageAdapter);
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
 
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                sectionPageAdapter.notifyDataSetChanged();
-            }
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                        sectionPageAdapter.notifyDataSetChanged();
+                    }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
