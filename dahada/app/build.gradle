@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "com.d2w.dahada"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -69,4 +69,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+
+    implementation 'com.google.firebase:firebase-messaging:20.1.7'
+
+
 }
+apply plugin: 'com.google.gms.google-services'
+
