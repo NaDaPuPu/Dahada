@@ -74,7 +74,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".data.activity_main.fragment_main.ResExerActivity"
+            android:name=".data.activity_main.fragment_main.RecExerActivity"
             android:label="추천 운동법"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -108,10 +108,10 @@
 
         <uses-library android:name="com.google.android.maps" />
         <activity android:name=".data.activity_main.fragment_main.recipe.RecipeDetails1"/>
+
         <service
             android:name=".datapushsend.FirebaseMessagingService"
             android:stopWithTask="false">
-
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
