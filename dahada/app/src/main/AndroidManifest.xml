@@ -84,6 +84,18 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".data.activity_main.fragment_main.CommunityActivity"
+            android:label="커뮤니티"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".data.activity_main.fragment_main.community.PostActivity"
+            android:label="글작성"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity android:name=".data.activity_main.fragment_main.recipe.RecipeDetails1"/>
     </application>
