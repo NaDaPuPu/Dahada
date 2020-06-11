@@ -1,13 +1,17 @@
 package com.d2w.dahada.data.activity_main.fragment_main.diet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +22,8 @@ import java.util.ArrayList;
 public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHolderDiet> {
     private ArrayList<DietItem> arrayList;
     private Context context;
+    private TextView textView_diet;
+
 
 
     public DietAdapter(ArrayList<DietItem> arrayList, Context context) {
@@ -30,7 +36,18 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
     public CustomViewHolderDiet onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.diet_list_item, parent, false);
-        CustomViewHolderDiet holder = new CustomViewHolderDiet(view);
+        final CustomViewHolderDiet holder = new CustomViewHolderDiet(view);
+
+
+        holder.itemLinear_diet.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(context, "아이템 클릭됨"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+
+            }
+        });
         return holder;
     }
 
@@ -53,12 +70,14 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
         ImageView diet_iv_picture;
         TextView diet_tv_id;
         TextView diet_tv_cal;
+        LinearLayout itemLinear_diet;
 
         public CustomViewHolderDiet(@NonNull View itemView) {
             super(itemView);
             this.diet_iv_picture = itemView.findViewById(R.id.diet_iv_picture);
             this.diet_tv_id = itemView.findViewById(R.id.diet_tv_id);
             this.diet_tv_cal = itemView.findViewById(R.id.diet_tv_cal);
+            this.itemLinear_diet = itemView.findViewById(R.id.itemLinear_diet);
         }
     }
 }

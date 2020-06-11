@@ -21,42 +21,43 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class FragmentNut extends Fragment {
-    private DietAdapter adapter;
+    private DietAdapter_nut adapter_nut;
 
     public FragmentNut() {
     }
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<DietItem> arrayList;
+    private ArrayList<DietItem_nut> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_diet_veg, container, false);
+        View view = inflater.inflate(R.layout.fragment_diet_nut, container, false);
 
         Log.d("test","check2");
-        recyclerView = view.findViewById(R.id.recyclerview_diet_veg);
+        recyclerView = view.findViewById(R.id.recyclerview_diet_nut);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         arrayList = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test","check3");
-        databaseReference = database.getReference("DietItem"); // DB 테이블 연결
+        databaseReference = database.getReference("DietItem_nut"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DietItem dietItem = snapshot.getValue(DietItem.class);
-                    arrayList.add(dietItem);
+                    DietItem_nut dietItem_nut = snapshot.getValue(DietItem_nut.class);
+                    arrayList.add(dietItem_nut);
                 }
                 Log.d("TEST",String.valueOf(arrayList.size()));
-                adapter = new DietAdapter(arrayList,getContext());
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                adapter_nut = new DietAdapter_nut(arrayList,getContext());
+                recyclerView.setAdapter(adapter_nut);
+                adapter_nut.notifyDataSetChanged();
             }
 
 
