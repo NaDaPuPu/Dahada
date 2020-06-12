@@ -1,7 +1,10 @@
 package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,42 +26,39 @@ public class RecipeDetails1 extends AppCompatActivity {
     public RecipeDetails1() {
     }
 
-
     private ArrayList<RecipeItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+
+    private ImageView rcpImage;
+    private TextView rcpName, rcpEx, rcpEx2, rcpGram, rcpKcal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_recipe_detail1);
 
-        arrayList = new ArrayList<>();
+        Intent intent = getIntent();
+
+        rcpName = findViewById(R.id.rcpDetailname);
+        rcpKcal = findViewById(R.id.rcpDetailkcal);
+
+        int position = intent.getIntExtra("position", 0);
+        Log.d("RecipeDetails", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
-        Log.d("test", "check3");
-        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
+        databaseReference = database.getReference("RecipeItem/" + position); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                arrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
-                    Log.d("RecipeItem : ", recipeItem.getRecipeName());
-                    Log.d("RecipeItem : ", recipeItem.getRecipeImage());
-                    arrayList.add(recipeItem);
-                }
-                Log.d("TEST", String.valueOf(arrayList.size()));
-
-
-
+                RecipeItem recipeItem = dataSnapshot.getValue(RecipeItem.class);
+                assert recipeItem != null;
+                rcpName.setText(recipeItem.getRecipeName());
+                rcpKcal.setText(recipeItem.getRecipeKcal() + "");
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));
             }
 

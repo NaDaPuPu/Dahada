@@ -43,7 +43,6 @@ public class RecipeFragment1 extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_recipe_1, container, false);
 
-
         Log.d("test", "check2");
         recyclerView = view.findViewById(R.id.rcp_recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -56,7 +55,6 @@ public class RecipeFragment1 extends Fragment  {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
@@ -66,25 +64,15 @@ public class RecipeFragment1 extends Fragment  {
                 adapter = new ItemAdapter(arrayList, getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
-
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 Log.e("Fragment1", String.valueOf(databaseError.toException()));
             }
-
         });
-
-
         Log.d("test", "check5");
 
         return view;
-
     }
-
-
 }

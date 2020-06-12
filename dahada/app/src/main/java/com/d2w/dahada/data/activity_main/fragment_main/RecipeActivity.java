@@ -35,8 +35,6 @@ public class RecipeActivity extends AppCompatActivity {
                 viewPager.setAdapter(sectionPageAdapter);
                 viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-
-
                 tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
 
                     @Override
@@ -47,7 +45,6 @@ public class RecipeActivity extends AppCompatActivity {
 
                     @Override
                     public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
