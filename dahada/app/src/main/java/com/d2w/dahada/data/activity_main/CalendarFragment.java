@@ -144,6 +144,7 @@ public class CalendarFragment extends Fragment {
         }
 
         setHelper();
+        setHelper2();
 
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             // 날짜 선택 시
@@ -238,6 +239,7 @@ public class CalendarFragment extends Fragment {
                 inputContainer.setVisibility(View.GONE);
                 outputContainer.setVisibility(View.VISIBLE);
                 setHelper();
+                setHelper2();
             }
         });
 
@@ -313,15 +315,42 @@ public class CalendarFragment extends Fragment {
         helperTitle1.setText("이번 달 물 2L 마신 날 : " + cnum + "/" + mnum);
 
         if (cnum < 7) {
-            helperContent1.setText(R.string.day0);
+            helperContent1.setText(R.string.wday0);
         } else if (cnum < 14) {
-            helperContent1.setText(R.string.day7);
+            helperContent1.setText(R.string.wday7);
         } else if (cnum < 21) {
-            helperContent1.setText(R.string.day14);
+            helperContent1.setText(R.string.wday14);
         } else if (cnum < 28) {
-            helperContent1.setText(R.string.day21);
+            helperContent1.setText(R.string.wday21);
         } else if (cnum < mnum) {
-            helperContent1.setText(R.string.day28);
+            helperContent1.setText(R.string.wday28);
+        }
+    }
+
+    private void setHelper2() {
+        int count = 0;
+        CalendarDay todayCal = CalendarDay.today();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate()))) {
+                count++;
+            }
+        }
+
+        cnum = count;
+
+        helperTitle2.setText("이번 달 식단 입력한 날 : " + cnum + "/" + mnum);
+
+        if (cnum < 7) {
+            helperContent2.setText(R.string.day0);
+        } else if (cnum < 14) {
+            helperContent2.setText(R.string.day7);
+        } else if (cnum < 21) {
+            helperContent2.setText(R.string.day14);
+        } else if (cnum < 28) {
+            helperContent2.setText(R.string.day21);
+        } else if (cnum < mnum) {
+            helperContent2.setText(R.string.day28);
         }
     }
 
