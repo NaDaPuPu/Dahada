@@ -6,9 +6,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.d2w.dahada.R;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment1;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment2;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment3;
 import com.d2w.dahada.data.activity_main.fragment_main.recipe.SectionPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 

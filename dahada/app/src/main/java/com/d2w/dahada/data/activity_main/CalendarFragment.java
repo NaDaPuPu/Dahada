@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_calendar.EventDecorator;
+import com.d2w.dahada.data.activity_main.fragment_calendar.EventsDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.OneDayDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.SaturdayDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.Schedule;
@@ -45,18 +46,22 @@ import java.util.concurrent.Executors;
 
 public class CalendarFragment extends Fragment {
     View v;
+    private Calendar calendar = Calendar.getInstance();
     private String shot_Day;
     private Date currentDate;
     private CalendarDay beforeSelectedDate;
+    private int cnum, cnum2;
+    private int mnum = calendar.getMaximum(Calendar.DAY_OF_MONTH);
     MaterialCalendarView materialCalendarView;
     ConstraintLayout inputContainer, outputContainer;
     EditText kcalText, menuText;
-    TextView kcalText2, menuText2, dateText, waterText, waterText2;
+    TextView kcalText2, menuText2, dateText, waterText, waterText2, helperTitle1, helperTitle2, helperContent1, helperContent2;
     Button buttonInput, buttonCancel, buttonEdit;
     SeekBar seekBar;
 
     ArrayList<Schedule> scheduleList = new ArrayList<>();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +78,10 @@ public class CalendarFragment extends Fragment {
         dateText = v.findViewById(R.id.date);
         waterText = v.findViewById(R.id.water);
         waterText2 = v.findViewById(R.id.water2);
+        helperTitle1 = v.findViewById(R.id.helperTitle1);
+        helperTitle2 = v.findViewById(R.id.helperTitle2);
+        helperContent1 = v.findViewById(R.id.helperContent1);
+        helperContent2 = v.findViewById(R.id.helperContent2);
 
         // Seekbar
         seekBar = v.findViewById(R.id.seekBar);
@@ -95,6 +104,7 @@ public class CalendarFragment extends Fragment {
                 new SundayDecorator(),
                 new SaturdayDecorator(),
                 new OneDayDecorator());
+
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
             String line = null;
@@ -133,6 +143,8 @@ public class CalendarFragment extends Fragment {
             e.printStackTrace();
         }
 
+        setHelper();
+
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             // 날짜 선택 시
             @Override
@@ -166,7 +178,7 @@ public class CalendarFragment extends Fragment {
                         menuText2.setText("menu : ");
                         waterText2.setText("water : ");
                     }
-                    
+
                     beforeSelectedDate = date;
                 }
             }
@@ -209,7 +221,7 @@ public class CalendarFragment extends Fragment {
                     CalendarDays.add(CalendarDay.from(currentDate));
 
                     if (seekBar.getProgress() >= 20) {
-                        materialCalendarView.addDecorator(new EventDecorator(Color.BLUE, CalendarDays, getActivity()));
+                        materialCalendarView.addDecorator(new EventsDecorator(CalendarDays, getActivity()));
                     } else {
                         materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, CalendarDays, getActivity()));
                     }
@@ -225,6 +237,7 @@ public class CalendarFragment extends Fragment {
 
                 inputContainer.setVisibility(View.GONE);
                 outputContainer.setVisibility(View.VISIBLE);
+                setHelper();
             }
         });
 
@@ -283,6 +296,33 @@ public class CalendarFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void setHelper() {
+        int count = 0;
+        CalendarDay todayCal = CalendarDay.today();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate())) && scheduleList.get(i).getWater() >= 20) {
+                count++;
+            }
+        }
+
+        cnum = count;
+
+        helperTitle1.setText("이번 달 물 2L 마신 날 : " + cnum + "/" + mnum);
+
+        if (cnum < 7) {
+            helperContent1.setText(R.string.day0);
+        } else if (cnum < 14) {
+            helperContent1.setText(R.string.day7);
+        } else if (cnum < 21) {
+            helperContent1.setText(R.string.day14);
+        } else if (cnum < 28) {
+            helperContent1.setText(R.string.day21);
+        } else if (cnum < mnum) {
+            helperContent1.setText(R.string.day28);
+        }
     }
 
     private class L_CalendarDay {
@@ -368,7 +408,7 @@ public class CalendarFragment extends Fragment {
                 return;
             }
             materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, l_calendarDay.Time_Result, getActivity()));
-            materialCalendarView.addDecorator(new EventDecorator(Color.BLUE, l_calendarDay.Water_Result, getActivity()));
+            materialCalendarView.addDecorator(new EventsDecorator(l_calendarDay.Water_Result, getActivity()));
         }
     }
 }
