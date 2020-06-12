@@ -47,6 +47,7 @@ public class CalendarFragment extends Fragment {
     View v;
     private String shot_Day;
     private Date currentDate;
+    private CalendarDay beforeSelectedDate;
     MaterialCalendarView materialCalendarView;
     ConstraintLayout inputContainer, outputContainer;
     EditText kcalText, menuText;
@@ -136,31 +137,37 @@ public class CalendarFragment extends Fragment {
             // 날짜 선택 시
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
-                boolean ifEquals = false;
+                if (inputContainer.getVisibility() == View.VISIBLE) {
+                    materialCalendarView.setSelectedDate(beforeSelectedDate);
+                } else {
+                    materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
+                    boolean ifEquals = false;
 
-                int Year = date.getYear();
-                int Month = date.getMonth() + 1;
-                int Day = date.getDay();
+                    int Year = date.getYear();
+                    int Month = date.getMonth() + 1;
+                    int Day = date.getDay();
 
-                currentDate = date.getDate();
-                shot_Day = Year + "." + Month + "." + Day;
+                    currentDate = date.getDate();
+                    shot_Day = Year + "." + Month + "." + Day;
 
-                dateText.setText("date : " + shot_Day);
+                    dateText.setText("date : " + shot_Day);
 
-                for (int i = 0; i < scheduleList.size(); i++) {
-                    if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
-                        kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
-                        menuText2.setText("menu : " + scheduleList.get(i).getMenu());
-                        waterText2.setText("water : " + scheduleList.get(i).getWater() / 10.0 + "L");
-                        ifEquals = true;
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
+                            kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
+                            menuText2.setText("menu : " + scheduleList.get(i).getMenu());
+                            waterText2.setText("water : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                            ifEquals = true;
+                        }
                     }
-                }
 
-                if (!ifEquals) {
-                    kcalText2.setText("kcal : ");
-                    menuText2.setText("menu : ");
-                    waterText2.setText("water : ");
+                    if (!ifEquals) {
+                        kcalText2.setText("kcal : ");
+                        menuText2.setText("menu : ");
+                        waterText2.setText("water : ");
+                    }
+                    
+                    beforeSelectedDate = date;
                 }
             }
         });
@@ -246,8 +253,6 @@ public class CalendarFragment extends Fragment {
                             kcalText.setText(scheduleList.get(i).getKcal() + "");
                             menuText.setText(scheduleList.get(i).getMenu() + "");
                             waterText.setText("이 날 마신 물 : " + scheduleList.get(i).getWater() / 10.0 + "L");
-                            seekBar.setProgress(scheduleList.get(i).getWater());
-                            Log.d("ifEquals", seekBar.getProgress() + "");
                         }
                     }
                 } else {
