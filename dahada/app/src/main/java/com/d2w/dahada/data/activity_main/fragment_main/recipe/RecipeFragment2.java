@@ -23,14 +23,14 @@ import java.util.List;
 
 public class RecipeFragment2 extends Fragment {
 
-    private ItemAdapter adapter;
+    private ItemAdapter2 adapter;
 
     public RecipeFragment2() {
     }
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<RecipeItem> arrayList;
+    private ArrayList<RecipeItem2> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
@@ -47,18 +47,18 @@ public class RecipeFragment2 extends Fragment {
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test","check3");
-        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
+        databaseReference = database.getReference("RecipeItem2"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
-                    arrayList.add(recipeItem);
+                    RecipeItem2 recipeItem2 = snapshot.getValue(RecipeItem2.class);
+                    arrayList.add(recipeItem2);
                 }
                 Log.d("TEST",String.valueOf(arrayList.size()));
-                adapter = new ItemAdapter(arrayList,getContext());
+                adapter = new ItemAdapter2(arrayList,getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -67,7 +67,7 @@ public class RecipeFragment2 extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                Log.e("Fragment1", String.valueOf(databaseError.toException()));
+                Log.e("Fragment2", String.valueOf(databaseError.toException()));
             }
         });
 

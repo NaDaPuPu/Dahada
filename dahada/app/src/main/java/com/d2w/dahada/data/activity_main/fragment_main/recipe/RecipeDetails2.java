@@ -18,17 +18,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RecipeDetails1 extends AppCompatActivity {
+public class RecipeDetails2 extends AppCompatActivity {
 
-    private ItemAdapter adapter;
+    private ItemAdapter2 adapter;
 
     TextView rcpName,rcpKcal,rcpGram,rcpEx,rcpEx2;
 
-    public RecipeDetails1() {
+    public RecipeDetails2() {
     }
 
 
-    private ArrayList<RecipeItem> arrayList;
+    private ArrayList<RecipeItem2> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
@@ -50,24 +50,24 @@ public class RecipeDetails1 extends AppCompatActivity {
         Log.d("RecipeDetails", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
-        databaseReference = database.getReference("RecipeItem/" + position); // DB 테이블 연결
+        databaseReference = database.getReference("RecipeItem2/" + position); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                RecipeItem recipeItem = dataSnapshot.getValue(RecipeItem.class);
-                assert recipeItem != null;
-                rcpName.setText(recipeItem.getRecipeName());
-                rcpKcal.setText(recipeItem.getRecipeKcal() + "kcal");
-                rcpGram.setText(recipeItem.getRecipeGram() + "g");
-                rcpEx.setText(recipeItem.getRecipeEx1());
-                rcpEx2.setText(recipeItem.getRecipeEx2());
+                RecipeItem2 recipeItem2 = dataSnapshot.getValue(RecipeItem2.class);
+                assert recipeItem2 != null;
+                rcpName.setText(recipeItem2.getRecipeName());
+                rcpKcal.setText(recipeItem2.getRecipeKcal() + "kcal");
+                rcpGram.setText(recipeItem2.getRecipeGram() + "g");
+                rcpEx.setText(recipeItem2.getRecipeEx1());
+                rcpEx2.setText(recipeItem2.getRecipeEx2());
             }
 
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));
+                Log.e("RecipeDetails2", String.valueOf(databaseError.toException()));
             }
 
         });

@@ -22,14 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeFragment3 extends Fragment {
-    private ItemAdapter adapter;
+    private ItemAdapter3 adapter;
 
     public RecipeFragment3() {
     }
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<RecipeItem> arrayList;
+    private ArrayList<RecipeItem3> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
@@ -46,18 +46,18 @@ public class RecipeFragment3 extends Fragment {
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         Log.d("test","check3");
-        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
+        databaseReference = database.getReference("RecipeItem3"); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
-                    arrayList.add(recipeItem);
+                    RecipeItem3 recipeItem3 = snapshot.getValue(RecipeItem3.class);
+                    arrayList.add(recipeItem3);
                 }
                 Log.d("TEST",String.valueOf(arrayList.size()));
-                adapter = new ItemAdapter(arrayList,getContext());
+                adapter = new ItemAdapter3(arrayList,getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -66,7 +66,7 @@ public class RecipeFragment3 extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                Log.e("Fragment1", String.valueOf(databaseError.toException()));
+                Log.e("Fragment3", String.valueOf(databaseError.toException()));
             }
         });
 
