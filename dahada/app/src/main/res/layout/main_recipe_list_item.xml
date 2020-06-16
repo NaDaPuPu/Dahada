@@ -38,7 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="칼로리" />
+                android:text="칼로리"
+                android:drawableRight="@drawable/kcal" />
 
 
         </LinearLayout>
