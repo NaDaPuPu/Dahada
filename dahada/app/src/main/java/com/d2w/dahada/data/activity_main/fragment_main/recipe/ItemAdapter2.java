@@ -40,6 +40,7 @@ public class ItemAdapter2 extends RecyclerView.Adapter<ItemAdapter2.CustomViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RecipeDetails2.class);
+                intent.putExtra("position",holder.getAdapterPosition());
                 context.startActivity(intent);
                 Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }

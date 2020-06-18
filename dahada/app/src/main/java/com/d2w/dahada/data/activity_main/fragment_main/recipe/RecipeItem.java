@@ -1,5 +1,7 @@
 package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 
+import android.app.Activity;
+
 public class RecipeItem {
     private String RecipeImage;
     private String RecipeName;
@@ -17,13 +19,9 @@ public class RecipeItem {
         RecipeEx2 = recipeEx2;
     }
 
-    public RecipeItem() {
+    public RecipeItem() { }
 
-    }
-
-    public String getRecipeImage() {
-        return RecipeImage;
-    }
+    public String getRecipeImage() { return RecipeImage; }
 
     public void setRecipeImage(String recipeImage) {
         RecipeImage = recipeImage;
@@ -41,19 +39,28 @@ public class RecipeItem {
         return RecipeKcal;
     }
 
-    public void setRecipeKcal(int recipeKcal) {
-        RecipeKcal = recipeKcal;
+    public void setRecipeKcal(int recipeKcal) { RecipeKcal = recipeKcal; }
+
+    public int getRecipeGram() {
+        return RecipeGram;
     }
 
-    public int getRecipeGram() { return RecipeGram; }
-
-    public void setRecipeGram(int recipeGram) { RecipeGram = recipeGram; }
+    public void setRecipeGram(int recipeGram) {
+        RecipeGram = recipeGram;
+    }
 
     public String getRecipeEx1() { return RecipeEx1; }
 
-    public void setRecipeEx1(String recipeEx1) { RecipeEx1 = recipeEx1; }
+    public void setRecipeEx1(String recipeEx1) {
+        RecipeEx1 = recipeEx1;
+    }
 
-    public String getRecipeEx2() { return RecipeEx2; }
+    public String getRecipeEx2() {
+        return RecipeEx2;
+    }
 
-    public void setRecipeEx2(String recipeEx2) { RecipeEx2 = recipeEx2; }
+    public void setRecipeEx2(String recipeEx2) {
+        RecipeEx2 = recipeEx2;
+    }
 }
+

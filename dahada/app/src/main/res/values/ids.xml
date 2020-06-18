@@ -6,4 +6,5 @@
     <item name="shop_cardview" type="id" />
     <item name="button12" type="id" />
     <item name="button15" type="id" />
+    <item name="edit" type="id" />
 </resources>

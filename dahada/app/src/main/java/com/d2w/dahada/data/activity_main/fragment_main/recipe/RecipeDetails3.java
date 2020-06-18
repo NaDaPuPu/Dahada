@@ -3,6 +3,7 @@ package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,15 +23,15 @@ public class RecipeDetails3 extends AppCompatActivity {
 
     private ItemAdapter3 adapter;
 
-    TextView rcpName,rcpKcal,rcpGram,rcpEx,rcpEx2;
-
     public RecipeDetails3() {
     }
-
 
     private ArrayList<RecipeItem3> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+
+    private ImageView rcpImage;
+    private TextView rcpName, rcpEx, rcpEx2, rcpGram, rcpKcal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,28 +46,25 @@ public class RecipeDetails3 extends AppCompatActivity {
         rcpEx = findViewById(R.id.rcpDetailex1);
         rcpEx2 = findViewById(R.id.rcpDetailex2);
 
-
         int position = intent.getIntExtra("position", 0);
-        Log.d("RecipeDetails", "position : " + position);
+        Log.d("RecipeDetails3", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         databaseReference = database.getReference("RecipeItem3/" + position); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                RecipeItem3 recipeItem3 = dataSnapshot.getValue(RecipeItem3.class);
-                assert recipeItem3 != null;
-                rcpName.setText(recipeItem3.getRecipeName());
-                rcpKcal.setText(recipeItem3.getRecipeKcal() + "kcal");
-                rcpGram.setText(recipeItem3.getRecipeGram() + "g");
-                rcpEx.setText(recipeItem3.getRecipeEx1());
-                rcpEx2.setText(recipeItem3.getRecipeEx2());
+                RecipeItem3 recipeItem = dataSnapshot.getValue(RecipeItem3.class);
+                assert recipeItem != null;
+                rcpName.setText(recipeItem.getRecipeName());
+                rcpKcal.setText(recipeItem.getRecipeKcal() + "kcal");
+                rcpGram.setText(recipeItem.getRecipeGram() + "g");
+                rcpEx.setText(recipeItem.getRecipeEx1());
+                rcpEx2.setText(recipeItem.getRecipeEx2());
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 Log.e("RecipeDetails3", String.valueOf(databaseError.toException()));
             }
 

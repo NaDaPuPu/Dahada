@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.activity_main.fragment_main.DietActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeDetails1;
 
 import java.util.ArrayList;
 
@@ -43,7 +45,8 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
 
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, DietActivity.class);
+                intent.putExtra("position",holder.getAdapterPosition());
                 Toast.makeText(context, "아이템 클릭됨"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
             }
@@ -78,6 +81,14 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
             this.diet_tv_id = itemView.findViewById(R.id.diet_tv_id);
             this.diet_tv_cal = itemView.findViewById(R.id.diet_tv_cal);
             this.itemLinear_diet = itemView.findViewById(R.id.itemLinear_diet);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int curPos = getAdapterPosition();
+                    DietItem dietItem = arrayList.get(curPos);
+                }
+            });
         }
     }
 }

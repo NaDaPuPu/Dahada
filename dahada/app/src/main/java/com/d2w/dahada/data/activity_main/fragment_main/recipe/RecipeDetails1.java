@@ -3,6 +3,7 @@ package com.d2w.dahada.data.activity_main.fragment_main.recipe;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,22 +23,20 @@ public class RecipeDetails1 extends AppCompatActivity {
 
     private ItemAdapter adapter;
 
-    TextView rcpName,rcpKcal,rcpGram,rcpEx,rcpEx2;
-
     public RecipeDetails1() {
     }
-
 
     private ArrayList<RecipeItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
+    private ImageView rcpImage;
+    private TextView rcpName, rcpEx, rcpEx2, rcpGram, rcpKcal;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_recipe_detail1);
-
-        Intent intent = getIntent();
 
         rcpName = findViewById(R.id.rcpDetailname);
         rcpKcal = findViewById(R.id.rcpDetailkcal);
@@ -45,6 +44,7 @@ public class RecipeDetails1 extends AppCompatActivity {
         rcpEx = findViewById(R.id.rcpDetailex1);
         rcpEx2 = findViewById(R.id.rcpDetailex2);
 
+        Intent intent = getIntent();
 
         int position = intent.getIntExtra("position", 0);
         Log.d("RecipeDetails", "position : " + position);
@@ -63,10 +63,8 @@ public class RecipeDetails1 extends AppCompatActivity {
                 rcpEx2.setText(recipeItem.getRecipeEx2());
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));
             }
 

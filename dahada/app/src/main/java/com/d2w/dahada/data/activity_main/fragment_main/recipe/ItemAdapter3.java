@@ -39,7 +39,8 @@ public class ItemAdapter3 extends RecyclerView.Adapter<ItemAdapter3.CustomViewHo
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, RecipeDetails1.class);
+                Intent intent = new Intent(context, RecipeDetails3.class);
+                intent.putExtra("position",holder.getAdapterPosition());
                 context.startActivity(intent);
                 Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }

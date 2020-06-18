@@ -17,13 +17,9 @@ public class RecipeItem2 {
         RecipeEx2 = recipeEx2;
     }
 
-    public RecipeItem2() {
+    public RecipeItem2() { }
 
-    }
-
-    public String getRecipeImage() {
-        return RecipeImage;
-    }
+    public String getRecipeImage() { return RecipeImage; }
 
     public void setRecipeImage(String recipeImage) {
         RecipeImage = recipeImage;
@@ -41,9 +37,7 @@ public class RecipeItem2 {
         return RecipeKcal;
     }
 
-    public void setRecipeKcal(int recipeKcal) {
-        RecipeKcal = recipeKcal;
-    }
+    public void setRecipeKcal(int recipeKcal) { RecipeKcal = recipeKcal; }
 
     public int getRecipeGram() {
         return RecipeGram;
@@ -53,9 +47,7 @@ public class RecipeItem2 {
         RecipeGram = recipeGram;
     }
 
-    public String getRecipeEx1() {
-        return RecipeEx1;
-    }
+    public String getRecipeEx1() { return RecipeEx1; }
 
     public void setRecipeEx1(String recipeEx1) {
         RecipeEx1 = recipeEx1;
@@ -69,3 +61,4 @@ public class RecipeItem2 {
         RecipeEx2 = recipeEx2;
     }
 }
+

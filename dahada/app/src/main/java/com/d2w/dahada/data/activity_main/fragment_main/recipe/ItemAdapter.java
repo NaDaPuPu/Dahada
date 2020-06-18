@@ -44,6 +44,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RecipeDetails1.class);
+                intent.putExtra("position",holder.getAdapterPosition());
                 context.startActivity(intent);
                 Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }
@@ -78,6 +79,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
             this.iv_picture = itemView.findViewById(R.id.iv_picture);
             this.tv_id = itemView.findViewById(R.id.tv_id);
             this.tv_cal = itemView.findViewById(R.id.tv_cal);
+
+
 
         }
 
