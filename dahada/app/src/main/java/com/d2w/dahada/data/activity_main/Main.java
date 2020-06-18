@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_main.CommunityActivity;
-import com.d2w.dahada.data.activity_main.fragment_main.CommunityActivity2;
 import com.d2w.dahada.data.activity_main.fragment_main.DietActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.MapActivity;
 import com.d2w.dahada.data.activity_main.fragment_main.RecipeActivity;
