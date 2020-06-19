@@ -131,9 +131,10 @@ public class DietActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
+
         editText = (EditText)findViewById(R.id.edit);
 
-        int position = intent.getIntExtra("position", 0);
+        final int position = intent.getIntExtra("position", 0);
         Log.d("DietItem", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
@@ -142,6 +143,7 @@ public class DietActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 DietItem dietItem = dataSnapshot.getValue(DietItem.class);
+                editText.setText(position + "");
                 assert dietItem != null;
 
             }

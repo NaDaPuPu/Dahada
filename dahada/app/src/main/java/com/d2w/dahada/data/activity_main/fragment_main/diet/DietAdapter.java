@@ -82,13 +82,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
             this.diet_tv_cal = itemView.findViewById(R.id.diet_tv_cal);
             this.itemLinear_diet = itemView.findViewById(R.id.itemLinear_diet);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int curPos = getAdapterPosition();
-                    DietItem dietItem = arrayList.get(curPos);
-                }
-            });
+
         }
     }
 }
