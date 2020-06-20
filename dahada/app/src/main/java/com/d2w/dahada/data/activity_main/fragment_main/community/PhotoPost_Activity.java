@@ -18,12 +18,19 @@ import android.widget.Toast;
 import com.d2w.dahada.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class PhotoPost_Activity extends AppCompatActivity {
 
@@ -36,6 +43,8 @@ public class PhotoPost_Activity extends AppCompatActivity {
     private String Description;
     private StorageReference PostsImageRefrence;
 
+
+
     private String saveCurrentDate, saveCurrentTime, postRandomName;
 
 
@@ -45,6 +54,10 @@ public class PhotoPost_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_post_);
+
+
+
+
 
         PostsImageRefrence = FirebaseStorage.getInstance().getReference();
 
@@ -103,7 +116,10 @@ public class PhotoPost_Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful())
                 {
+
                     Toast.makeText(PhotoPost_Activity.this, "이미지가 업로드 되었습니다!", Toast.LENGTH_SHORT).show();
+
+
                 }
                 else
                 {
@@ -115,6 +131,8 @@ public class PhotoPost_Activity extends AppCompatActivity {
 
 
     }
+
+
 
     private void Opengalley() {
         Intent galleyIntent = new Intent();

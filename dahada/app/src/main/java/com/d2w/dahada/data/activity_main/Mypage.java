@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.Setting.SetupInformationActivity;
 import com.d2w.dahada.data.activity_main.fragment_mypage.NoticeActivity;
 import com.d2w.dahada.data.activity_main.fragment_mypage.QuestionActivity;
 import com.d2w.dahada.data.login.LoginActivity;
@@ -85,7 +86,8 @@ public class Mypage extends Fragment implements View.OnClickListener{
                 startActivity(intent2);
                 break;
             case R.id.button_setting:
-                Toast.makeText(getContext(), "환경설정", Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(getActivity().getApplicationContext(), SetupInformationActivity.class);
+                startActivity(myIntent);
                 break;
         }
     }

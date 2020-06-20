@@ -14,6 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.d2w.dahada.R;
+import com.d2w.dahada.data.Setting.SetupInformationActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.CommunityActivity;
+import com.d2w.dahada.data.activity_main.fragment_main.FreeCommunityActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -119,6 +122,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (user != null) {
             Toast.makeText(getApplicationContext(), user.getDisplayName() + "로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
+            Intent myIntent = new Intent(LoginActivity.this, SetupInformationActivity.class);
+            startActivity(myIntent);
+
             finish();
         } else {
 
