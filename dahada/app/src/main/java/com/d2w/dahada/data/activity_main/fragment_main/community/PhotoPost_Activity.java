@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 
 public class PhotoPost_Activity extends AppCompatActivity {
 
+    private ProgressDialog loadingBar;
     private ImageButton SelectPostImage;
     private Button UpdatePostButton;
     private EditText PostDescription;
@@ -43,9 +45,13 @@ public class PhotoPost_Activity extends AppCompatActivity {
     private String Description;
     private StorageReference PostsImageRefrence;
 
+    private DatabaseReference UserRef, PostRef;
+
+    private FirebaseAuth mAuth; //추가
 
 
-    private String saveCurrentDate, saveCurrentTime, postRandomName;
+
+    private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
 
 
 
@@ -58,12 +64,18 @@ public class PhotoPost_Activity extends AppCompatActivity {
 
 
 
+        mAuth = FirebaseAuth.getInstance();
+        current_user_id = mAuth.getCurrentUser().getUid();
 
         PostsImageRefrence = FirebaseStorage.getInstance().getReference();
+        UserRef = FirebaseDatabase.getInstance().getReference().child("Users"); //추가
+        PostRef = FirebaseDatabase.getInstance().getReference().child("Posts"); //추가
+
 
         SelectPostImage = (ImageButton)findViewById(R.id.select_post_image);
         UpdatePostButton = (Button)findViewById(R.id.update_post_button);
         PostDescription = (EditText)findViewById(R.id.post_description);
+        loadingBar = new ProgressDialog(this);
 
         SelectPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +105,10 @@ public class PhotoPost_Activity extends AppCompatActivity {
         }
         else
         {
+            loadingBar.setTitle("사진을 게시중입니다");
+            loadingBar.setMessage("잠시만 기다려주세요.");
+            loadingBar.show();
+            loadingBar.setCanceledOnTouchOutside(true);
             StoringImageToStorage();
         }
     }
@@ -116,8 +132,9 @@ public class PhotoPost_Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful())
                 {
-
+                    downloadUrl = task.getResult().getUploadSessionUri().toString(); //추가
                     Toast.makeText(PhotoPost_Activity.this, "이미지가 업로드 되었습니다!", Toast.LENGTH_SHORT).show();
+                    SavingPostInformationToDatabase(); //추가
 
 
                 }
@@ -132,6 +149,59 @@ public class PhotoPost_Activity extends AppCompatActivity {
 
     }
 
+    private void SavingPostInformationToDatabase() { //추가
+        UserRef.child(current_user_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    String userNickname = dataSnapshot.child("nickname").getValue().toString();
+                    String userResidence = dataSnapshot.child("residence").getValue().toString();
+
+                    HashMap postsMap = new HashMap();
+                    postsMap.put("uid", current_user_id);
+                    postsMap.put("date", saveCurrentDate);
+                    postsMap.put("time", saveCurrentTime);
+                    postsMap.put("description", Description);
+                    postsMap.put("postImage", downloadUrl);
+                    postsMap.put("nickname", userNickname);
+                    postsMap.put("Residence", userResidence);
+
+                    PostRef.child(current_user_id + postRandomName).updateChildren(postsMap)
+                            .addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        SendUserToPhotoCommunity();
+                                        Toast.makeText(PhotoPost_Activity.this, "성공적으로 게시되었습니다.", Toast.LENGTH_SHORT).show();
+                                        loadingBar.dismiss();
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(PhotoPost_Activity.this, "Error.", Toast.LENGTH_SHORT).show();
+                                        loadingBar.dismiss();
+                                    }
+                                }
+                            });
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void SendUserToPhotoCommunity() {
+        Intent myIntent = new Intent(PhotoPost_Activity.this, PhotoCommunity_Activity.class);
+        startActivity(myIntent);
+    }
 
 
     private void Opengalley() {
