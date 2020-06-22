@@ -32,6 +32,7 @@ public class RecipeDetails1 extends AppCompatActivity {
 
     private ImageView rcpImage;
     private TextView rcpName, rcpEx, rcpEx2, rcpGram, rcpKcal;
+    int Image;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,10 +44,12 @@ public class RecipeDetails1 extends AppCompatActivity {
         rcpGram= findViewById(R.id.rcpDetailgram);
         rcpEx = findViewById(R.id.rcpDetailex1);
         rcpEx2 = findViewById(R.id.rcpDetailex2);
+        rcpImage = findViewById(R.id.rcpDetailimage);
 
         Intent intent = getIntent();
 
-        int position = intent.getIntExtra("position", 0);
+        final int position = intent.getIntExtra("position", 0);
+        //Image = getIntent().getIntExtra("Iamge",0);
         Log.d("RecipeDetails", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동

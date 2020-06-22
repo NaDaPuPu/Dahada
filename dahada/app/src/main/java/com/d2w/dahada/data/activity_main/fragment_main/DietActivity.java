@@ -34,7 +34,7 @@ public class DietActivity extends AppCompatActivity {
     FragmentDairy fragmentDairy;
     FragmentNut fragmentNut;
 
-    EditText editText;
+    public EditText editText;
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -143,7 +143,6 @@ public class DietActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 DietItem dietItem = dataSnapshot.getValue(DietItem.class);
-                editText.setText(position + "");
                 assert dietItem != null;
 
             }

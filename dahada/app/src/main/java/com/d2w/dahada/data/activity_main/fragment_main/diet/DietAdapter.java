@@ -2,9 +2,11 @@ package com.d2w.dahada.data.activity_main.fragment_main.diet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
     private ArrayList<DietItem> arrayList;
     private Context context;
     private TextView textView_diet;
+
 
 
 
@@ -49,7 +52,19 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
                 intent.putExtra("position",holder.getAdapterPosition());
                 Toast.makeText(context, "아이템 클릭됨"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
-            }
+                Editable edit = ((DietActivity) context).editText.getText();
+                    int a,b;
+
+                    if (edit.length() == 0) {
+                        // 데이터1
+                    } else if (edit.length() != 0 && !edit.toString().contains("+")) {
+                        // 데이터 2
+                    } else {
+                        // 결과값과 데이터1, 데이터 2 연산한 값 출력
+                    }
+                }
+
+
         });
         return holder;
     }
