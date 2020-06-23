@@ -1965,4 +1965,1249 @@ firebase 콘솔의 클라우딩 메시지를 보낼때 적는 알림제목이 �
 
 
 
+## 로그인
 
+먼저 Gradle에 firebase auth를 추가시켜준다.
+
+```
+implementation 'com.google.firebase:firebase-auth:19.3.1'
+```
+
+추가한 라이브러리 안에 있는 클래스들을 호출한다.
+
+```
+private FirebaseAuth mAuth;
+
+private GoogleSignInClient mGoogleSignInClient;
+```
+
+액티비티가 생성되었을 때, firebase auth를 사용할 수 있도록 설정하고, 로그인 버튼에 대한 기능을 추가시켜준다.
+
+```java
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        signInButton = findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+
+        signInButton.setOnClickListener(this);
+    }
+```
+
+로그인 버튼에 대한 클릭 리스너
+```java
+	public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                signIn();
+                progressDialog("로그인 중입니다.");
+                break;
+        }
+    }
+```
+
+구글 로그인 버튼이 눌렸을 때 실행될 로그인 과정을 메서드로 제작한다.
+
+signIn 메서드는 GoogleSignInClient 내부에 있는 인텐트를 실행하여 결과값을 가져온다.
+```java
+	private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+	
+```
+
+signIn 메서드에서 가져온 결과값을 RC_SIGN_IN과 비교하여 메서드 실행을 결정짓는다.
+```java
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                Log.w(TAG, "Google sign in failed", e);
+                Toast.makeText(getApplicationContext(),  "로그인에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        }
+    }
+```
+
+onActivityResult를 통과한 뒤 Google 계정을 이용한 인증 방식을 통해 로그인을 실행한다.
+```java
+	private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle : " + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Snackbar.make(findViewById(R.id.container), "Authentication Successed.", Snackbar.LENGTH_SHORT).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Snackbar.make(findViewById(R.id.container), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+    }
+```
+
+정상적으로 작동하였으면, 유저의 닉네임을 포함한 Toast 메시지를 표시한다.
+```java
+    private void updateUI(FirebaseUser user) { //update ui code here
+        if (user != null) {
+            Toast.makeText(getApplicationContext(), user.getDisplayName() + "로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+            finish();
+        } else {
+
+        }
+    }
+```
+
+로딩 시간을 알려주기 위해 ProgressDialog를 표시한다.
+```java
+	private void progressDialog(String message) {
+        dialog = new ProgressDialog(LoginActivity.this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(message);
+
+        dialog.show();
+    }
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399864-7ae67e00-b592-11ea-9979-871912cf7d22.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399910-89349a00-b592-11ea-9527-5c145a22e3df.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399892-8639a980-b592-11ea-9c02-3b27d6493bf7.jpg">
+</div>
+
+
+## 하단 바
+
+메인화면에 하단 바(BottomNavigationView)를 추가하여서 프래그먼트의 전환을 편하게 하였다.
+
+먼저 MainActivity가 실행될 때, 프래그먼트들을 모두 호출, 선언한다.
+```java
+	protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, LoadingActivity.class);
+        startActivity(intent);
+
+        main = new Main();
+        calendarFragment = new CalendarFragment();
+        notice = new Notice();
+        mypage = new Mypage();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, main).commit();
+
+```
+
+탭이 변경될 때 마다 프래그먼트 매니저가 container에 들어가는 프래그먼트를 전환한다.
+```java
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.tab1:
+//                        Toast.makeText(getApplicationContext(), "홈", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, main).commit();
+                        return true;
+
+                    case R.id.tab2:
+//                        Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarFragment).commit();
+                        return true;
+
+                    case R.id.tab3:
+//                        Toast.makeText(getApplicationContext(), "알림", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, notice).commit();
+                        return true;
+
+                    case R.id.tab4:
+//                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mypage).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+```
+
+## 마이페이지
+
+마이페이지는 4개의 버튼으로 이루어져 있다. 각각의 버튼마다 실행되는 기능이 다르다.
+
+먼저 로그인 여부를 확인하기 위해 firebase auth를 선언한다.
+```java
+	private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+```
+
+firebase auth와 버튼들을 호출하고, 버튼에 클릭 리스너를 추가한다.
+```java
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_mypage, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        button_login = v.findViewById(R.id.button_log);
+        button_notice = v.findViewById(R.id.button_notice);
+        button_question = v.findViewById(R.id.button_question);
+        button_setting = v.findViewById(R.id.button_setting);
+
+        button_login.setOnClickListener(this);
+        button_notice.setOnClickListener(this);
+        button_question.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
+
+        return v;
+    }
+```
+
+로그인/로그아웃 버튼은 로그인 여부에 따라 기능과 텍스트가 달라진다.
+공지사항, 문의하기 버튼은 그에 맞는 액티비티를 실행시킨다.
+```java
+	public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_log:
+                if (button_login.getText() == getString(R.string.mypage_login)) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                } else if (button_login.getText() == getString(R.string.mypage_logout)) {
+                    showMessage();
+                }
+                break;
+            case R.id.button_notice:
+                Intent intent = new Intent(getActivity().getApplicationContext(), NoticeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.button_question:
+                Intent intent2 = new Intent(getActivity().getApplicationContext(), QuestionActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.button_setting:
+                Toast.makeText(getContext(), "환경설정", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+```
+
+로그아웃 버튼을 눌렀을 때, 바로 로그아웃이 되는 것이 아니라 알림 메시지를 띄워줘서 실수로 인한 로그아웃을 방지한다.
+확인 버튼을 누를 시 로그아웃을 실행한다.
+```java
+	private void showMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("알림");
+        builder.setMessage("로그아웃 하시겠습니까?");
+
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                signOut();
+                Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                button_login.setText(R.string.mypage_login);
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+```
+
+## 공지사항
+
+공지사항은 실제로 데이터베이스 내에 들어가있는 공지사항을 볼 수 있는 액티비티입니다.
+RecyclerView와 firebase database를 통하여 구현했습니다.
+
+먼저 Gradle에 다음 문구를 추가합니다.
+```java
+	implementation 'com.google.firebase:firebase-firestore:21.4.3'
+```
+
+RecyclerView를 호출하고, LayoutManager와 Adapter를 추가하는 메서드와
+DB 내에 데이터가 존재할 경우 이를 표시해주는 메서드를 추가합니다.
+```java
+	private void init() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+        // 리사이클러뷰에 LinearLayoutManager 지정. (vertical)
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
+        adapter = new RecyclerNoticeAdapter();
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
+    }
+
+    private void setup() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("mypage/notice/posts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String gettedDate;
+                                String gettedTitle;
+                                String gettedContent;
+                                date = document.getDate("date");
+                                gettedDate = format.format(date);
+                                gettedTitle = document.get("title").toString();
+                                gettedContent = document.get("content").toString();
+
+                                RecyclerItem item = new RecyclerItem(gettedDate, gettedTitle, gettedContent);
+                                adapter.addItem(item);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+```
+
+onCreate에서 메서드들을 실행합니다.
+```java
+	protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notice);
+        init();
+        setup();
+    }
+```
+
+어댑터에서 리사이클러뷰에 표시할 아이템들을 정렬, 추가 등의 기능을 가집니다.
+```java
+public class RecyclerNoticeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private ArrayList<RecyclerItem> mData = new ArrayList<>();
+
+    // Item의 클릭 상태를 저장할 array 객체
+    private SparseBooleanArray selectedItems = new SparseBooleanArray();
+    // 직전에 클릭한 Item의 position
+    private int prePosition = -1;
+
+    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notice_recycler_item, parent, false);
+        return new ViewHolderNotice(view);
+    }
+
+    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position ) {
+        ViewHolderNotice viewHolderNotice = (ViewHolderNotice)holder;
+        viewHolderNotice.onBind(mData.get(position), position, selectedItems);
+        viewHolderNotice.setOnViewHolderItemClickListener(new OnViewHolderItemClickListener() {
+            @Override
+            public void onViewHolderItemClick() {
+                if (selectedItems.get(position)) {
+                    // 펼쳐진 Item을 클릭 시
+                    selectedItems.delete(position);
+                } else {
+                    // 직전의 클릭됐던 Item의 클릭상태를 지움
+                    selectedItems.delete(prePosition);
+                    // 클릭한 Item의 position을 저장
+                    selectedItems.put(position, true);
+                }
+                // 해당 포지션의 변화를 알림
+                if (prePosition != -1) notifyItemChanged(prePosition);
+                notifyItemChanged(position);
+                // 클릭된 position 저장
+                prePosition = position;
+            }
+        });
+    }
+
+    // getItemCount() - 전체 데이터 갯수 리턴.
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
+
+    public void addItem(RecyclerItem item) {
+        mData.add(item);
+    }
+}
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400441-5fc83e00-b593-11ea-9896-1c845b895640.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400442-5fc83e00-b593-11ea-982f-6bcaf7242340.jpg">
+</div>
+
+
+## 문의하기
+
+문의하기는 문의 작성, 문의 내역 확인 두 개의 프래그먼트로 이루어져있다.
+문의 내역 확인 코드는 공지사항 코드와 거의 차이가 없다.
+
+문의 작성은 먼저 스피너를 사용한다. 따라서 스피너 아이템 선택 이벤트를 작성한다.
+선택된 아이템에 따라 문의 내용 텍스트가 달라진다.
+```java
+		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
+                                "- 문제발생일시 : \n" +
+                                "- 문의내용 : ");
+                        break;
+                    case 1:
+                        content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
+                                "- 문제발생일시 : \n" +
+                                "- 문의내용 : ");
+                        break;
+                    case 2:
+                        content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
+                                "- 오류 문구 창 내 메시지 확인 : \n" +
+                                "- 문제발생일시 : \n" +
+                                "- 문의내용 : ");
+                        break;
+                    case 3:
+                        content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
+                                "- 오류 문구 창 내 메시지 확인 : \n" +
+                                "- 문제발생상품 :\n" +
+                                "- 문제발생일시 :\n" +
+                                "- 문의내용 : ");
+                        break;
+                    case 4:
+                        content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
+                                "- 문제발생게시판 : \n" +
+                                "- 문제발생일시 : \n" +
+                                "- 문의내용 : ");
+                        break;
+                    case 5:
+                        content.setText("아래 내용을 함께 보내주시면 더욱 빨리 처리가 가능합니다.\n" +
+                                "- 오류 문구 창 내 메시지 확인 : \n" +
+                                "- 문제발생일시 : \n" +
+                                "- 문의내용 : ");
+                        break;
+                }
+            }
+```
+
+전송 버튼을 누를 시 DB에 형식에 맞춰서 문의를 저장한다. 저장하기 전에 알림 메시지를 띄워서 재확인 후 문의를 저장한다.
+
+```java
+		sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogBuilder = new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setTitle("알림")
+                        .setMessage("문의를 보내시겠습니까?")
+                        .setCancelable(false)
+
+                        // 확인 시
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                Date date = new Date(System.currentTimeMillis());
+                                String contentStr = content.getText().toString();
+                                int startIndex = contentStr.indexOf("문의내용 : ");
+                                int endIndex = contentStr.length();
+                                String title;
+
+                                if (endIndex - startIndex >= 20) {
+                                    title = contentStr.substring(startIndex + 7, startIndex + 27);
+                                } else {
+                                    title = contentStr.substring(startIndex + 7, endIndex);
+                                }
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Question question = new Question(mAuth.getUid(), format.format(date), spinner.getSelectedItemPosition(), title, contentStr, null, emailText.getText().toString());
+
+                                db.collection("mypage/question/questions").document(question.getType() + " " + question.getDate() + " " + question.getEmail()).set(question);
+                                Toast.makeText(getContext(), "문의를 보냈습니다.", Toast.LENGTH_SHORT).show();
+                                getActivity().finish();
+                            }
+                        })
+
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400429-5ccd4d80-b593-11ea-9269-e89317067d11.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400431-5dfe7a80-b593-11ea-96d7-9295425a1ec5.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400435-5e971100-b593-11ea-8b9f-eadebda1be98.jpg">
+</div>
+
+
+문의 내역 확인은 공지사항 기능과 거의 유사하지만, 사용자가 작성한 문의만 표시한다.
+```java
+	private void setup() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("mypage/question/questions")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String gettedUid = document.get("uid").toString();
+                                if (gettedUid.equals(mAuth.getUid())) {
+                                    String gettedTitle;
+                                    String gettedContent;
+                                    String gettedAnswer;
+                                    gettedTitle = document.get("title").toString();
+                                    gettedContent = document.get("content").toString();
+                                    if (document.get("answer") != null) {
+                                        gettedAnswer = document.get("answer").toString();
+                                    } else {
+                                        gettedAnswer = null;
+                                    }
+
+                                    RecyclerItem item = new RecyclerItem(gettedTitle, gettedContent, gettedAnswer);
+                                    adapter.addItem(item);
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400438-5e971100-b593-11ea-9dd9-358f2a5d4e82.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400439-5f2fa780-b593-11ea-9e59-6f97c1c36633.jpg">
+</div>
+
+## 로딩화면
+
+앱 실행 시 맨 처음에 보여지는 화면으로, 2초 동안 보여진 후 MainActivity로 전환한다.
+```java
+public class LoadingActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loading);
+        startLoading();
+    }
+
+    private void startLoading() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 뒤로가기 금지
+    }
+}
+```
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85400892-17f5e680-b594-11ea-9b23-0970828c9b5d.jpg">
+</div>
+
+
+## 캘린더
+
+캘린더 기능은 선택한 날짜에 그 날 먹은 칼로리, 음식 메뉴, 마신 물의 양을 입력할 수 있다.
+파일 입출력을 통하여 앱 내부 저장소에 저장되며, 앱 삭제 시 같이 삭제된다.
+
+먼저 외부 라이브러리인 'Material Calendar'를 Gradle에 추가한다.
+```java
+	implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+```
+
+CalendarFragment가 실행되면 달력을 표시하고, 가시성을 높이기 위해 토요일, 일요일을 다른 색으로 표시해주는 Decorator를 추가한다.
+```java
+	materialCalendarView = v.findViewById(R.id.calendarView);
+
+        materialCalendarView.state().edit()
+                .setFirstDayOfWeek(Calendar.SUNDAY)
+                .setMinimumDate(CalendarDay.from(2017, 0, 1))
+                .setMaximumDate(CalendarDay.from(2030, 11, 31))
+                .setCalendarDisplayMode(CalendarMode.MONTHS)
+                .commit();
+
+        materialCalendarView.addDecorators(
+                new SundayDecorator(),
+                new SaturdayDecorator(),
+                new OneDayDecorator());
+```
+
+SaturdayDecorator
+```java
+public class SaturdayDecorator implements DayViewDecorator {
+
+    private final Calendar calendar = Calendar.getInstance();
+
+    public SaturdayDecorator() {
+    }
+
+    @Override
+    public boolean shouldDecorate(CalendarDay day) {
+        day.copyTo(calendar);
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
+        return weekDay == Calendar.SATURDAY;
+    }
+
+    @Override
+    public void decorate(DayViewFacade view) {
+        view.addSpan(new ForegroundColorSpan(Color.BLUE));
+    }
+}
+
+```
+
+SundayDecorator
+```java
+public class SundayDecorator implements DayViewDecorator {
+
+    private final Calendar calendar = Calendar.getInstance();
+
+    public SundayDecorator() {
+    }
+
+    @Override
+    public boolean shouldDecorate(CalendarDay day) {
+        day.copyTo(calendar);
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
+        return weekDay == Calendar.SUNDAY;
+    }
+
+    @Override
+    public void decorate(DayViewFacade view) {
+        view.addSpan(new ForegroundColorSpan(Color.RED));
+    }
+}
+
+```
+
+만약 파일 입출력을 통해 기존에 저장된 값이 있을 경우, 달력에 표시해줘야한다. 이는 사용자가 달력을 보기 전에 이루어져야한다.
+따라서 AsyncTask를 통해 백그라운드에서 진행한다.
+
+```java
+		try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
+            String line = null;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] readedContent = line.split(" ");
+                Date rdate = simpleDateFormat.parse(readedContent[0]);
+                int rkcal = Integer.parseInt(readedContent[1]);
+                String rmenu = readedContent[2];
+                int rwater = Integer.parseInt(readedContent[3]);
+
+                Schedule schedule = new Schedule(rdate, rkcal, rmenu, rwater);
+                scheduleList.add(schedule);
+            }
+            bufferedReader.close();
+
+            String[] result = new String[scheduleList.size()];
+            for (int i = 0; i < scheduleList.size(); i++) {
+                result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
+            }
+
+            ArrayList<String> w_result = new ArrayList<>();
+            for (int i = 0; i < scheduleList.size(); i++) {
+                if (scheduleList.get(i).getWater() >= 20) {
+                    w_result.add(simpleDateFormat.format(scheduleList.get(i).getDate()));
+                }
+            }
+
+            new ApiSimulator(result, w_result).executeOnExecutor(Executors.newSingleThreadExecutor());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        setHelper();
+        setHelper2();
+```
+
+AsyncTask와 이를 실행할 때 필요한 데이터를 입력할 클래스를 만들었다.
+doInBackground에서 실행의 결과로 return하는 l_calendarDay를 onPostExecute에서 받아 진행한다.
+```java
+	private class ApiSimulator extends AsyncTask<Void, Void, L_CalendarDay> {
+        String[] Time_Result;
+        ArrayList<String> Water_Result;
+
+        ApiSimulator(String[] Time_Result, ArrayList<String> Water_Result) {
+            this.Time_Result = Time_Result;
+            this.Water_Result = Water_Result;
+        }
+
+        @Override
+        protected L_CalendarDay doInBackground(@NonNull Void... voids) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            ArrayList<CalendarDay> dates = new ArrayList<>();
+            ArrayList<CalendarDay> wdates = new ArrayList<>();
+
+            for (int i = 0; i < Time_Result.length; i++) {
+
+                String[] time = Time_Result[i].split("\\."); // "."으로 하면 X
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int day = Integer.parseInt(time[2]);
+
+                calendar.set(year, month - 1, day);
+                CalendarDay calendarDay = CalendarDay.from(calendar);
+                dates.add(calendarDay);
+            }
+
+            for (int i = 0; i < Water_Result.size(); i++) {
+
+                String[] time = Water_Result.get(i).split("\\."); // "."으로 하면 X
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int day = Integer.parseInt(time[2]);
+
+                calendar.set(year, month - 1, day);
+                CalendarDay calendarDay = CalendarDay.from(calendar);
+                wdates.add(calendarDay);
+            }
+            L_CalendarDay l_calendarDay = new L_CalendarDay(dates, wdates);
+
+            return l_calendarDay;
+        }
+
+        @Override
+        protected void onPostExecute(L_CalendarDay l_calendarDay) {
+            super.onPostExecute(l_calendarDay);
+
+            if (isRemoving()) {
+                return;
+            }
+            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, l_calendarDay.Time_Result, getActivity()));
+            materialCalendarView.addDecorator(new EventsDecorator(l_calendarDay.Water_Result, getActivity()));
+        }
+    }
+```
+
+달력의 날짜를 선택할 시 이벤트가 발생한다. 이벤트 발생 시 선택된 날짜를 시각적으로 표시하고
+만약 그 날짜에 해당하는 데이터가 존재할 경우 텍스트로 그 값을 보여준다.
+```java
+		materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            // 날짜 선택 시
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                if (inputContainer.getVisibility() == View.VISIBLE) {
+                    materialCalendarView.setSelectedDate(beforeSelectedDate);
+                } else {
+                    materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
+                    boolean ifEquals = false;
+
+                    int Year = date.getYear();
+                    int Month = date.getMonth() + 1;
+                    int Day = date.getDay();
+
+                    currentDate = date.getDate();
+                    shot_Day = Year + "." + Month + "." + Day;
+
+                    dateText.setText("date : " + shot_Day);
+
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
+                            kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
+                            menuText2.setText("menu : " + scheduleList.get(i).getMenu());
+                            waterText2.setText("water : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                            ifEquals = true;
+                        }
+                    }
+
+                    if (!ifEquals) {
+                        kcalText2.setText("kcal : ");
+                        menuText2.setText("menu : ");
+                        waterText2.setText("water : ");
+                    }
+
+                    beforeSelectedDate = date;
+                }
+            }
+        });
+```
+
+날짜를 선택하고, 그 날짜에 데이터를 넣을 수 있다. 입력 상태에 들어가기 위한 버튼 이벤트를 작성한다.
+입력 창의 visibility는 GONE으로 설정되어있으므로, 이를 변경한다.
+만약 선택된 날짜에 데이터가 존재할 경우, 수정하기 편하게 그 데이터들을 표시해준다.
+```java
+		buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputContainer.setVisibility(View.VISIBLE);
+                outputContainer.setVisibility(View.GONE);
+
+                if (!kcalText2.getText().toString().equals("kcal : ")) {
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        String sdate = simpleDateFormat.format(scheduleList.get(i).getDate());
+                        if (simpleDateFormat.format(currentDate).equals(sdate)) {
+                            kcalText.setText(scheduleList.get(i).getKcal() + "");
+                            menuText.setText(scheduleList.get(i).getMenu() + "");
+                            waterText.setText("이 날 마신 물 : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                        }
+                    }
+                } else {
+                    kcalText.setText("");
+                    menuText.setText("");
+                    waterText.setText("이 날 마신 물 : 0.0L");
+                    seekBar.setProgress(0);
+                }
+            }
+        });
+```
+
+확인 버튼의 이벤트를 설정한다.
+데이터를 입력하고 확인 버튼을 누를 시, 파일 입출력을 통하여 데이터를 저장한다.
+또한, 달력에 이를 표시한다. 만약 마신 물의 양이 2L 이상일 경우, 파란색을 표시한다.
+이후에 수정 화면을 종료한다.
+
+```java
+		buttonInput.setOnClickListener(new View.OnClickListener() { // 입력 버튼
+            @Override
+            public void onClick(View v) {
+                String content = "";
+                try {
+                    File directory = getActivity().getFilesDir();
+                    File file = new File(directory, "savedCalendar");
+                    FileWriter fileWriter = new FileWriter(getActivity().getFilesDir() + "savedCalendar", false);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()), menuText.getText().toString(), seekBar.getProgress());
+                    int currentsize = scheduleList.size();
+                    boolean isChanged = false;
+
+                    if (currentsize == 0) {
+                        scheduleList.add(schedule);
+                        isChanged = true;
+                    }
+
+                    for (int i = 0; i < currentsize; i++) {
+                        if (simpleDateFormat.format(scheduleList.get(i).getDate()).equals(simpleDateFormat.format(schedule.getDate()))) {
+                            scheduleList.set(i, schedule);
+                            isChanged = true;
+                        } else if (i == currentsize - 1 && !isChanged) {
+                            scheduleList.add(schedule);
+                        }
+                    }
+
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i).getKcal() + " " + scheduleList.get(i).getMenu() + " " + scheduleList.get(i).getWater() + "\n";
+                    }
+                    bufferedWriter.write(content);
+                    bufferedWriter.close();
+
+                    ArrayList<CalendarDay> CalendarDays = new ArrayList<>();
+                    CalendarDays.add(CalendarDay.from(currentDate));
+
+                    if (seekBar.getProgress() >= 20) {
+                        materialCalendarView.addDecorator(new EventsDecorator(CalendarDays, getActivity()));
+                    } else {
+                        materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, CalendarDays, getActivity()));
+                    }
+
+                    kcalText2.setText("kcal : " + kcalText.getText());
+                    menuText2.setText("menu :" + menuText.getText());
+                    waterText2.setText("water : " + (float) seekBar.getProgress() / 10 + "L");
+                    kcalText.setText("");
+                    menuText.setText("");
+                } catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                inputContainer.setVisibility(View.GONE);
+                outputContainer.setVisibility(View.VISIBLE);
+                setHelper();
+                setHelper2();
+            }
+        });
+```
+
+취소 버튼은 입력된 데이터를 초기화하고, 수정 화면을 종료한다.
+```java
+		buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputContainer.setVisibility(View.GONE);
+                outputContainer.setVisibility(View.VISIBLE);
+                kcalText.setText("");
+                menuText.setText("");
+                seekBar.setProgress(0);
+                waterText.setText("이 날 마신 물 : 0.0L");
+            }
+        });
+```
+
+마신 물의 양을 입력하기 위한 Seekbar의 Progress가 변할 경우의 이벤트를 작성한다.
+텍스트를 변경하여 입력 값이 얼마인지를 표시한다.
+```java
+		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float water = (float) progress / 10;
+                waterText.setText("이 날 마신 물 : " + water + "L");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+```
+
+일정 입력을 활발히 하기 위해 격려의 메시지를 표시하는 기능을 추가하였다.
+일정이 입력된 날과 2L 이상 물을 마신 날을 계산하여 일정 수마다 표시하는 메시지가 달라진다.
+아래는 2L 이상 물을 마신 날을 기준으로 하는 코드이다.
+```java
+	private void setHelper() {
+        int count = 0;
+        CalendarDay todayCal = CalendarDay.today();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate())) && scheduleList.get(i).getWater() >= 20) {
+                count++;
+            }
+        }
+
+        cnum = count;
+
+        helperTitle1.setText("이번 달 물 2L 마신 날 : " + cnum + "/" + mnum);
+
+        if (cnum < 7) {
+            helperContent1.setText(R.string.wday0);
+        } else if (cnum < 14) {
+            helperContent1.setText(R.string.wday7);
+        } else if (cnum < 21) {
+            helperContent1.setText(R.string.wday14);
+        } else if (cnum < 28) {
+            helperContent1.setText(R.string.wday21);
+        } else if (cnum < mnum) {
+            helperContent1.setText(R.string.wday28);
+        }
+    }
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399894-86d24000-b592-11ea-814b-443596fe275b.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399897-86d24000-b592-11ea-8dc7-1221a4e7dd9e.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399899-876ad680-b592-11ea-80fd-23aa22650029.jpg">
+</div>
+
+
+## 내 운동코스
+
+내 운동코스 기능은 Google Map API를 사용하여 제작되었다. 간단한 코스 표시를 할 수 있다.
+
+아래의 내용을 Gradle에 추가한다.
+```java
+	implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+```
+
+아래의 내용은 Manifest에 추가하는 내용이다.
+```java
+	<uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+	<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="(API KEY를 입력하세요)"/>
+
+```
+
+먼저 필요한 변수, 상수들을 private로 선언한다.
+```java
+	private static final String TAG = "MapActivity";
+    private GoogleMap map;
+    private CameraPosition cameraPosition;
+
+    private ConstraintLayout courseEdit;
+    private Button courseButton, saveButton, cancelButton;
+
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    private LatLng defaultLocation = new LatLng(37.56, 126.97); // 서울
+    private LatLng beforeLocation;
+
+    private PolylineOptions polylineOptions;
+    private ArrayList<LatLng> arrayPoints = new ArrayList<>();
+
+    private Animation fab_open, fab_close;
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fab1, fab2;
+
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int DEFAULT_ZOOM = 15;
+    private boolean locationPermissionGranted;
+
+    private Location lastKnownLocation;
+
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
+```
+
+Google Map은 준비되었을 때, onMapReady를 호출한다.
+지도를 표시할 때 권한 확인과 현재 위치로 설정, 지도 터치 이벤트를 추가한다.
+```java
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        getLocationPermission(); // 권한 확인
+
+        updateLocationUI(); //
+
+        getDeviceLocation();
+
+        map.setOnMapClickListener(this);
+    }
+```
+아래는 위치 권한 요청, 요청 응답 결과 확인, 위치 서비스 준비 메서드이다.
+```java
+	private void getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        locationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                    updateLocationUI();
+                }
+            }
+        }
+    }
+
+    private void updateLocationUI() {
+        if (map == null) {
+            return;
+        }
+        try {
+            if (locationPermissionGranted) {
+                map.setMyLocationEnabled(true);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                map.setMyLocationEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(false);
+                lastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+```
+
+위치 권한이 있을 시에 현재 위치를 찾으면, 현재 위치로 지도를 이동시킨다.
+
+```java
+	private void getDeviceLocation() {
+        try {
+            if (locationPermissionGranted) {
+                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // 현재 위치로 지도의 카메라 위치를 변경
+                            lastKnownLocation = task.getResult();
+                            if (lastKnownLocation != null) {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(lastKnownLocation.getLatitude(),
+                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            }
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            map.moveCamera(CameraUpdateFactory
+                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            map.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+```
+
+화면이 꺼지거나, 잠금 상태가 되었을 시에 마지막 위치를 저장하여 다시 표시할 때 위치를 다시 불러오지 않아도 지도 위치를 설정한다.
+```java
+	protected void onSaveInstanceState(Bundle outState) {
+        if (map != null) {
+            outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
+            outState.putParcelable(KEY_LOCATION, lastKnownLocation);
+            super.onSaveInstanceState(outState);
+        }
+    }
+```
+맵을 터치 시 빨간 핀을 표시하도록 하였다.
+또한, 지도 위에 FloatingActionButton을 추가하여 검은 핀을 표시할 수 있도록 하였다.
+검은 핀의 LatLng값은 ArrayList에 추가되며, 핀과 핀 사이를 PolyLine을 그려서 경로 표시를 해주었다.
+FloatingActionButton을 누를 시 애니메이션도 추가하였다.
+```java
+	public void onMapClick(LatLng latLng) {
+        if (courseEdit.getVisibility() == View.VISIBLE) {
+            beforeLocation = latLng;
+            Log.d("onMapClick", beforeLocation + "");
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            map.clear();
+
+            map.addMarker(markerOptions);
+
+            polylineOptions = new PolylineOptions();
+            polylineOptions.color(Color.RED);
+            polylineOptions.width(5);
+            polylineOptions.addAll(arrayPoints);
+            if (arrayPoints.size() > 0) {
+                polylineOptions.add(arrayPoints.get(0));
+            }
+            map.addPolyline(polylineOptions);
+
+            for (int i = 0; i < arrayPoints.size(); i++) {
+                markerOptions.position(arrayPoints.get(i));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.round_location_on_black_24dp));
+                map.addMarker(markerOptions);
+            }
+        }
+    }
+
+	public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.fab1:
+                anim();
+                break;
+            case R.id.fab2:
+                anim();
+                map.clear();
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(beforeLocation);
+                map.addMarker(markerOptions);
+
+                for (int i = 0; i < arrayPoints.size(); i++) {
+                    markerOptions.position(arrayPoints.get(i));
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.round_location_on_black_24dp));
+                    map.addMarker(markerOptions);
+                }
+
+                polylineOptions = new PolylineOptions();
+                polylineOptions.color(Color.RED);
+                polylineOptions.width(5);
+                arrayPoints.add(beforeLocation);
+                polylineOptions.addAll(arrayPoints);
+                polylineOptions.add(arrayPoints.get(0));
+                map.addPolyline(polylineOptions);
+
+                Toast.makeText(this, "추가되었습니다.", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    public void anim() {
+
+        if (isFabOpen) {
+            fab2.startAnimation(fab_close);
+            fab2.setClickable(false);
+            isFabOpen = false;
+        } else {
+            fab2.startAnimation(fab_open);
+            fab2.setClickable(true);
+            isFabOpen = true;
+        }
+    }
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399902-88036d00-b592-11ea-81bb-04eb8843bc69.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399904-88036d00-b592-11ea-9be9-400ff644a040.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399906-889c0380-b592-11ea-8de4-215b36858bb6.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399907-889c0380-b592-11ea-9c4a-96904d450a13.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399908-89349a00-b592-11ea-97c8-55cc801d4484.jpg">
+</div>
