@@ -740,6 +740,66 @@ public class FirebaseID {
     public static String timestamp = "timestamp";
 }
 ```
+```
+findViewById(R.id.post_save_button).setOnClickListener(this);
+
+        if (mAuth.getCurrentUser() != null) {
+            mStore.collection(FirebaseID.user).document(mAuth.getCurrentUser().getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        }
+                    });
+        }
+```
+```
+@Override
+    public void onClick(View v) {
+        if (mAuth.getCurrentUser() != null) {
+            String postId = mStore.collection(FirebaseID.post).document().getId();
+            Map<String, Object> data = new HashMap<>();
+            data.put(FirebaseID.documentId, mAuth.getCurrentUser().getDisplayName());
+            data.put(FirebaseID.title, mTitle.getText().toString());
+            data.put(FirebaseID.contents, mContents.getText().toString());
+            data.put(FirebaseID.timestamp, FieldValue.serverTimestamp());
+            mStore.collection(FirebaseID.post).document(postId).set(data, SetOptions.merge());
+            finish();
+        }
+    }
+```
+
+PostAdapter부분
+
+```
+ @Override
+    public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
+        final Post post = datas.get(position);
+        holder.documentid.setText(post.getDocumentId());
+        holder.title.setText(post.getTitle());
+        holder.contents.setText(post.getContents());
+    }
+    @Override
+    public int getItemCount() {
+        return datas.size();
+    }
+
+    public class PostViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView documentid;
+        private TextView title;
+        private TextView contents;
+
+        public PostViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            documentid = itemView.findViewById(R.id.item_post_nickname);
+            title = itemView.findViewById(R.id.item_post_title);
+            contents = itemView.findViewById(R.id.item_post_contents);
+        }
+    }
+```
 
 ## 로그인
 
