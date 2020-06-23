@@ -208,17 +208,14 @@ public class RecipeFragment1 extends Fragment  {
 </div>
 
 # 3.내 레시피
-# 2. 내 레시피
 
-1.xml파일 생성
 데이터들을 recyclerview로 화면에 보여줄 fragment_diet_veg.xml 파일과
 recyclerview에 보여줄 틀을 diet_list_item.xml파일에 만들어 준다.
-```
+<div>
 <img src="https://user-images.githubusercontent.com/62593277/85393565-2d651380-b588-11ea-81d4-2c6671306fe9.png"></img>
+</div>
 
-```
 
-2.변수만들기
 DietItem이라는 자바클래스를 하나 만들어 데이터베이스에 넣어줄 변수들을 넣어준 뒤
 Alt+insert 버튼을 눌러 변수들의 구조체를 만들고
 ```
@@ -269,7 +266,6 @@ getter/setter를 만들어 준다.
 
 ```
 
-3.Adapter 생성
 recyclerview를 사용하기 위해선 Adapter가 필요하기 때문에
 자바클래스로 DietAdapter라는 파일을 만들어주고 Recyclerview.Adapter를 extends해준 뒤
 빨간줄에 alt+insert 버튼을 눌러 필요한 클래스와 메서드들을 만들어 준다.
@@ -386,9 +382,9 @@ public class FragmentVeg extends Fragment {
 FirebaseDatabse.getInstance()를 통해 Firebase의 Database를 연동시켜주고
 database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
 ```
-        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+        database = FirebaseDatabase.getInstance(); 
         Log.d("test","check3");
-        databaseReference = database.getReference("DietItem"); // DB 테이블 연결
+        databaseReference = database.getReference("DietItem");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
