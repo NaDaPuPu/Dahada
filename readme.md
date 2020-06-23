@@ -1884,8 +1884,8 @@ doInBackground에서 실행의 결과로 return하는 l_calendarDay를 onPostExe
 
 
 # 10. 이외의 다양한 기능
-1)FCM 메시지
-build gradle(Module:app)에 firebase-messaging 서비스를 추가해준다..
+# 1) FCM 메시지
+build gradle(Module:app)에 firebase-messaging 서비스를 추가해준다
 ```java
  implementation 'com.google.firebase:firebase-messaging:20.1.7'
 ```
