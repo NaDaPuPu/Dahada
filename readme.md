@@ -59,6 +59,50 @@ public String getRecipeName() {
         RecipeName = recipeName;
     }
 ```
+```
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHolder> {
+
+    private ArrayList<RecipeItem> arrayList;
+    private Context context;
+
+    public ItemAdapter(ArrayList<RecipeItem> arrayList, Context context) {
+        this.arrayList = arrayList;
+        this.context = context;
+```
+```
+ @Override
+    public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+        Glide.with(holder.itemView)
+                .load(arrayList.get(position).getRecipeImage())
+                .into(holder.iv_picture);
+        holder.tv_id.setText(arrayList.get(position).getRecipeName());
+        holder.tv_cal.setText(String.valueOf(arrayList.get(position).getRecipeKcal()));
+
+    }
+    @Override
+    public int getItemCount() {
+        return arrayList.size();
+    }
+```
+```
+public class CustomViewHolder extends RecyclerView.ViewHolder {
+
+        CardView item;
+        ImageView iv_picture;
+        TextView tv_id;
+        TextView tv_cal;
+
+        public CustomViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            this.item = itemView.findViewById(R.id.cardview_item);
+            this.iv_picture = itemView.findViewById(R.id.iv_picture);
+            this.tv_id = itemView.findViewById(R.id.tv_id);
+            this.tv_cal = itemView.findViewById(R.id.tv_cal);
+
+        }
+    }
+```
 어댑터를 통해 Firebase의 데이터 테이블을 받아와 프래그먼트에 나타나도록 합니다.
 ```
 public class RecipeFragment1 extends Fragment  {
