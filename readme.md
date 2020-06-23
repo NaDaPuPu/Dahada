@@ -1941,7 +1941,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 firebase 콘솔의 클라우딩 메시지를 보낼때 적는 알림제목이 변수 title에, 텍스트 내용이 msg에 들어가게 된다.
 <div>
-<img src="https://user-images.githubusercontent.com/62593277/85392098-086fa100-b586-11ea-817f-ad03af7fcd7d.png"width=90%></img>
+<img src="https://user-images.githubusercontent.com/62593277/85392098-086fa100-b586-11ea-817f-ad03af7fcd7d.png"></img>
 </div>
 
 
