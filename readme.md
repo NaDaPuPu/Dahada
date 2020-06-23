@@ -2614,9 +2614,97 @@ firebase 콘솔의 클라우딩 메시지를 보낼때 적는 알림제목이 �
 <img src="https://user-images.githubusercontent.com/62593277/85392412-71efaf80-b586-11ea-98b0-c709968aa5bd.png"width="30%"></img>
 </div>
 
+# 9. 마이페이지
 
+마이페이지는 4개의 버튼으로 이루어져 있다. 각각의 버튼마다 실행되는 기능이 다르다.
 
-## 로그인
+먼저 로그인 여부를 확인하기 위해 firebase auth를 선언한다.
+```java
+	private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+```
+
+firebase auth와 버튼들을 호출하고, 버튼에 클릭 리스너를 추가한다.
+```java
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_mypage, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        button_login = v.findViewById(R.id.button_log);
+        button_notice = v.findViewById(R.id.button_notice);
+        button_question = v.findViewById(R.id.button_question);
+        button_setting = v.findViewById(R.id.button_setting);
+
+        button_login.setOnClickListener(this);
+        button_notice.setOnClickListener(this);
+        button_question.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
+
+        return v;
+    }
+```
+
+로그인/로그아웃 버튼은 로그인 여부에 따라 기능과 텍스트가 달라진다.
+공지사항, 문의하기 버튼은 그에 맞는 액티비티를 실행시킨다.
+```java
+	public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_log:
+                if (button_login.getText() == getString(R.string.mypage_login)) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                } else if (button_login.getText() == getString(R.string.mypage_logout)) {
+                    showMessage();
+                }
+                break;
+            case R.id.button_notice:
+                Intent intent = new Intent(getActivity().getApplicationContext(), NoticeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.button_question:
+                Intent intent2 = new Intent(getActivity().getApplicationContext(), QuestionActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.button_setting:
+                Toast.makeText(getContext(), "환경설정", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+```
+
+로그아웃 버튼을 눌렀을 때, 바로 로그아웃이 되는 것이 아니라 알림 메시지를 띄워줘서 실수로 인한 로그아웃을 방지한다.
+확인 버튼을 누를 시 로그아웃을 실행한다.
+```java
+	private void showMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("알림");
+        builder.setMessage("로그아웃 하시겠습니까?");
+
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                signOut();
+                Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                button_login.setText(R.string.mypage_login);
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+```
+
+## 9.1. 로그인
 
 먼저 Gradle에 firebase auth를 추가시켜준다.
 
@@ -2755,151 +2843,7 @@ onActivityResult를 통과한 뒤 Google 계정을 이용한 인증 방식을 �
 </div>
 
 
-## 하단 바
-
-메인화면에 하단 바(BottomNavigationView)를 추가하여서 프래그먼트의 전환을 편하게 하였다.
-
-먼저 MainActivity가 실행될 때, 프래그먼트들을 모두 호출, 선언한다.
-```java
-	protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, LoadingActivity.class);
-        startActivity(intent);
-
-        main = new Main();
-        calendarFragment = new CalendarFragment();
-        notice = new Notice();
-        mypage = new Mypage();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, main).commit();
-
-```
-
-탭이 변경될 때 마다 프래그먼트 매니저가 container에 들어가는 프래그먼트를 전환한다.
-```java
-        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.tab1:
-//                        Toast.makeText(getApplicationContext(), "홈", Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, main).commit();
-                        return true;
-
-                    case R.id.tab2:
-//                        Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarFragment).commit();
-                        return true;
-
-                    case R.id.tab3:
-//                        Toast.makeText(getApplicationContext(), "알림", Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, notice).commit();
-                        return true;
-
-                    case R.id.tab4:
-//                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mypage).commit();
-                        return true;
-                }
-                return false;
-            }
-        });
-    }
-```
-
-## 마이페이지
-
-마이페이지는 4개의 버튼으로 이루어져 있다. 각각의 버튼마다 실행되는 기능이 다르다.
-
-먼저 로그인 여부를 확인하기 위해 firebase auth를 선언한다.
-```java
-	private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseUser user;
-    private FirebaseAuth mAuth;
-```
-
-firebase auth와 버튼들을 호출하고, 버튼에 클릭 리스너를 추가한다.
-```java
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_mypage, container, false);
-
-        mAuth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-        button_login = v.findViewById(R.id.button_log);
-        button_notice = v.findViewById(R.id.button_notice);
-        button_question = v.findViewById(R.id.button_question);
-        button_setting = v.findViewById(R.id.button_setting);
-
-        button_login.setOnClickListener(this);
-        button_notice.setOnClickListener(this);
-        button_question.setOnClickListener(this);
-        button_setting.setOnClickListener(this);
-
-        return v;
-    }
-```
-
-로그인/로그아웃 버튼은 로그인 여부에 따라 기능과 텍스트가 달라진다.
-공지사항, 문의하기 버튼은 그에 맞는 액티비티를 실행시킨다.
-```java
-	public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_log:
-                if (button_login.getText() == getString(R.string.mypage_login)) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                } else if (button_login.getText() == getString(R.string.mypage_logout)) {
-                    showMessage();
-                }
-                break;
-            case R.id.button_notice:
-                Intent intent = new Intent(getActivity().getApplicationContext(), NoticeActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.button_question:
-                Intent intent2 = new Intent(getActivity().getApplicationContext(), QuestionActivity.class);
-                startActivity(intent2);
-                break;
-            case R.id.button_setting:
-                Toast.makeText(getContext(), "환경설정", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-```
-
-로그아웃 버튼을 눌렀을 때, 바로 로그아웃이 되는 것이 아니라 알림 메시지를 띄워줘서 실수로 인한 로그아웃을 방지한다.
-확인 버튼을 누를 시 로그아웃을 실행한다.
-```java
-	private void showMessage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("알림");
-        builder.setMessage("로그아웃 하시겠습니까?");
-
-        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                signOut();
-                Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-                button_login.setText(R.string.mypage_login);
-            }
-        });
-
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-```
-
-## 공지사항
+## 9.2. 공지사항
 
 공지사항은 실제로 데이터베이스 내에 들어가있는 공지사항을 볼 수 있는 액티비티입니다.
 RecyclerView와 firebase database를 통하여 구현했습니다.
@@ -3028,7 +2972,7 @@ public class RecyclerNoticeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 </div>
 
 
-## 문의하기
+## 9.3. 문의하기
 
 문의하기는 문의 작성, 문의 내역 확인 두 개의 프래그먼트로 이루어져있다.
 문의 내역 확인 코드는 공지사항 코드와 거의 차이가 없다.
@@ -3178,6 +3122,62 @@ public class RecyclerNoticeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 <img width="280" src="https://user-images.githubusercontent.com/51768326/85400438-5e971100-b593-11ea-9dd9-358f2a5d4e82.jpg">
 <img width="280" src="https://user-images.githubusercontent.com/51768326/85400439-5f2fa780-b593-11ea-9e59-6f97c1c36633.jpg">
 </div>
+
+
+
+## 하단 바
+
+메인화면에 하단 바(BottomNavigationView)를 추가하여서 프래그먼트의 전환을 편하게 하였다.
+
+먼저 MainActivity가 실행될 때, 프래그먼트들을 모두 호출, 선언한다.
+```java
+	protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, LoadingActivity.class);
+        startActivity(intent);
+
+        main = new Main();
+        calendarFragment = new CalendarFragment();
+        notice = new Notice();
+        mypage = new Mypage();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, main).commit();
+
+```
+
+탭이 변경될 때 마다 프래그먼트 매니저가 container에 들어가는 프래그먼트를 전환한다.
+```java
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.tab1:
+//                        Toast.makeText(getApplicationContext(), "홈", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, main).commit();
+                        return true;
+
+                    case R.id.tab2:
+//                        Toast.makeText(getApplicationContext(), "캘린더 화면", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarFragment).commit();
+                        return true;
+
+                    case R.id.tab3:
+//                        Toast.makeText(getApplicationContext(), "알림", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, notice).commit();
+                        return true;
+
+                    case R.id.tab4:
+//                        Toast.makeText(getApplicationContext(), "마이페이지", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mypage).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+```
 
 ## 로딩화면
 
