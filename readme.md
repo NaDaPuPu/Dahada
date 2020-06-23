@@ -203,7 +203,7 @@ public class RecipeFragment1 extends Fragment  {
 ```
 
 <div>
-<img src="https://user-images.githubusercontent.com/62593236/85388415-07884080-b581-11ea-9fbd-ba48e53ce82e.png" width="90%"></img>
+<img src="https://user-images.githubusercontent.com/62593236/85388415-07884080-b581-11ea-9fbd-ba48e53ce82e.png" ></img>
 <img src="https://user-images.githubusercontent.com/62593236/85388440-0e16b800-b581-11ea-8b74-c3b1ca2da49b.png" width="90%"></img>
 </div>
 
