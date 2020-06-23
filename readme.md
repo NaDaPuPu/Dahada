@@ -385,6 +385,8 @@ Button.OnClickListener mListener = new Button.OnClickListener() {
     }
 ```
 
+<img src="https://user-images.githubusercontent.com/62593236/85388920-add44600-b581-11ea-8231-2a8ee7d45acf.png"></img>
+
 # 6.추천 운동법
 
 각 카테고리마다 데이터 조사를 거쳐 적절한 데이터를 삽입하여 목록 형식으로 보일 수 있도록 하였습니다.
