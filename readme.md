@@ -410,72 +410,6 @@ database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
 ```java
 return view;
 ```
-
-# 4.쇼핑하기
-ShoppingActivity 파일에
-TabLayout을 사용하여 상단 탭을 마켓, 닭가슴살, 샐러드로 구분해준다.
-```java
- @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_shopping);
-
-        TabLayout tabLayout = findViewById(R.id.shop_tablayout);
-
-        tabLayout.addTab((tabLayout.newTab().setText("마켓")));
-        tabLayout.addTab((tabLayout.newTab().setText("닭가슴살")));
-        tabLayout.addTab((tabLayout.newTab().setText("샐러드")));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-```
-
-
-shop_sectionPage 변수 안에 Shop_SectionPage 자바파일을 불러온다.
-```java
-shop_sectionPage = new Shop_SectionPage(getSupportFragmentManager(), tabLayout.getTabCount());
-```java
-
-
-shop_viewPager.xml의 id값을 불러오고 shop_sectionPage를 Adapt해준다.
-```java
- shop_viewPager = findViewById(R.id.shop_viewPager);
- shop_viewPager.setAdapter(shop_sectionPage);
-  shop_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-```
-
-
-
-addOnTabSelectedListner를 사용해 탭을 선택할 수 있는 기능을 넣어준다.
-```java
-tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
-
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                shop_viewPager.setCurrentItem(tab.getPosition());
-                shop_sectionPage.notifyDataSetChanged();
-            }
-
-```
-
-
-
-
-Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
-```java
- @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_shop_1, container, false);
-        Button btn_shop_gmarket = (Button) view.findViewById(R.id.btn_shop_gmarktet);
-        btn_shop_gmarket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.gmarket.co.kr"));
-                startActivity(myIntent);
-            }
-        });
-```
-
-
  ## 3.1 데이터부분
 
 ## 3.2 계산기
@@ -660,6 +594,73 @@ Button.OnClickListener mListener = new Button.OnClickListener() {
 ```
 
 <img src="https://user-images.githubusercontent.com/62593236/85388920-add44600-b581-11ea-8231-2a8ee7d45acf.png"></img>
+
+# 4.쇼핑하기
+ShoppingActivity 파일에
+TabLayout을 사용하여 상단 탭을 마켓, 닭가슴살, 샐러드로 구분해준다.
+```java
+ @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_shopping);
+
+        TabLayout tabLayout = findViewById(R.id.shop_tablayout);
+
+        tabLayout.addTab((tabLayout.newTab().setText("마켓")));
+        tabLayout.addTab((tabLayout.newTab().setText("닭가슴살")));
+        tabLayout.addTab((tabLayout.newTab().setText("샐러드")));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+```
+
+
+shop_sectionPage 변수 안에 Shop_SectionPage 자바파일을 불러온다.
+```java
+shop_sectionPage = new Shop_SectionPage(getSupportFragmentManager(), tabLayout.getTabCount());
+```java
+
+
+shop_viewPager.xml의 id값을 불러오고 shop_sectionPage를 Adapt해준다.
+```java
+ shop_viewPager = findViewById(R.id.shop_viewPager);
+ shop_viewPager.setAdapter(shop_sectionPage);
+  shop_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+```
+
+
+
+addOnTabSelectedListner를 사용해 탭을 선택할 수 있는 기능을 넣어준다.
+```java
+tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                shop_viewPager.setCurrentItem(tab.getPosition());
+                shop_sectionPage.notifyDataSetChanged();
+            }
+
+```
+
+
+
+
+Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
+```java
+ @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.frag_shop_1, container, false);
+        Button btn_shop_gmarket = (Button) view.findViewById(R.id.btn_shop_gmarktet);
+        btn_shop_gmarket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.gmarket.co.kr"));
+                startActivity(myIntent);
+            }
+        });
+```
+
+
+
 
 # 6.추천 운동법
 
