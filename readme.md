@@ -1882,3 +1882,71 @@ doInBackground에서 실행의 결과로 return하는 l_calendarDay를 onPostExe
 
 ```
 
+
+# 10. 이외의 다양한 기능
+1)FCM 메시지
+build gradle(Module:app)에 firebase-messaging 서비스를 추가해준다..
+```java
+ implementation 'com.google.firebase:firebase-messaging:20.1.7'
+```
+
+그리고 FirebaseMessagingService라는 자바클래스를 하나 만들어 아래와 같이
+글 내용을 변수 msg에, 글 제목을 변수 title에 넣어 준 뒤 Notification.builder로 메시지 틀을 만들어주고
+NotificationManager로 만든 틀을 실행해 준다.
+
+```java
+public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService{
+
+    protected static final String FOMTAG = "[FC Sserivce]";
+
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        Log.d(FOMTAG, "onMessageReceived is Called");
+
+        String msg, title;
+
+        msg = remoteMessage.getNotification().getBody();
+        title = remoteMessage.getNotification().getTitle();
+
+        Notification.Builder noti = new Notification.Builder(this)
+                .setContentTitle("New push from " + title)
+                .setContentText(msg)
+                .setSmallIcon(R.mipmap.ic_launcher);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0,noti.build());
+
+
+
+    }
+}
+```
+
+
+firebase 콘솔의 클라우딩 메시지를 보낼때 적는 알림제목이 변수 title에, 텍스트 내용이 msg에 들어가게 된다.
+<div>
+<img src="https://user-images.githubusercontent.com/62593277/85392098-086fa100-b586-11ea-817f-ad03af7fcd7d.png"width=90%></img>
+</div>
+
+
+마지막으로 manifest에 MESSAGING_EVENT와 INSTANCE_ID_EVENT를 intent해주면 
+```java
+ <service
+            android:name=".datapushsend.FirebaseMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+</service>
+```
+
+파이어베이스 콘솔에서 푸시알림을 보낼수 있다.
+<div>
+<img src="https://user-images.githubusercontent.com/62593277/85392412-71efaf80-b586-11ea-98b0-c709968aa5bd.png"width=90%></img>
+</div>
+
+
+
+
