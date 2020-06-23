@@ -84,7 +84,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
         return arrayList.size();
     }
 ```
-```
+```java
 public class CustomViewHolder extends RecyclerView.ViewHolder {
 
         CardView item;
