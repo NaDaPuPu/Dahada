@@ -800,6 +800,40 @@ PostAdapter부분
         }
     }
 ```
+```
+@Override
+    protected void onStart() {
+        super.onStart();
+        mlogingData = new ArrayList<>();
+        mDatas = new ArrayList<>();
+        mStore.collection(FirebaseID.post)
+                //여기서부터 실시간으로 정보 불러오는 코드
+                .orderBy(FirebaseID.timestamp, Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (queryDocumentSnapshots != null) {
+                            mDatas.clear();
+                            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                                Map<String, Object> shot = snap.getData();
+                                String documentId = String.valueOf(shot.get(FirebaseID.documentId));
+                                String user = String.valueOf(shot.get(FirebaseID.user));
+                                String title = String.valueOf(shot.get(FirebaseID.title));
+                                String contents = String.valueOf(shot.get(FirebaseID.contents));
+                                Post data = new Post(documentId, title, contents);
+                                mDatas.add(data);
+                            }
+                            mAdapter = new PostAdapter(mDatas);
+                            mPostRecyclerview.setAdapter(mAdapter);
+                        }
+                    }
+                });
+    }
+    @Override
+    public void onClick(View v){
+        startActivity(new Intent(this, PostActivity.class));
+    }
+```
 
 ## 로그인
 
