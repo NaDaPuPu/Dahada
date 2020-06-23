@@ -213,7 +213,7 @@ public class RecipeFragment1 extends Fragment  {
 
 ## 3.2 계산기
 ```java
-	Button add,sub,mul,div,remainder,del;
+    Button add,sub,mul,div,remainder,del;
     Button result;
 
     String history = "";
@@ -231,7 +231,7 @@ public class RecipeFragment1 extends Fragment  {
     double d2;
 ```
 ```java
-		et_show = findViewById(R.id.et_show);
+	et_show = findViewById(R.id.et_show);
         et_result = findViewById(R.id.et_result);
         et_result.setText("");
         add = findViewById(R.id.btn_add);
