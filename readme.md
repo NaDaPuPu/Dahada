@@ -212,7 +212,7 @@ public class RecipeFragment1 extends Fragment  {
  ## 3.1 데이터부분
 
 ## 3.2 계산기
-```
+```java
 	Button add,sub,mul,div,remainder,del;
     Button result;
 
@@ -230,7 +230,7 @@ public class RecipeFragment1 extends Fragment  {
     double d1;
     double d2;
 ```
-```
+```java
 		et_show = findViewById(R.id.et_show);
         et_result = findViewById(R.id.et_result);
         et_result.setText("");
@@ -251,8 +251,7 @@ public class RecipeFragment1 extends Fragment  {
         result.setOnClickListener(mListener);
         del.setOnClickListener(mListener);
 ```
-```
-
+```java
         Button clear = findViewById(R.id.btn_clear);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,7 +280,7 @@ public class RecipeFragment1 extends Fragment  {
         });
     }
 ```
-```
+```java
 Button.OnClickListener mListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
