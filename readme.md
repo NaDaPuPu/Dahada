@@ -148,6 +148,58 @@ public class RecipeFragment1 extends Fragment  {
     }
 }
 ```
+어댑터에서 인텐트를 생성하여 아이템을 클릭 할 때 그 포지션의 값을 받아준 뒤
+```
+    @NonNull
+    @Override
+    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.main_recipe_list_item, parent, false);
+        final CustomViewHolder holder = new CustomViewHolder(view);
+
+
+        holder.item.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RecipeDetails1.class);
+                intent.putExtra("position",holder.getAdapterPosition());
+                intent.putExtra("Image",holder.getAdapterPosition());
+                context.startActivity(intent);
+                Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return holder;
+    }
+    ```
+    디테일 액티비티에서 받아온다.
+    ```
+    Intent intent = getIntent();
+        final int position = intent.getIntExtra("position", 0);
+        Log.d("RecipeDetails", "position : " + position);
+
+        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+        databaseReference = database.getReference("RecipeItem/" + position); // DB 테이블 연결
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                RecipeItem recipeItem = dataSnapshot.getValue(RecipeItem.class);
+                assert recipeItem != null;
+                rcpName.setText(recipeItem.getRecipeName());
+                rcpKcal.setText(recipeItem.getRecipeKcal() + "kcal");
+                rcpGram.setText(recipeItem.getRecipeGram() + "g");
+                rcpEx.setText(recipeItem.getRecipeEx1());
+                rcpEx2.setText(recipeItem.getRecipeEx2());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));
+            }
+
+        });
+    ```
 
 
 ## 로그인
