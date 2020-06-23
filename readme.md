@@ -37,6 +37,8 @@ readme.md 파일도 추가되었다! 와! 우리는 이제 GitHub를 제대로 �
 다하다는 다이어트, 운동, 식단 등을 관리하기 위한 기능을 넣어 간편하게 관리할 수 있는 앱을 목표로 하고있습니다.
 '다하다'라는 이름은 '다이어트 하다'와 '최선을 다하다'의 뜻이 담긴 중의적인 이름입니다.
 
+<img src="https://user-images.githubusercontent.com/62593236/85401991-e54ced80-b595-11ea-8633-38ae547426e9.png" ></img>
+
 # 2. 추천 레시피
 
 RecipeItem 모델에 넣고자하는 데이터를 생성하고, Getter Setter로 값을 주고받아오게 한다.
@@ -995,7 +997,7 @@ recyclerView = view.findViewById(R.id.rec_ex_2_recyclerview);
 # 7.커뮤니티
 
 Post model을 생성해 firebase에 데이터가 저장될 틀을 구성한다.
-```
+```java
 public class Post {
 
         private String documentId;
@@ -1052,7 +1054,7 @@ public class Post {
 }
 ```
 FirebaseID로 아이디들을 추가해준다.
-```
+```java
 public class FirebaseID {
     public static String user = "user";
     public static String post = "post";
@@ -1064,7 +1066,7 @@ public class FirebaseID {
 ```
 
 Post Activity에 onClick이벤트를 생성하여 저장버튼을 누르면 documentId,title,contents,timestamp 의 데이터가 FirebaseFirestore에 저장되도록 하였다.
-```
+```java
 findViewById(R.id.post_save_button).setOnClickListener(this);
 
         if (mAuth.getCurrentUser() != null) {
@@ -1078,7 +1080,7 @@ findViewById(R.id.post_save_button).setOnClickListener(this);
                     });
         }
 ```
-```
+```java
 @Override
     public void onClick(View v) {
         if (mAuth.getCurrentUser() != null) {
@@ -1095,7 +1097,7 @@ findViewById(R.id.post_save_button).setOnClickListener(this);
 ```
 
 PostAdapter를 통해 데이터를 연결해주고
-```
+```java
  @Override
     public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
         final Post post = datas.get(position);
@@ -1125,7 +1127,7 @@ PostAdapter를 통해 데이터를 연결해주고
 ```
 
 Community Activity에는 액티비티 시작 시 mDatas 리스트가 보이게 하였다.
-```
+```java
 @Override
     protected void onStart() {
         super.onStart();
