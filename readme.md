@@ -40,7 +40,7 @@ implementation 'com.google.firebase:firebase-auth:19.3.1'
 
 # 2. 추천 레시피
 
-RecipeItem 모델에 넣고자하는 데이터를 생성합니다.
+RecipeItem 모델에 넣고자하는 데이터를 생성하고, Getter Setter로 값을 주고받아오게 한다.
 ```java
 public class RecipeItem {
     private String RecipeImage;
@@ -50,7 +50,6 @@ public class RecipeItem {
     private String RecipeEx1;
     private String RecipeEx2;
 ```
-Getter Setter로 값을 주고받아오게 해주고 난 뒤
 ```java
 public String getRecipeName() {
         return RecipeName;
@@ -59,6 +58,10 @@ public String getRecipeName() {
         RecipeName = recipeName;
     }
 ```
+Adapter부분은 RecyclerView.Adapter를 상속받고 생성자를 지정해준 뒤 
+RecyclerView에 들어갈 ViewHolder, 그리고 ViewHolder에 들어갈 아이템들을 지정해준다.
+Adapter 클래스 상속 시 구현해야하는 함수 onBindViewHolder는 실제 각 ViewHolder에 데이터를 연결해주는 함수이다.
+후에 getItemCount() 로 전체 아이템 갯수를 리턴한다.
 ```java
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHolder> {
 
