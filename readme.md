@@ -1169,6 +1169,406 @@ Community Activity에는 액티비티 시작 시 mDatas 리스트가 보이게 �
 <img src="https://user-images.githubusercontent.com/62593236/85388704-5fbf4280-b581-11ea-820f-cc7c2e782fb7.png" width="30%"></img>
 </div>
 
+
+# 8. 캘린더
+
+캘린더 기능은 선택한 날짜에 그 날 먹은 칼로리, 음식 메뉴, 마신 물의 양을 입력할 수 있다.
+파일 입출력을 통하여 앱 내부 저장소에 저장되며, 앱 삭제 시 같이 삭제된다.
+
+먼저 외부 라이브러리인 'Material Calendar'를 Gradle에 추가한다.
+```java
+	implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+```
+
+CalendarFragment가 실행되면 달력을 표시하고, 가시성을 높이기 위해 토요일, 일요일을 다른 색으로 표시해주는 Decorator를 추가한다.
+```java
+	materialCalendarView = v.findViewById(R.id.calendarView);
+
+        materialCalendarView.state().edit()
+                .setFirstDayOfWeek(Calendar.SUNDAY)
+                .setMinimumDate(CalendarDay.from(2017, 0, 1))
+                .setMaximumDate(CalendarDay.from(2030, 11, 31))
+                .setCalendarDisplayMode(CalendarMode.MONTHS)
+                .commit();
+
+        materialCalendarView.addDecorators(
+                new SundayDecorator(),
+                new SaturdayDecorator(),
+                new OneDayDecorator());
+```
+
+SaturdayDecorator
+```java
+public class SaturdayDecorator implements DayViewDecorator {
+
+    private final Calendar calendar = Calendar.getInstance();
+
+    public SaturdayDecorator() {
+    }
+
+    @Override
+    public boolean shouldDecorate(CalendarDay day) {
+        day.copyTo(calendar);
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
+        return weekDay == Calendar.SATURDAY;
+    }
+
+    @Override
+    public void decorate(DayViewFacade view) {
+        view.addSpan(new ForegroundColorSpan(Color.BLUE));
+    }
+}
+
+```
+
+SundayDecorator
+```java
+public class SundayDecorator implements DayViewDecorator {
+
+    private final Calendar calendar = Calendar.getInstance();
+
+    public SundayDecorator() {
+    }
+
+    @Override
+    public boolean shouldDecorate(CalendarDay day) {
+        day.copyTo(calendar);
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
+        return weekDay == Calendar.SUNDAY;
+    }
+
+    @Override
+    public void decorate(DayViewFacade view) {
+        view.addSpan(new ForegroundColorSpan(Color.RED));
+    }
+}
+
+```
+
+만약 파일 입출력을 통해 기존에 저장된 값이 있을 경우, 달력에 표시해줘야한다. 이는 사용자가 달력을 보기 전에 이루어져야한다.
+따라서 AsyncTask를 통해 백그라운드에서 진행한다.
+
+```java
+		try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
+            String line = null;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] readedContent = line.split(" ");
+                Date rdate = simpleDateFormat.parse(readedContent[0]);
+                int rkcal = Integer.parseInt(readedContent[1]);
+                String rmenu = readedContent[2];
+                int rwater = Integer.parseInt(readedContent[3]);
+
+                Schedule schedule = new Schedule(rdate, rkcal, rmenu, rwater);
+                scheduleList.add(schedule);
+            }
+            bufferedReader.close();
+
+            String[] result = new String[scheduleList.size()];
+            for (int i = 0; i < scheduleList.size(); i++) {
+                result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
+            }
+
+            ArrayList<String> w_result = new ArrayList<>();
+            for (int i = 0; i < scheduleList.size(); i++) {
+                if (scheduleList.get(i).getWater() >= 20) {
+                    w_result.add(simpleDateFormat.format(scheduleList.get(i).getDate()));
+                }
+            }
+
+            new ApiSimulator(result, w_result).executeOnExecutor(Executors.newSingleThreadExecutor());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        setHelper();
+        setHelper2();
+```
+
+AsyncTask와 이를 실행할 때 필요한 데이터를 입력할 클래스를 만들었다.
+doInBackground에서 실행의 결과로 return하는 l_calendarDay를 onPostExecute에서 받아 진행한다.
+```java
+	private class ApiSimulator extends AsyncTask<Void, Void, L_CalendarDay> {
+        String[] Time_Result;
+        ArrayList<String> Water_Result;
+
+        ApiSimulator(String[] Time_Result, ArrayList<String> Water_Result) {
+            this.Time_Result = Time_Result;
+            this.Water_Result = Water_Result;
+        }
+
+        @Override
+        protected L_CalendarDay doInBackground(@NonNull Void... voids) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            ArrayList<CalendarDay> dates = new ArrayList<>();
+            ArrayList<CalendarDay> wdates = new ArrayList<>();
+
+            for (int i = 0; i < Time_Result.length; i++) {
+
+                String[] time = Time_Result[i].split("\\."); // "."으로 하면 X
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int day = Integer.parseInt(time[2]);
+
+                calendar.set(year, month - 1, day);
+                CalendarDay calendarDay = CalendarDay.from(calendar);
+                dates.add(calendarDay);
+            }
+
+            for (int i = 0; i < Water_Result.size(); i++) {
+
+                String[] time = Water_Result.get(i).split("\\."); // "."으로 하면 X
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int day = Integer.parseInt(time[2]);
+
+                calendar.set(year, month - 1, day);
+                CalendarDay calendarDay = CalendarDay.from(calendar);
+                wdates.add(calendarDay);
+            }
+            L_CalendarDay l_calendarDay = new L_CalendarDay(dates, wdates);
+
+            return l_calendarDay;
+        }
+
+        @Override
+        protected void onPostExecute(L_CalendarDay l_calendarDay) {
+            super.onPostExecute(l_calendarDay);
+
+            if (isRemoving()) {
+                return;
+            }
+            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, l_calendarDay.Time_Result, getActivity()));
+            materialCalendarView.addDecorator(new EventsDecorator(l_calendarDay.Water_Result, getActivity()));
+        }
+    }
+```
+
+달력의 날짜를 선택할 시 이벤트가 발생한다. 이벤트 발생 시 선택된 날짜를 시각적으로 표시하고
+만약 그 날짜에 해당하는 데이터가 존재할 경우 텍스트로 그 값을 보여준다.
+```java
+		materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            // 날짜 선택 시
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                if (inputContainer.getVisibility() == View.VISIBLE) {
+                    materialCalendarView.setSelectedDate(beforeSelectedDate);
+                } else {
+                    materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
+                    boolean ifEquals = false;
+
+                    int Year = date.getYear();
+                    int Month = date.getMonth() + 1;
+                    int Day = date.getDay();
+
+                    currentDate = date.getDate();
+                    shot_Day = Year + "." + Month + "." + Day;
+
+                    dateText.setText("date : " + shot_Day);
+
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
+                            kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
+                            menuText2.setText("menu : " + scheduleList.get(i).getMenu());
+                            waterText2.setText("water : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                            ifEquals = true;
+                        }
+                    }
+
+                    if (!ifEquals) {
+                        kcalText2.setText("kcal : ");
+                        menuText2.setText("menu : ");
+                        waterText2.setText("water : ");
+                    }
+
+                    beforeSelectedDate = date;
+                }
+            }
+        });
+```
+
+날짜를 선택하고, 그 날짜에 데이터를 넣을 수 있다. 입력 상태에 들어가기 위한 버튼 이벤트를 작성한다.
+입력 창의 visibility는 GONE으로 설정되어있으므로, 이를 변경한다.
+만약 선택된 날짜에 데이터가 존재할 경우, 수정하기 편하게 그 데이터들을 표시해준다.
+```java
+		buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputContainer.setVisibility(View.VISIBLE);
+                outputContainer.setVisibility(View.GONE);
+
+                if (!kcalText2.getText().toString().equals("kcal : ")) {
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        String sdate = simpleDateFormat.format(scheduleList.get(i).getDate());
+                        if (simpleDateFormat.format(currentDate).equals(sdate)) {
+                            kcalText.setText(scheduleList.get(i).getKcal() + "");
+                            menuText.setText(scheduleList.get(i).getMenu() + "");
+                            waterText.setText("이 날 마신 물 : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                        }
+                    }
+                } else {
+                    kcalText.setText("");
+                    menuText.setText("");
+                    waterText.setText("이 날 마신 물 : 0.0L");
+                    seekBar.setProgress(0);
+                }
+            }
+        });
+```
+
+확인 버튼의 이벤트를 설정한다.
+데이터를 입력하고 확인 버튼을 누를 시, 파일 입출력을 통하여 데이터를 저장한다.
+또한, 달력에 이를 표시한다. 만약 마신 물의 양이 2L 이상일 경우, 파란색을 표시한다.
+이후에 수정 화면을 종료한다.
+
+```java
+		buttonInput.setOnClickListener(new View.OnClickListener() { // 입력 버튼
+            @Override
+            public void onClick(View v) {
+                String content = "";
+                try {
+                    File directory = getActivity().getFilesDir();
+                    File file = new File(directory, "savedCalendar");
+                    FileWriter fileWriter = new FileWriter(getActivity().getFilesDir() + "savedCalendar", false);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()), menuText.getText().toString(), seekBar.getProgress());
+                    int currentsize = scheduleList.size();
+                    boolean isChanged = false;
+
+                    if (currentsize == 0) {
+                        scheduleList.add(schedule);
+                        isChanged = true;
+                    }
+
+                    for (int i = 0; i < currentsize; i++) {
+                        if (simpleDateFormat.format(scheduleList.get(i).getDate()).equals(simpleDateFormat.format(schedule.getDate()))) {
+                            scheduleList.set(i, schedule);
+                            isChanged = true;
+                        } else if (i == currentsize - 1 && !isChanged) {
+                            scheduleList.add(schedule);
+                        }
+                    }
+
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i).getKcal() + " " + scheduleList.get(i).getMenu() + " " + scheduleList.get(i).getWater() + "\n";
+                    }
+                    bufferedWriter.write(content);
+                    bufferedWriter.close();
+
+                    ArrayList<CalendarDay> CalendarDays = new ArrayList<>();
+                    CalendarDays.add(CalendarDay.from(currentDate));
+
+                    if (seekBar.getProgress() >= 20) {
+                        materialCalendarView.addDecorator(new EventsDecorator(CalendarDays, getActivity()));
+                    } else {
+                        materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, CalendarDays, getActivity()));
+                    }
+
+                    kcalText2.setText("kcal : " + kcalText.getText());
+                    menuText2.setText("menu :" + menuText.getText());
+                    waterText2.setText("water : " + (float) seekBar.getProgress() / 10 + "L");
+                    kcalText.setText("");
+                    menuText.setText("");
+                } catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                inputContainer.setVisibility(View.GONE);
+                outputContainer.setVisibility(View.VISIBLE);
+                setHelper();
+                setHelper2();
+            }
+        });
+```
+
+취소 버튼은 입력된 데이터를 초기화하고, 수정 화면을 종료한다.
+```java
+		buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputContainer.setVisibility(View.GONE);
+                outputContainer.setVisibility(View.VISIBLE);
+                kcalText.setText("");
+                menuText.setText("");
+                seekBar.setProgress(0);
+                waterText.setText("이 날 마신 물 : 0.0L");
+            }
+        });
+```
+
+마신 물의 양을 입력하기 위한 Seekbar의 Progress가 변할 경우의 이벤트를 작성한다.
+텍스트를 변경하여 입력 값이 얼마인지를 표시한다.
+```java
+		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float water = (float) progress / 10;
+                waterText.setText("이 날 마신 물 : " + water + "L");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+```
+
+일정 입력을 활발히 하기 위해 격려의 메시지를 표시하는 기능을 추가하였다.
+일정이 입력된 날과 2L 이상 물을 마신 날을 계산하여 일정 수마다 표시하는 메시지가 달라진다.
+아래는 2L 이상 물을 마신 날을 기준으로 하는 코드이다.
+```java
+	private void setHelper() {
+        int count = 0;
+        CalendarDay todayCal = CalendarDay.today();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate())) && scheduleList.get(i).getWater() >= 20) {
+                count++;
+            }
+        }
+
+        cnum = count;
+
+        helperTitle1.setText("이번 달 물 2L 마신 날 : " + cnum + "/" + mnum);
+
+        if (cnum < 7) {
+            helperContent1.setText(R.string.wday0);
+        } else if (cnum < 14) {
+            helperContent1.setText(R.string.wday7);
+        } else if (cnum < 21) {
+            helperContent1.setText(R.string.wday14);
+        } else if (cnum < 28) {
+            helperContent1.setText(R.string.wday21);
+        } else if (cnum < mnum) {
+            helperContent1.setText(R.string.wday28);
+        }
+    }
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399894-86d24000-b592-11ea-814b-443596fe275b.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399897-86d24000-b592-11ea-8dc7-1221a4e7dd9e.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399899-876ad680-b592-11ea-80fd-23aa22650029.jpg">
+</div>
+
+
 ## 로그인
 
 먼저 Gradle에 firebase auth를 추가시켜준다.
@@ -2810,403 +3210,4 @@ public class LoadingActivity extends AppCompatActivity {
 ```
 <div>
 <img width="280" src="https://user-images.githubusercontent.com/51768326/85400892-17f5e680-b594-11ea-9b23-0970828c9b5d.jpg">
-</div>
-
-
-## 캘린더
-
-캘린더 기능은 선택한 날짜에 그 날 먹은 칼로리, 음식 메뉴, 마신 물의 양을 입력할 수 있다.
-파일 입출력을 통하여 앱 내부 저장소에 저장되며, 앱 삭제 시 같이 삭제된다.
-
-먼저 외부 라이브러리인 'Material Calendar'를 Gradle에 추가한다.
-```java
-	implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
-```
-
-CalendarFragment가 실행되면 달력을 표시하고, 가시성을 높이기 위해 토요일, 일요일을 다른 색으로 표시해주는 Decorator를 추가한다.
-```java
-	materialCalendarView = v.findViewById(R.id.calendarView);
-
-        materialCalendarView.state().edit()
-                .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2017, 0, 1))
-                .setMaximumDate(CalendarDay.from(2030, 11, 31))
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
-                .commit();
-
-        materialCalendarView.addDecorators(
-                new SundayDecorator(),
-                new SaturdayDecorator(),
-                new OneDayDecorator());
-```
-
-SaturdayDecorator
-```java
-public class SaturdayDecorator implements DayViewDecorator {
-
-    private final Calendar calendar = Calendar.getInstance();
-
-    public SaturdayDecorator() {
-    }
-
-    @Override
-    public boolean shouldDecorate(CalendarDay day) {
-        day.copyTo(calendar);
-        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
-        return weekDay == Calendar.SATURDAY;
-    }
-
-    @Override
-    public void decorate(DayViewFacade view) {
-        view.addSpan(new ForegroundColorSpan(Color.BLUE));
-    }
-}
-
-```
-
-SundayDecorator
-```java
-public class SundayDecorator implements DayViewDecorator {
-
-    private final Calendar calendar = Calendar.getInstance();
-
-    public SundayDecorator() {
-    }
-
-    @Override
-    public boolean shouldDecorate(CalendarDay day) {
-        day.copyTo(calendar);
-        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
-        return weekDay == Calendar.SUNDAY;
-    }
-
-    @Override
-    public void decorate(DayViewFacade view) {
-        view.addSpan(new ForegroundColorSpan(Color.RED));
-    }
-}
-
-```
-
-만약 파일 입출력을 통해 기존에 저장된 값이 있을 경우, 달력에 표시해줘야한다. 이는 사용자가 달력을 보기 전에 이루어져야한다.
-따라서 AsyncTask를 통해 백그라운드에서 진행한다.
-
-```java
-		try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
-            String line = null;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] readedContent = line.split(" ");
-                Date rdate = simpleDateFormat.parse(readedContent[0]);
-                int rkcal = Integer.parseInt(readedContent[1]);
-                String rmenu = readedContent[2];
-                int rwater = Integer.parseInt(readedContent[3]);
-
-                Schedule schedule = new Schedule(rdate, rkcal, rmenu, rwater);
-                scheduleList.add(schedule);
-            }
-            bufferedReader.close();
-
-            String[] result = new String[scheduleList.size()];
-            for (int i = 0; i < scheduleList.size(); i++) {
-                result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
-            }
-
-            ArrayList<String> w_result = new ArrayList<>();
-            for (int i = 0; i < scheduleList.size(); i++) {
-                if (scheduleList.get(i).getWater() >= 20) {
-                    w_result.add(simpleDateFormat.format(scheduleList.get(i).getDate()));
-                }
-            }
-
-            new ApiSimulator(result, w_result).executeOnExecutor(Executors.newSingleThreadExecutor());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        setHelper();
-        setHelper2();
-```
-
-AsyncTask와 이를 실행할 때 필요한 데이터를 입력할 클래스를 만들었다.
-doInBackground에서 실행의 결과로 return하는 l_calendarDay를 onPostExecute에서 받아 진행한다.
-```java
-	private class ApiSimulator extends AsyncTask<Void, Void, L_CalendarDay> {
-        String[] Time_Result;
-        ArrayList<String> Water_Result;
-
-        ApiSimulator(String[] Time_Result, ArrayList<String> Water_Result) {
-            this.Time_Result = Time_Result;
-            this.Water_Result = Water_Result;
-        }
-
-        @Override
-        protected L_CalendarDay doInBackground(@NonNull Void... voids) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Calendar calendar = Calendar.getInstance();
-            ArrayList<CalendarDay> dates = new ArrayList<>();
-            ArrayList<CalendarDay> wdates = new ArrayList<>();
-
-            for (int i = 0; i < Time_Result.length; i++) {
-
-                String[] time = Time_Result[i].split("\\."); // "."으로 하면 X
-                int year = Integer.parseInt(time[0]);
-                int month = Integer.parseInt(time[1]);
-                int day = Integer.parseInt(time[2]);
-
-                calendar.set(year, month - 1, day);
-                CalendarDay calendarDay = CalendarDay.from(calendar);
-                dates.add(calendarDay);
-            }
-
-            for (int i = 0; i < Water_Result.size(); i++) {
-
-                String[] time = Water_Result.get(i).split("\\."); // "."으로 하면 X
-                int year = Integer.parseInt(time[0]);
-                int month = Integer.parseInt(time[1]);
-                int day = Integer.parseInt(time[2]);
-
-                calendar.set(year, month - 1, day);
-                CalendarDay calendarDay = CalendarDay.from(calendar);
-                wdates.add(calendarDay);
-            }
-            L_CalendarDay l_calendarDay = new L_CalendarDay(dates, wdates);
-
-            return l_calendarDay;
-        }
-
-        @Override
-        protected void onPostExecute(L_CalendarDay l_calendarDay) {
-            super.onPostExecute(l_calendarDay);
-
-            if (isRemoving()) {
-                return;
-            }
-            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, l_calendarDay.Time_Result, getActivity()));
-            materialCalendarView.addDecorator(new EventsDecorator(l_calendarDay.Water_Result, getActivity()));
-        }
-    }
-```
-
-달력의 날짜를 선택할 시 이벤트가 발생한다. 이벤트 발생 시 선택된 날짜를 시각적으로 표시하고
-만약 그 날짜에 해당하는 데이터가 존재할 경우 텍스트로 그 값을 보여준다.
-```java
-		materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            // 날짜 선택 시
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                if (inputContainer.getVisibility() == View.VISIBLE) {
-                    materialCalendarView.setSelectedDate(beforeSelectedDate);
-                } else {
-                    materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
-                    boolean ifEquals = false;
-
-                    int Year = date.getYear();
-                    int Month = date.getMonth() + 1;
-                    int Day = date.getDay();
-
-                    currentDate = date.getDate();
-                    shot_Day = Year + "." + Month + "." + Day;
-
-                    dateText.setText("date : " + shot_Day);
-
-                    for (int i = 0; i < scheduleList.size(); i++) {
-                        if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
-                            kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
-                            menuText2.setText("menu : " + scheduleList.get(i).getMenu());
-                            waterText2.setText("water : " + scheduleList.get(i).getWater() / 10.0 + "L");
-                            ifEquals = true;
-                        }
-                    }
-
-                    if (!ifEquals) {
-                        kcalText2.setText("kcal : ");
-                        menuText2.setText("menu : ");
-                        waterText2.setText("water : ");
-                    }
-
-                    beforeSelectedDate = date;
-                }
-            }
-        });
-```
-
-날짜를 선택하고, 그 날짜에 데이터를 넣을 수 있다. 입력 상태에 들어가기 위한 버튼 이벤트를 작성한다.
-입력 창의 visibility는 GONE으로 설정되어있으므로, 이를 변경한다.
-만약 선택된 날짜에 데이터가 존재할 경우, 수정하기 편하게 그 데이터들을 표시해준다.
-```java
-		buttonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inputContainer.setVisibility(View.VISIBLE);
-                outputContainer.setVisibility(View.GONE);
-
-                if (!kcalText2.getText().toString().equals("kcal : ")) {
-                    for (int i = 0; i < scheduleList.size(); i++) {
-                        String sdate = simpleDateFormat.format(scheduleList.get(i).getDate());
-                        if (simpleDateFormat.format(currentDate).equals(sdate)) {
-                            kcalText.setText(scheduleList.get(i).getKcal() + "");
-                            menuText.setText(scheduleList.get(i).getMenu() + "");
-                            waterText.setText("이 날 마신 물 : " + scheduleList.get(i).getWater() / 10.0 + "L");
-                        }
-                    }
-                } else {
-                    kcalText.setText("");
-                    menuText.setText("");
-                    waterText.setText("이 날 마신 물 : 0.0L");
-                    seekBar.setProgress(0);
-                }
-            }
-        });
-```
-
-확인 버튼의 이벤트를 설정한다.
-데이터를 입력하고 확인 버튼을 누를 시, 파일 입출력을 통하여 데이터를 저장한다.
-또한, 달력에 이를 표시한다. 만약 마신 물의 양이 2L 이상일 경우, 파란색을 표시한다.
-이후에 수정 화면을 종료한다.
-
-```java
-		buttonInput.setOnClickListener(new View.OnClickListener() { // 입력 버튼
-            @Override
-            public void onClick(View v) {
-                String content = "";
-                try {
-                    File directory = getActivity().getFilesDir();
-                    File file = new File(directory, "savedCalendar");
-                    FileWriter fileWriter = new FileWriter(getActivity().getFilesDir() + "savedCalendar", false);
-                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()), menuText.getText().toString(), seekBar.getProgress());
-                    int currentsize = scheduleList.size();
-                    boolean isChanged = false;
-
-                    if (currentsize == 0) {
-                        scheduleList.add(schedule);
-                        isChanged = true;
-                    }
-
-                    for (int i = 0; i < currentsize; i++) {
-                        if (simpleDateFormat.format(scheduleList.get(i).getDate()).equals(simpleDateFormat.format(schedule.getDate()))) {
-                            scheduleList.set(i, schedule);
-                            isChanged = true;
-                        } else if (i == currentsize - 1 && !isChanged) {
-                            scheduleList.add(schedule);
-                        }
-                    }
-
-                    for (int i = 0; i < scheduleList.size(); i++) {
-                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i).getKcal() + " " + scheduleList.get(i).getMenu() + " " + scheduleList.get(i).getWater() + "\n";
-                    }
-                    bufferedWriter.write(content);
-                    bufferedWriter.close();
-
-                    ArrayList<CalendarDay> CalendarDays = new ArrayList<>();
-                    CalendarDays.add(CalendarDay.from(currentDate));
-
-                    if (seekBar.getProgress() >= 20) {
-                        materialCalendarView.addDecorator(new EventsDecorator(CalendarDays, getActivity()));
-                    } else {
-                        materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, CalendarDays, getActivity()));
-                    }
-
-                    kcalText2.setText("kcal : " + kcalText.getText());
-                    menuText2.setText("menu :" + menuText.getText());
-                    waterText2.setText("water : " + (float) seekBar.getProgress() / 10 + "L");
-                    kcalText.setText("");
-                    menuText.setText("");
-                } catch (IOException | ParseException e) {
-                    e.printStackTrace();
-                }
-
-                inputContainer.setVisibility(View.GONE);
-                outputContainer.setVisibility(View.VISIBLE);
-                setHelper();
-                setHelper2();
-            }
-        });
-```
-
-취소 버튼은 입력된 데이터를 초기화하고, 수정 화면을 종료한다.
-```java
-		buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inputContainer.setVisibility(View.GONE);
-                outputContainer.setVisibility(View.VISIBLE);
-                kcalText.setText("");
-                menuText.setText("");
-                seekBar.setProgress(0);
-                waterText.setText("이 날 마신 물 : 0.0L");
-            }
-        });
-```
-
-마신 물의 양을 입력하기 위한 Seekbar의 Progress가 변할 경우의 이벤트를 작성한다.
-텍스트를 변경하여 입력 값이 얼마인지를 표시한다.
-```java
-		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float water = (float) progress / 10;
-                waterText.setText("이 날 마신 물 : " + water + "L");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-```
-
-일정 입력을 활발히 하기 위해 격려의 메시지를 표시하는 기능을 추가하였다.
-일정이 입력된 날과 2L 이상 물을 마신 날을 계산하여 일정 수마다 표시하는 메시지가 달라진다.
-아래는 2L 이상 물을 마신 날을 기준으로 하는 코드이다.
-```java
-	private void setHelper() {
-        int count = 0;
-        CalendarDay todayCal = CalendarDay.today();
-
-        for (int i = 0; i < scheduleList.size(); i++) {
-            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate())) && scheduleList.get(i).getWater() >= 20) {
-                count++;
-            }
-        }
-
-        cnum = count;
-
-        helperTitle1.setText("이번 달 물 2L 마신 날 : " + cnum + "/" + mnum);
-
-        if (cnum < 7) {
-            helperContent1.setText(R.string.wday0);
-        } else if (cnum < 14) {
-            helperContent1.setText(R.string.wday7);
-        } else if (cnum < 21) {
-            helperContent1.setText(R.string.wday14);
-        } else if (cnum < 28) {
-            helperContent1.setText(R.string.wday21);
-        } else if (cnum < mnum) {
-            helperContent1.setText(R.string.wday28);
-        }
-    }
-```
-
-<div>
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399894-86d24000-b592-11ea-814b-443596fe275b.jpg">
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399897-86d24000-b592-11ea-8dc7-1221a4e7dd9e.jpg">
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399899-876ad680-b592-11ea-80fd-23aa22650029.jpg">
 </div>
