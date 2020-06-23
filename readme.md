@@ -39,6 +39,8 @@ implementation 'com.google.firebase:firebase-auth:19.3.1'
 ```
 
 # 2. 추천 레시피
+
+RecipeItem 모델에 넣고자하는 데이터를 생성합니다.
 ```
 public class RecipeItem {
     private String RecipeImage;
@@ -48,18 +50,7 @@ public class RecipeItem {
     private String RecipeEx1;
     private String RecipeEx2;
 ```
-```
-public RecipeItem(String recipeImage, String recipeName, int recipeKcal,
-                            int recipeGram, String recipeEx1, String recipeEx2) {
-        RecipeImage = recipeImage;
-        RecipeName = recipeName;
-        RecipeKcal = recipeKcal;
-        RecipeGram = recipeGram;
-        RecipeEx1 = recipeEx1;
-        RecipeEx2 = recipeEx2;
-    }
-    public RecipeItem() { }
-```
+Getter Setter로 값을 주고받아오게 해주고 난 뒤
 ```
 public String getRecipeName() {
         return RecipeName;
@@ -67,6 +58,51 @@ public String getRecipeName() {
     public void setRecipeName(String recipeName) {
         RecipeName = recipeName;
     }
+```
+어댑터를 통해 Firebase의 데이터 테이블을 받아와 프래그먼트에 나타나도록 합니다.
+```
+public class RecipeFragment1 extends Fragment  {
+    private ItemAdapter adapter;
+    public RecipeFragment1() { }
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<RecipeItem> arrayList;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.main_recipe_1, container, false);
+        Log.d("test", "check2");
+        recyclerView = view.findViewById(R.id.rcp_recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        arrayList = new ArrayList<>();
+
+        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+        Log.d("test", "check3");
+        databaseReference = database.getReference("RecipeItem"); // DB 테이블 연결
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    RecipeItem recipeItem = snapshot.getValue(RecipeItem.class);
+                    arrayList.add(recipeItem);
+                }
+                Log.d("TEST", String.valueOf(arrayList.size()));
+                adapter = new ItemAdapter(arrayList, getContext());
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Fragment1", String.valueOf(databaseError.toException()));
+            }
+        });
+        Log.d("test", "check5");
+        return view;
+    }
+}
 ```
 
 
