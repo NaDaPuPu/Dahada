@@ -38,6 +38,37 @@ readme.md 파일도 추가되었다! 와! 우리는 이제 GitHub를 제대로 �
 implementation 'com.google.firebase:firebase-auth:19.3.1'
 ```
 
+# 2. 추천 레시피
+```
+public class RecipeItem {
+    private String RecipeImage;
+    private String RecipeName;
+    private int RecipeKcal;
+    private int RecipeGram;
+    private String RecipeEx1;
+    private String RecipeEx2;
+```
+```
+public RecipeItem(String recipeImage, String recipeName, int recipeKcal,
+                            int recipeGram, String recipeEx1, String recipeEx2) {
+        RecipeImage = recipeImage;
+        RecipeName = recipeName;
+        RecipeKcal = recipeKcal;
+        RecipeGram = recipeGram;
+        RecipeEx1 = recipeEx1;
+        RecipeEx2 = recipeEx2;
+    }
+    public RecipeItem() { }
+```
+```
+public String getRecipeName() {
+        return RecipeName;
+    }
+    public void setRecipeName(String recipeName) {
+        RecipeName = recipeName;
+    }
+```
+
 
 ## 로그인
 
