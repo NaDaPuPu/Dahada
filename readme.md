@@ -150,7 +150,7 @@ public class RecipeFragment1 extends Fragment  {
 ```
 어댑터에서 인텐트를 생성하여 아이템을 클릭 할 때 그 포지션의 값을 받아준 뒤
 
-```
+```java
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -176,7 +176,7 @@ public class RecipeFragment1 extends Fragment  {
     }
 ```
 
-```
+```java
     Intent intent = getIntent();
         final int position = intent.getIntExtra("position", 0);
         Log.d("RecipeDetails", "position : " + position);
@@ -211,7 +211,7 @@ public class RecipeFragment1 extends Fragment  {
 
 각 카테고리마다 데이터 조사를 거쳐 적절한 데이터를 삽입하여 목록 형식으로 보일 수 있도록 하였습니다.
 탭을 이용하여 섹션을 나눈 후 뷰페이저에 프래그먼트를 넣어 탭을 이동할 때마다 프래그먼트가 바뀌도록 해놓았습니다.
-```
+```java
 @Override
     public Fragment getItem(int position) {
         switch (position) {
@@ -237,7 +237,7 @@ public class RecipeFragment1 extends Fragment  {
     }
 ```
 RecyclerView Adapter를 통해 데이터가 정렬되어 나타나게 하였습니다.
-```
+```java
 @Override
     public void onBindViewHolder(@NonNull RecEx_RecyclerAdapter.VideoViewHolder holder, int position) {
         holder.videoWeb.loadData(movieList.get(position).getVideoId(), "text/html" , "utf-8" );
@@ -264,7 +264,7 @@ RecyclerView Adapter를 통해 데이터가 정렬되어 나타나게 하였습�
 ```
 모델을 만들어 영상링크와 이름을 넣을 수 있게 해준 뒤, 백터를 이용해 모델을 가져와 리사이클러뷰에 데이터가 정렬되도록 하였습니다.
 유투브 동영상은 WebView 위젯을 통해 삽입하였습니다. 
-```
+```java
 recyclerView = view.findViewById(R.id.rec_ex_2_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
