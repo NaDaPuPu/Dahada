@@ -225,9 +225,10 @@ public class DietItem {
     }
 '''
 
+```
 getter/setter를 만들어 준다.
 
-'''
+```
     public DietItem() {
 
     }
