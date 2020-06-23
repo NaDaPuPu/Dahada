@@ -207,6 +207,85 @@ public class RecipeFragment1 extends Fragment  {
 <img src="https://user-images.githubusercontent.com/62593236/85388440-0e16b800-b581-11ea-8b74-c3b1ca2da49b.png" ></img>
 </div>
 
+# 6.추천 운동법
+
+각 카테고리마다 데이터 조사를 거쳐 적절한 데이터를 삽입하여 목록 형식으로 보일 수 있도록 하였습니다.
+탭을 이용하여 섹션을 나눈 후 뷰페이저에 프래그먼트를 넣어 탭을 이동할 때마다 프래그먼트가 바뀌도록 해놓았습니다.
+```
+@Override
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                RecExerciseFragment1 recExerciseFragment1 = new RecExerciseFragment1();
+                return recExerciseFragment1;
+            case 1:
+                RecExerciseFragment2 recExerciseFragment2 = new RecExerciseFragment2();
+                return recExerciseFragment2;
+            case 2:
+                RecExerciseFragment3 recExerciseFragment3 = new RecExerciseFragment3();
+                return recExerciseFragment3;
+            case 3:
+                RecExerciseFragment4 recExerciseFragment4 = new RecExerciseFragment4();
+                return recExerciseFragment4;
+            default:
+                return null;
+        }
+    }
+    @Override
+    public int getCount() {
+        return num;
+    }
+```
+RecyclerView Adapter를 통해 데이터가 정렬되어 나타나게 하였습니다.
+```
+@Override
+    public void onBindViewHolder(@NonNull RecEx_RecyclerAdapter.VideoViewHolder holder, int position) {
+        holder.videoWeb.loadData(movieList.get(position).getVideoId(), "text/html" , "utf-8" );
+        holder.videoname.setText(movieList.get(position).getVideoname());
+    }
+    @Override
+    public int getItemCount() {
+        return movieList.size();
+    }
+    public class VideoViewHolder extends RecyclerView.ViewHolder {
+
+        WebView videoWeb;
+        TextView videoname;
+
+        public VideoViewHolder(@NonNull View itemView) {
+            super(itemView);
+            videoWeb = (WebView) itemView.findViewById(R.id.videoWebView);
+            this.videoname = itemView.findViewById(R.id.rec_ex_name);
+            videoWeb.getSettings().setJavaScriptEnabled(true);
+            videoWeb.setWebChromeClient(new WebChromeClient() {
+            } );
+        }
+    }
+```
+모델을 만들어 영상링크와 이름을 넣을 수 있게 해준 뒤, 백터를 이용해 모델을 가져와 리사이클러뷰에 데이터가 정렬되도록 하였습니다.
+유투브 동영상은 WebView 위젯을 통해 삽입하였습니다. 
+```
+recyclerView = view.findViewById(R.id.rec_ex_2_recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        movies.add( new Movie("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/3VouSaW_LPw\" " +
+                "frameborder=\"0\" allowfullscreen></iframe>", "전신 다이어트 유산소운동 [홈트레이닝]") );
+        movies.add( new Movie("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/VNQpP6C1fJg\" " +
+                "frameborder=\"0\" allowfullscreen></iframe>", "집에서 하는 유산소운동 다이어트 [칼소폭] 30 MIN FULL BODY") );
+        movies.add( new Movie("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/swRNeYw1JkY\" " +
+                "frameborder=\"0\" allowfullscreen></iframe>", "하루 15분! 전신 칼로리 불태우는 다이어트 운동 15 MIN FULL BODY") );
+        movies.add( new Movie("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/MMswNnLdHso\" " +
+                "frameborder=\"0\" allowfullscreen></iframe>", "단기간 살빠지는 최고의 운동 [칼소폭2] 30 MIN FAT BURNING CARDIO WORKOUT") );
+        
+        RecEx_RecyclerAdapter recEx_recyclerAdapter = new RecEx_RecyclerAdapter(movies);
+        recyclerView.setAdapter(recEx_recyclerAdapter);
+
+        return view;
+```
+전신, 상체, 하체로 나누어 자기가 원하는 카테고리만 보면서 빠르게 정보를 얻을 수 있게 하였습니다.
+
+<img src="https://user-images.githubusercontent.com/62593236/85388641-4918eb80-b581-11ea-8beb-234bf0b32775.png"></img>
 
 ## 로그인
 
