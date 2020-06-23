@@ -174,9 +174,9 @@ public class RecipeFragment1 extends Fragment  {
 
         return holder;
     }
-    ```
+```
 
-    ```
+```
     Intent intent = getIntent();
         final int position = intent.getIntExtra("position", 0);
         Log.d("RecipeDetails", "position : " + position);
@@ -200,7 +200,7 @@ public class RecipeFragment1 extends Fragment  {
             }
 
         });
-    ```
+```
 
 
 ## 로그인
