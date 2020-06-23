@@ -202,7 +202,7 @@ public class RecipeFragment1 extends Fragment  {
     ```
 
 
-# 3. 내 레시피
+# 2. 추천 레시피
 
 1.xml파일 생성
 데이터들을 recyclerview로 화면에 보여줄 fragment_diet_veg.xml 파일과
