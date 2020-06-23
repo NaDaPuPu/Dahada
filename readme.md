@@ -174,6 +174,7 @@ public class RecipeFragment1 extends Fragment  {
         return holder;
     }
     ```
+    
     디테일 액티비티에서 받아온다.
     ```
     Intent intent = getIntent();
