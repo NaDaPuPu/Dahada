@@ -30,6 +30,8 @@ public class CommunityActivity extends AppCompatActivity {
             }
         });
 
+
+
         CardView cardView_photoCommunity = (CardView)findViewById(R.id.cardview_photoCommunity);
         cardView_photoCommunity.setOnClickListener(new View.OnClickListener() {
             @Override

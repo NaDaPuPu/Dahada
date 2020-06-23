@@ -163,7 +163,7 @@ public class PhotoPost_Activity extends AppCompatActivity {
                     postsMap.put("date", saveCurrentDate);
                     postsMap.put("time", saveCurrentTime);
                     postsMap.put("description", Description);
-                    postsMap.put("postImage", downloadUrl);
+                    postsMap.put("postimage", downloadUrl);
                     postsMap.put("nickname", userNickname);
                     postsMap.put("Residence", userResidence);
 
