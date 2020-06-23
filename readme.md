@@ -266,7 +266,6 @@ getter/setter를 만들어 준다.
 
 ```
 
-recyclerview를 사용하기 위해선 Adapter가 필요하기 때문에
 자바클래스로 DietAdapter라는 파일을 만들어주고 Recyclerview.Adapter를 extends해준 뒤
 빨간줄에 alt+insert 버튼을 눌러 필요한 클래스와 메서드들을 만들어 준다.
 그리고 ArrayList로 위에서 만들어준 변수들을 불러와준다.
