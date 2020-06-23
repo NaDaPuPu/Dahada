@@ -34,5 +34,6 @@ readme.md 파일도 추가되었다! 와! 우리는 이제 GitHub를 제대로 �
 12. 느낀 점
 
 # 1. 다하다 소개
-
+```
 implementation 'com.google.firebase:firebase-auth:19.3.1'
+```
