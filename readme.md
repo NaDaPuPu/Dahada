@@ -34,14 +34,14 @@ readme.md 파일도 추가되었다! 와! 우리는 이제 GitHub를 제대로 �
 12. 느낀 점
 
 # 1. 다하다 소개
-```
+```java
 implementation 'com.google.firebase:firebase-auth:19.3.1'
 ```
 
 # 2. 추천 레시피
 
 RecipeItem 모델에 넣고자하는 데이터를 생성합니다.
-```
+```java
 public class RecipeItem {
     private String RecipeImage;
     private String RecipeName;
@@ -51,7 +51,7 @@ public class RecipeItem {
     private String RecipeEx2;
 ```
 Getter Setter로 값을 주고받아오게 해주고 난 뒤
-```
+```java
 public String getRecipeName() {
         return RecipeName;
     }
@@ -59,7 +59,7 @@ public String getRecipeName() {
         RecipeName = recipeName;
     }
 ```
-```
+```java
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHolder> {
 
     private ArrayList<RecipeItem> arrayList;
@@ -69,7 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
         this.arrayList = arrayList;
         this.context = context;
 ```
-```
+```java
  @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         Glide.with(holder.itemView)
@@ -104,7 +104,7 @@ public class CustomViewHolder extends RecyclerView.ViewHolder {
     }
 ```
 어댑터를 통해 Firebase의 데이터 테이블을 받아와 프래그먼트에 나타나도록 합니다.
-```
+```java
 public class RecipeFragment1 extends Fragment  {
     private ItemAdapter adapter;
     public RecipeFragment1() { }
@@ -154,13 +154,13 @@ public class RecipeFragment1 extends Fragment  {
 
 먼저 Gradle에 firebase auth를 추가시켜준다.
 
-```
+```java
 implementation 'com.google.firebase:firebase-auth:19.3.1'
 ```
 
 추가한 라이브러리 안에 있는 클래스들을 호출한다.
 
-```
+```java
 private FirebaseAuth mAuth;
 
 private GoogleSignInClient mGoogleSignInClient;
@@ -168,7 +168,7 @@ private GoogleSignInClient mGoogleSignInClient;
 
 액티비티가 생성되었을 때, firebase auth를 사용할 수 있도록 설정하고, 로그인 버튼에 대한 기능을 추가시켜준다.
 
-```
+```java
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
