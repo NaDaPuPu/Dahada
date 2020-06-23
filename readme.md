@@ -211,6 +211,7 @@ public class RecipeFragment1 extends Fragment  {
 </div>
 
 # 3.내 레시피
+## 3.1 데이터부분
 
 DietItem이라는 자바클래스를 하나 만들어 데이터베이스에 넣어줄 변수들을 넣어준 뒤
 구조체를 만들고
@@ -410,7 +411,7 @@ database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
 ```java
 return view;
 ```
- ## 3.1 데이터부분
+
 
 ## 3.2 계산기
 피연산자 2개를 생성하고 각 연산자 버튼을 생성한다. 
