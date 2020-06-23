@@ -208,6 +208,215 @@ public class RecipeFragment1 extends Fragment  {
 </div>
 
 # 3.내 레시피
+# 2. 내 레시피
+
+1.xml파일 생성
+데이터들을 recyclerview로 화면에 보여줄 fragment_diet_veg.xml 파일과
+recyclerview에 보여줄 틀을 diet_list_item.xml파일에 만들어 준다.
+```
+<img src="https://user-images.githubusercontent.com/62593277/85393565-2d651380-b588-11ea-81d4-2c6671306fe9.png"></img>
+
+```
+
+2.변수만들기
+DietItem이라는 자바클래스를 하나 만들어 데이터베이스에 넣어줄 변수들을 넣어준 뒤
+Alt+insert 버튼을 눌러 변수들의 구조체를 만들고
+```
+public class DietItem {
+
+    private String DietImage;
+    private String DietName;
+    private int DietKcal;
+
+    public DietItem(String dietImage, String dietName, int dietKcal) {
+        DietImage = dietImage;
+        DietName = dietName;
+        DietKcal = dietKcal;
+    }
+'''
+getter/setter를 만들어 준다.
+
+'''
+    public DietItem() {
+
+    }
+
+
+    public String getDietImage() {
+        return DietImage;
+    }
+
+    public void setDietImage(String dietImage) {
+        DietImage = dietImage;
+    }
+
+    public String getDietName() {
+        return DietName;
+    }
+
+    public void setDietName(String dietName) {
+        DietName = dietName;
+    }
+
+    public int getDietKcal() {
+        return DietKcal;
+    }
+
+    public void setDietKcal(int dietKcal) {
+        DietKcal = dietKcal;
+    }
+}
+
+```
+
+3.Adapter 생성
+recyclerview를 사용하기 위해선 Adapter가 필요하기 때문에
+자바클래스로 DietAdapter라는 파일을 만들어주고 Recyclerview.Adapter를 extends해준 뒤
+빨간줄에 alt+insert 버튼을 눌러 필요한 클래스와 메서드들을 만들어 준다.
+그리고 ArrayList로 위에서 만들어준 변수들을 불러와준다.
+```
+public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHolderDiet> {
+    private ArrayList<DietItem> arrayList;
+    private Context context;
+    private TextView textView_diet;
+
+
+
+    public DietAdapter(ArrayList<DietItem> arrayList, Context context) {
+        this.arrayList = arrayList;
+        this.context = context;
+    }
+```
+
+
+그리고 맨 밑에 만들어진 클래스 안에 새 변수들을 만들고
+diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
+```
+    @Override
+    public int getItemCount() {
+        return arrayList.size();
+    }
+
+    public class CustomViewHolderDiet extends RecyclerView.ViewHolder {
+        ImageView diet_iv_picture;
+        TextView diet_tv_id;
+        TextView diet_tv_cal;
+        LinearLayout itemLinear_diet;
+
+        public CustomViewHolderDiet(@NonNull View itemView) {
+            super(itemView);
+            this.diet_iv_picture = itemView.findViewById(R.id.diet_iv_picture);
+            this.diet_tv_id = itemView.findViewById(R.id.diet_tv_id);
+            this.diet_tv_cal = itemView.findViewById(R.id.diet_tv_cal);
+            this.itemLinear_diet = itemView.findViewById(R.id.itemLinear_diet);
+        }
+    }
+}
+```
+
+onCreateViewHolder는 리스트 아이템에 데이터들을 보여주기 위한 기능이므로
+변수 view를 만들고 diet_lis_item.xml파일을 inflate해준다.
+```
+   @NonNull
+    @Override
+    public CustomViewHolderDiet onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.diet_list_item, parent, false);
+        final CustomViewHolderDiet holder = new CustomViewHolderDiet(view);
+
+
+        holder.itemLinear_diet.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(context, "아이템 클릭됨"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        return holder;
+    }
+```
+
+
+마지막으로 onBindViewHolder에 실제 데이터들을 매칭시켜주는 코딩을 해준다.
+```
+
+    @Override
+    public void onBindViewHolder(@NonNull DietAdapter.CustomViewHolderDiet holder, int position) {
+        Glide.with(holder.itemView)
+                .load(arrayList.get(position).getDietImage())
+                .into(holder.diet_iv_picture);
+        holder.diet_tv_id.setText(arrayList.get(position).getDietName());
+        holder.diet_tv_cal.setText(String.valueOf(arrayList.get(position).getDietKcal()));
+
+    }
+```
+
+이제 FragmentVeg라는 자바파일에 만들어준 Adapter와 변수들을 불러오고
+파이어베이스 연동을 위한 FirebaseDatabase, DatabaseReference 변수를 선언한다. 
+```
+public class FragmentVeg extends Fragment {
+    private DietAdapter adapter;
+
+    public FragmentVeg() {
+    }
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<DietItem> arrayList;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+
+```
+
+변수 view에 fragment_diet_veg를, 변수 recyclerview에는 xml파일 안의 recyclerview id값을 넣어준다.
+
+```
+   @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_diet_veg, container, false);
+
+        Log.d("test","check2");
+        recyclerView = view.findViewById(R.id.recyclerview_diet_veg);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        arrayList = new ArrayList<>();
+```
+
+FirebaseDatabse.getInstance()를 통해 Firebase의 Database를 연동시켜주고
+database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
+```
+        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+        Log.d("test","check3");
+        databaseReference = database.getReference("DietItem"); // DB 테이블 연결
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                arrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DietItem dietItem = snapshot.getValue(DietItem.class);
+                    arrayList.add(dietItem);
+                }
+                Log.d("TEST",String.valueOf(arrayList.size()));
+                adapter = new DietAdapter(arrayList,getContext());
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Log.e("Fragment1", String.valueOf(databaseError.toException()));
+            }
+        });
+
+```
+
+마지막으로 변수 view를 return해주면 DB가 연동된다.
+```
+return view;
+```
+
 
  ## 3.1 데이터부분
 
