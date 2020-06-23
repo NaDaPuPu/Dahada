@@ -1956,7 +1956,7 @@ firebase 콘솔의 클라우딩 메시지를 보낼때 적는 알림제목이 �
 
 파이어베이스 콘솔에서 푸시알림을 보낼수 있다.
 <div>
-<img src="https://user-images.githubusercontent.com/62593277/85392412-71efaf80-b586-11ea-98b0-c709968aa5bd.png"width=90%></img>
+<img src="https://user-images.githubusercontent.com/62593277/85392412-71efaf80-b586-11ea-98b0-c709968aa5bd.png"></img>
 </div>
 
 
