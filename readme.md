@@ -37,3 +37,43 @@ readme.md 파일도 추가되었다! 와! 우리는 이제 GitHub를 제대로 �
 ```
 implementation 'com.google.firebase:firebase-auth:19.3.1'
 ```
+
+
+## 로그인
+
+먼저 Gradle에 firebase auth를 추가시켜준다.
+
+```
+implementation 'com.google.firebase:firebase-auth:19.3.1'
+```
+
+추가한 라이브러리 안에 있는 클래스들을 호출한다.
+
+```
+private FirebaseAuth mAuth;
+
+private GoogleSignInClient mGoogleSignInClient;
+```
+
+액티비티가 생성되었을 때, firebase auth를 사용할 수 있도록 설정하고, 로그인 버튼에 대한 기능을 추가시켜준다.
+
+```
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        signInButton = findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+
+        signInButton.setOnClickListener(this);
+    }
+```
