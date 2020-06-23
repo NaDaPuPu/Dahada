@@ -84,6 +84,8 @@ public class DietActivity extends AppCompatActivity {
 
         result = findViewById(R.id.btn_result);
 
+        editText = (EditText)findViewById(R.id.edit);
+
         add.setOnClickListener(mListener);
         sub.setOnClickListener(mListener);
         mul.setOnClickListener(mListener);
@@ -131,9 +133,6 @@ public class DietActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-
-        editText = (EditText)findViewById(R.id.edit);
-
         final int position = intent.getIntExtra("position", 0);
         Log.d("DietItem", "position : " + position);
 

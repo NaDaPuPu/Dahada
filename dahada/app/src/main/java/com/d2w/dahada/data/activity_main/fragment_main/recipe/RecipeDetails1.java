@@ -22,17 +22,13 @@ import java.util.ArrayList;
 public class RecipeDetails1 extends AppCompatActivity {
 
     private ItemAdapter adapter;
-
-    public RecipeDetails1() {
-    }
-
     private ArrayList<RecipeItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-
     private ImageView rcpImage;
     private TextView rcpName, rcpEx, rcpEx2, rcpGram, rcpKcal;
-    int Image;
+
+    public RecipeDetails1() { }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,9 +43,7 @@ public class RecipeDetails1 extends AppCompatActivity {
         rcpImage = findViewById(R.id.rcpDetailimage);
 
         Intent intent = getIntent();
-
         final int position = intent.getIntExtra("position", 0);
-        //Image = getIntent().getIntExtra("Iamge",0);
         Log.d("RecipeDetails", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
@@ -65,7 +59,6 @@ public class RecipeDetails1 extends AppCompatActivity {
                 rcpEx.setText(recipeItem.getRecipeEx1());
                 rcpEx2.setText(recipeItem.getRecipeEx2());
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));

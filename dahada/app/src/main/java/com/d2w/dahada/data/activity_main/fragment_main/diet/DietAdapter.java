@@ -28,7 +28,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
     private Context context;
     private TextView textView_diet;
 
-
+    int a,b;
 
 
     public DietAdapter(ArrayList<DietItem> arrayList, Context context) {
@@ -50,16 +50,22 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(context, DietActivity.class);
                 intent.putExtra("position",holder.getAdapterPosition());
+
+                context.startActivity(intent);
                 Toast.makeText(context, "아이템 클릭됨"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
                 Editable edit = ((DietActivity) context).editText.getText();
-                    int a,b;
+                //edit.setText(dietItem.getDietKcal());
+
 
                     if (edit.length() == 0) {
+                        //a = Integer.parseInt(edit.toString());
                         // 데이터1
                     } else if (edit.length() != 0 && !edit.toString().contains("+")) {
+                        //b = Integer.parseInt(edit.toString());
                         // 데이터 2
                     } else {
+
                         // 결과값과 데이터1, 데이터 2 연산한 값 출력
                     }
                 }

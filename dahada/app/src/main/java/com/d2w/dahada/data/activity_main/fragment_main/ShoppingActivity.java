@@ -20,7 +20,6 @@ public class ShoppingActivity extends AppCompatActivity {
         setContentView(R.layout.main_shopping);
 
         TabLayout tabLayout = findViewById(R.id.shop_tablayout);
-
         tabLayout.addTab((tabLayout.newTab().setText("마켓")));
         tabLayout.addTab((tabLayout.newTab().setText("닭가슴살")));
         tabLayout.addTab((tabLayout.newTab().setText("샐러드")));
@@ -32,25 +31,16 @@ public class ShoppingActivity extends AppCompatActivity {
         shop_viewPager.setAdapter(shop_sectionPage);
         shop_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
-
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 shop_viewPager.setCurrentItem(tab.getPosition());
                 shop_sectionPage.notifyDataSetChanged();
             }
-
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
+            public void onTabUnselected(TabLayout.Tab tab) { }
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) { }
         });
     }
 }

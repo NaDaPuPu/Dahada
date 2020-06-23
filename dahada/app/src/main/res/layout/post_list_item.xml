@@ -42,9 +42,8 @@
 
     </LinearLayout>
     <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <TextView
         android:id="@+id/item_post_contents"
         android:layout_width="wrap_content"
@@ -56,12 +55,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"/>
 
-    <ImageView
-        android:id="@+id/likes"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="280dp"
-        android:src="@drawable/likes_unfixed"/>
+
     </LinearLayout>
 </LinearLayout>
 

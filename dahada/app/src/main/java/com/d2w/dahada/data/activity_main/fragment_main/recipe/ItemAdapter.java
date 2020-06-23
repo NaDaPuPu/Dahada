@@ -47,7 +47,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
                 intent.putExtra("position",holder.getAdapterPosition());
                 intent.putExtra("Image",holder.getAdapterPosition());
                 context.startActivity(intent);
-                Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()),
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -81,10 +82,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
             this.tv_id = itemView.findViewById(R.id.tv_id);
             this.tv_cal = itemView.findViewById(R.id.tv_cal);
 
-
-
         }
-
-
     }
 }
