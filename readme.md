@@ -411,7 +411,7 @@ database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
 return view;
 ```
 
-# 3.쇼핑하기
+# 4.쇼핑하기
 ShoppingActivity 파일에
 TabLayout을 사용하여 상단 탭을 마켓, 닭가슴살, 샐러드로 구분해준다.
 ```java
