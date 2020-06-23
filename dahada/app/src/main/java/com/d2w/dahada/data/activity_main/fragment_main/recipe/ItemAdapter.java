@@ -38,17 +38,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
                 .inflate(R.layout.main_recipe_list_item, parent, false);
         final CustomViewHolder holder = new CustomViewHolder(view);
 
-
         holder.item.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RecipeDetails1.class);
-                intent.putExtra("position",holder.getAdapterPosition());
-                intent.putExtra("Image",holder.getAdapterPosition());
+                intent.putExtra("position", holder.getAdapterPosition());
                 context.startActivity(intent);
-                Toast.makeText(context, "Test click"+String.valueOf(holder.getAdapterPosition()),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Test click"+ holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -61,7 +58,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
                 .into(holder.iv_picture);
         holder.tv_id.setText(arrayList.get(position).getRecipeName());
         holder.tv_cal.setText(String.valueOf(arrayList.get(position).getRecipeKcal()));
-
     }
     @Override
     public int getItemCount() {
@@ -81,7 +77,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CustomViewHold
             this.iv_picture = itemView.findViewById(R.id.iv_picture);
             this.tv_id = itemView.findViewById(R.id.tv_id);
             this.tv_cal = itemView.findViewById(R.id.tv_cal);
-
         }
     }
 }

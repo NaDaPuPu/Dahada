@@ -6,9 +6,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.d2w.dahada.R;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment1;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment2;
-import com.d2w.dahada.data.activity_main.fragment_main.recipe.RecipeFragment3;
 import com.d2w.dahada.data.activity_main.fragment_main.recipe.SectionPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -30,20 +27,27 @@ public class RecipeActivity extends AppCompatActivity {
                 tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
                 sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+
                 viewPager = findViewById(R.id.viewPager);
                 viewPager.setAdapter(sectionPageAdapter);
-
                 viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
                 tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
                         viewPager.setCurrentItem(tab.getPosition());
                         sectionPageAdapter.notifyDataSetChanged();
                     }
+
                     @Override
-                    public void onTabUnselected(TabLayout.Tab tab) { }
+                    public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
             @Override
-            public void onTabReselected(TabLayout.Tab tab) { }
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
         });
     }
 

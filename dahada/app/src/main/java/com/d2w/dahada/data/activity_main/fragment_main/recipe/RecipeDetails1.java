@@ -22,28 +22,28 @@ import java.util.ArrayList;
 public class RecipeDetails1 extends AppCompatActivity {
 
     private ItemAdapter adapter;
+
+    public RecipeDetails1() {
+    }
+
     private ArrayList<RecipeItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+
     private ImageView rcpImage;
     private TextView rcpName, rcpEx, rcpEx2, rcpGram, rcpKcal;
-
-    public RecipeDetails1() { }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_recipe_detail1);
 
+        Intent intent = getIntent();
+
         rcpName = findViewById(R.id.rcpDetailname);
         rcpKcal = findViewById(R.id.rcpDetailkcal);
-        rcpGram= findViewById(R.id.rcpDetailgram);
-        rcpEx = findViewById(R.id.rcpDetailex1);
-        rcpEx2 = findViewById(R.id.rcpDetailex2);
-        rcpImage = findViewById(R.id.rcpDetailimage);
 
-        Intent intent = getIntent();
-        final int position = intent.getIntExtra("position", 0);
+        int position = intent.getIntExtra("position", 0);
         Log.d("RecipeDetails", "position : " + position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
@@ -54,11 +54,9 @@ public class RecipeDetails1 extends AppCompatActivity {
                 RecipeItem recipeItem = dataSnapshot.getValue(RecipeItem.class);
                 assert recipeItem != null;
                 rcpName.setText(recipeItem.getRecipeName());
-                rcpKcal.setText(recipeItem.getRecipeKcal() + "kcal");
-                rcpGram.setText(recipeItem.getRecipeGram() + "g");
-                rcpEx.setText(recipeItem.getRecipeEx1());
-                rcpEx2.setText(recipeItem.getRecipeEx2());
+                rcpKcal.setText(recipeItem.getRecipeKcal() + "");
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("RecipeDetails1", String.valueOf(databaseError.toException()));

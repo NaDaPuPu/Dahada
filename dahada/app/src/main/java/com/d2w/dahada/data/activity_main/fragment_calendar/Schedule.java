@@ -6,11 +6,13 @@ public class Schedule {
     private Date date;
     private int kcal;
     private String menu;
+    private int water;
 
-    public Schedule(Date date, int kcal, String menu) {
+    public Schedule(Date date, int kcal, String menu, int water) {
         this.date = date;
         this.kcal = kcal;
         this.menu = menu;
+        this.water = water;
     }
 
     public int getKcal() {
@@ -35,5 +37,13 @@ public class Schedule {
 
     public void setMenu(String menu) {
         this.menu = menu;
+    }
+
+    public int getWater() {
+        return water;
+    }
+
+    public void setWater(int water) {
+        this.water = water;
     }
 }

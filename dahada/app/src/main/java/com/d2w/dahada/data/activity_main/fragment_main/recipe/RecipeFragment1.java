@@ -29,15 +29,20 @@ import java.util.Random;
 
 public class RecipeFragment1 extends Fragment  {
     private ItemAdapter adapter;
-    public RecipeFragment1() { }
+
+    public RecipeFragment1() {
+    }
+
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<RecipeItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_recipe_1, container, false);
+
         Log.d("test", "check2");
         recyclerView = view.findViewById(R.id.rcp_recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -60,12 +65,14 @@ public class RecipeFragment1 extends Fragment  {
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("Fragment1", String.valueOf(databaseError.toException()));
             }
         });
         Log.d("test", "check5");
+
         return view;
     }
 }

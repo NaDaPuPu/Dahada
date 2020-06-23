@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.d2w.dahada.R;
 import com.d2w.dahada.data.activity_main.fragment_calendar.EventDecorator;
+import com.d2w.dahada.data.activity_main.fragment_calendar.EventsDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.OneDayDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.SaturdayDecorator;
 import com.d2w.dahada.data.activity_main.fragment_calendar.Schedule;
@@ -44,15 +46,22 @@ import java.util.concurrent.Executors;
 
 public class CalendarFragment extends Fragment {
     View v;
+    private Calendar calendar = Calendar.getInstance();
     private String shot_Day;
+    private Date currentDate;
+    private CalendarDay beforeSelectedDate;
+    private int cnum, cnum2;
+    private int mnum = calendar.getMaximum(Calendar.DAY_OF_MONTH);
     MaterialCalendarView materialCalendarView;
     ConstraintLayout inputContainer, outputContainer;
     EditText kcalText, menuText;
-    TextView kcalText2, menuText2, dateText;
+    TextView kcalText2, menuText2, dateText, waterText, waterText2, helperTitle1, helperTitle2, helperContent1, helperContent2;
     Button buttonInput, buttonCancel, buttonEdit;
+    SeekBar seekBar;
 
     ArrayList<Schedule> scheduleList = new ArrayList<>();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +76,15 @@ public class CalendarFragment extends Fragment {
         menuText = v.findViewById(R.id.menu);
         menuText2 = v.findViewById(R.id.menu2);
         dateText = v.findViewById(R.id.date);
+        waterText = v.findViewById(R.id.water);
+        waterText2 = v.findViewById(R.id.water2);
+        helperTitle1 = v.findViewById(R.id.helperTitle1);
+        helperTitle2 = v.findViewById(R.id.helperTitle2);
+        helperContent1 = v.findViewById(R.id.helperContent1);
+        helperContent2 = v.findViewById(R.id.helperContent2);
+
+        // Seekbar
+        seekBar = v.findViewById(R.id.seekBar);
 
         // 버튼
         buttonInput = v.findViewById(R.id.buttonInput);
@@ -86,17 +104,19 @@ public class CalendarFragment extends Fragment {
                 new SundayDecorator(),
                 new SaturdayDecorator(),
                 new OneDayDecorator());
+
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(getContext().getFilesDir() + "savedCalendar"));
             String line = null;
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] readedContent = line.split(" ");
-                String rdate = readedContent[0];
-                String rkcal = readedContent[1];
+                Date rdate = simpleDateFormat.parse(readedContent[0]);
+                int rkcal = Integer.parseInt(readedContent[1]);
                 String rmenu = readedContent[2];
+                int rwater = Integer.parseInt(readedContent[3]);
 
-                Schedule schedule = new Schedule(simpleDateFormat.parse(rdate), Integer.parseInt(rkcal), rmenu);
+                Schedule schedule = new Schedule(rdate, rkcal, rmenu, rwater);
                 scheduleList.add(schedule);
             }
             bufferedReader.close();
@@ -106,7 +126,14 @@ public class CalendarFragment extends Fragment {
                 result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
             }
 
-            new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+            ArrayList<String> w_result = new ArrayList<>();
+            for (int i = 0; i < scheduleList.size(); i++) {
+                if (scheduleList.get(i).getWater() >= 20) {
+                    w_result.add(simpleDateFormat.format(scheduleList.get(i).getDate()));
+                }
+            }
+
+            new ApiSimulator(result, w_result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -116,32 +143,44 @@ public class CalendarFragment extends Fragment {
             e.printStackTrace();
         }
 
+        setHelper();
+        setHelper2();
+
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             // 날짜 선택 시
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
-                boolean ifEquals = false;
+                if (inputContainer.getVisibility() == View.VISIBLE) {
+                    materialCalendarView.setSelectedDate(beforeSelectedDate);
+                } else {
+                    materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
+                    boolean ifEquals = false;
 
-                int Year = date.getYear();
-                int Month = date.getMonth() + 1;
-                int Day = date.getDay();
+                    int Year = date.getYear();
+                    int Month = date.getMonth() + 1;
+                    int Day = date.getDay();
 
-                shot_Day = Year + "." + Month + "." + Day;
+                    currentDate = date.getDate();
+                    shot_Day = Year + "." + Month + "." + Day;
 
-                dateText.setText("date : " + shot_Day);
+                    dateText.setText("date : " + shot_Day);
 
-                for (int i = 0; i < scheduleList.size(); i++) {
-                    if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
-                        kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
-                        menuText2.setText("menu : " + scheduleList.get(i).getMenu());
-                        ifEquals = true;
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        if (simpleDateFormat.format(date.getDate()).equals(simpleDateFormat.format(scheduleList.get(i).getDate()))) {
+                            kcalText2.setText("kcal : " + scheduleList.get(i).getKcal());
+                            menuText2.setText("menu : " + scheduleList.get(i).getMenu());
+                            waterText2.setText("water : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                            ifEquals = true;
+                        }
                     }
-                }
 
-                if (!ifEquals) {
-                    kcalText2.setText("kcal : ");
-                    menuText2.setText("menu : ");
+                    if (!ifEquals) {
+                        kcalText2.setText("kcal : ");
+                        menuText2.setText("menu : ");
+                        waterText2.setText("water : ");
+                    }
+
+                    beforeSelectedDate = date;
                 }
             }
         });
@@ -155,7 +194,7 @@ public class CalendarFragment extends Fragment {
                     File file = new File(directory, "savedCalendar");
                     FileWriter fileWriter = new FileWriter(getActivity().getFilesDir() + "savedCalendar", false);
                     BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()), menuText.getText().toString());
+                    Schedule schedule = new Schedule(simpleDateFormat.parse(shot_Day), Integer.parseInt(kcalText.getText().toString()), menuText.getText().toString(), seekBar.getProgress());
                     int currentsize = scheduleList.size();
                     boolean isChanged = false;
 
@@ -174,20 +213,23 @@ public class CalendarFragment extends Fragment {
                     }
 
                     for (int i = 0; i < scheduleList.size(); i++) {
-                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i).getKcal() + " " + scheduleList.get(i).getMenu() + "\n";
+                        content += simpleDateFormat.format(scheduleList.get(i).getDate()) + " " + scheduleList.get(i).getKcal() + " " + scheduleList.get(i).getMenu() + " " + scheduleList.get(i).getWater() + "\n";
                     }
                     bufferedWriter.write(content);
                     bufferedWriter.close();
 
-                    String[] result = new String[scheduleList.size()];
-                    for (int i = 0; i < scheduleList.size(); i++) {
-                        result[i] = simpleDateFormat.format(scheduleList.get(i).getDate());
-                    }
+                    ArrayList<CalendarDay> CalendarDays = new ArrayList<>();
+                    CalendarDays.add(CalendarDay.from(currentDate));
 
-                    new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+                    if (seekBar.getProgress() >= 20) {
+                        materialCalendarView.addDecorator(new EventsDecorator(CalendarDays, getActivity()));
+                    } else {
+                        materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, CalendarDays, getActivity()));
+                    }
 
                     kcalText2.setText("kcal : " + kcalText.getText());
                     menuText2.setText("menu :" + menuText.getText());
+                    waterText2.setText("water : " + (float) seekBar.getProgress() / 10 + "L");
                     kcalText.setText("");
                     menuText.setText("");
                 } catch (IOException | ParseException e) {
@@ -196,6 +238,8 @@ public class CalendarFragment extends Fragment {
 
                 inputContainer.setVisibility(View.GONE);
                 outputContainer.setVisibility(View.VISIBLE);
+                setHelper();
+                setHelper2();
             }
         });
 
@@ -206,6 +250,8 @@ public class CalendarFragment extends Fragment {
                 outputContainer.setVisibility(View.VISIBLE);
                 kcalText.setText("");
                 menuText.setText("");
+                seekBar.setProgress(0);
+                waterText.setText("이 날 마신 물 : 0.0L");
             }
         });
 
@@ -216,24 +262,135 @@ public class CalendarFragment extends Fragment {
                 outputContainer.setVisibility(View.GONE);
 
                 if (!kcalText2.getText().toString().equals("kcal : ")) {
-                    kcalText.setText(kcalText2.getText().toString().substring(7));
-                    menuText.setText(menuText2.getText().toString().substring(7));
+                    for (int i = 0; i < scheduleList.size(); i++) {
+                        String sdate = simpleDateFormat.format(scheduleList.get(i).getDate());
+                        if (simpleDateFormat.format(currentDate).equals(sdate)) {
+                            kcalText.setText(scheduleList.get(i).getKcal() + "");
+                            menuText.setText(scheduleList.get(i).getMenu() + "");
+                            waterText.setText("이 날 마신 물 : " + scheduleList.get(i).getWater() / 10.0 + "L");
+                        }
+                    }
+                } else {
+                    kcalText.setText("");
+                    menuText.setText("");
+                    waterText.setText("이 날 마신 물 : 0.0L");
+                    seekBar.setProgress(0);
                 }
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float water = (float) progress / 10;
+                waterText.setText("이 날 마신 물 : " + water + "L");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
         return v;
     }
 
-    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
-        String[] Time_Result;
+    private void setHelper() {
+        int count = 0;
+        CalendarDay todayCal = CalendarDay.today();
 
-        ApiSimulator(String[] Time_Result) {
+        for (int i = 0; i < scheduleList.size(); i++) {
+            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate())) && scheduleList.get(i).getWater() >= 20) {
+                count++;
+            }
+        }
+
+        cnum = count;
+
+        helperTitle1.setText("이번 달 물 2L 마신 날 : " + cnum + "/" + mnum);
+
+        if (cnum < 7) {
+            helperContent1.setText(R.string.wday0);
+        } else if (cnum < 14) {
+            helperContent1.setText(R.string.wday7);
+        } else if (cnum < 21) {
+            helperContent1.setText(R.string.wday14);
+        } else if (cnum < 28) {
+            helperContent1.setText(R.string.wday21);
+        } else if (cnum < mnum) {
+            helperContent1.setText(R.string.wday28);
+        }
+    }
+
+    private void setHelper2() {
+        int count = 0;
+        CalendarDay todayCal = CalendarDay.today();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            if (monthFormat.format(todayCal.getDate()).equals(monthFormat.format(scheduleList.get(i).getDate()))) {
+                count++;
+            }
+        }
+
+        cnum = count;
+
+        helperTitle2.setText("이번 달 식단 입력한 날 : " + cnum + "/" + mnum);
+
+        if (cnum < 7) {
+            helperContent2.setText(R.string.day0);
+        } else if (cnum < 14) {
+            helperContent2.setText(R.string.day7);
+        } else if (cnum < 21) {
+            helperContent2.setText(R.string.day14);
+        } else if (cnum < 28) {
+            helperContent2.setText(R.string.day21);
+        } else if (cnum < mnum) {
+            helperContent2.setText(R.string.day28);
+        }
+    }
+
+    private class L_CalendarDay {
+        ArrayList<CalendarDay> Time_Result;
+        ArrayList<CalendarDay> Water_Result;
+
+        L_CalendarDay(ArrayList<CalendarDay> time_Result, ArrayList<CalendarDay> water_Result) {
+            this.Time_Result = time_Result;
+            this.Water_Result = water_Result;
+        }
+
+        public ArrayList<CalendarDay> getTime_Result() {
+            return Time_Result;
+        }
+
+        public void setTime_Result(ArrayList<CalendarDay> time_Result) {
+            Time_Result = time_Result;
+        }
+
+        public ArrayList<CalendarDay> getWater_Result() {
+            return Water_Result;
+        }
+
+        public void setWater_Result(ArrayList<CalendarDay> water_Result) {
+            Water_Result = water_Result;
+        }
+    }
+
+    private class ApiSimulator extends AsyncTask<Void, Void, L_CalendarDay> {
+        String[] Time_Result;
+        ArrayList<String> Water_Result;
+
+        ApiSimulator(String[] Time_Result, ArrayList<String> Water_Result) {
             this.Time_Result = Time_Result;
+            this.Water_Result = Water_Result;
         }
 
         @Override
-        protected List<CalendarDay> doInBackground(@NonNull Void... voids) {
+        protected L_CalendarDay doInBackground(@NonNull Void... voids) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -242,6 +399,7 @@ public class CalendarFragment extends Fragment {
 
             Calendar calendar = Calendar.getInstance();
             ArrayList<CalendarDay> dates = new ArrayList<>();
+            ArrayList<CalendarDay> wdates = new ArrayList<>();
 
             for (int i = 0; i < Time_Result.length; i++) {
 
@@ -254,17 +412,32 @@ public class CalendarFragment extends Fragment {
                 CalendarDay calendarDay = CalendarDay.from(calendar);
                 dates.add(calendarDay);
             }
-            return dates;
+
+            for (int i = 0; i < Water_Result.size(); i++) {
+
+                String[] time = Water_Result.get(i).split("\\."); // "."으로 하면 X
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int day = Integer.parseInt(time[2]);
+
+                calendar.set(year, month - 1, day);
+                CalendarDay calendarDay = CalendarDay.from(calendar);
+                wdates.add(calendarDay);
+            }
+            L_CalendarDay l_calendarDay = new L_CalendarDay(dates, wdates);
+
+            return l_calendarDay;
         }
 
         @Override
-        protected void onPostExecute(List<CalendarDay> calendarDays) {
-            super.onPostExecute(calendarDays);
+        protected void onPostExecute(L_CalendarDay l_calendarDay) {
+            super.onPostExecute(l_calendarDay);
 
             if (isRemoving()) {
                 return;
             }
-            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, calendarDays, getActivity()));
+            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, l_calendarDay.Time_Result, getActivity()));
+            materialCalendarView.addDecorator(new EventsDecorator(l_calendarDay.Water_Result, getActivity()));
         }
     }
 }

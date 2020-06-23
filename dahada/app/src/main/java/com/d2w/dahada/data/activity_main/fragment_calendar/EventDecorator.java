@@ -13,6 +13,8 @@ import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 import java.util.Collection;
 import java.util.HashSet;
 
+import io.opencensus.trace.Span;
+
 /**
  * Decorate several days with a dot
  */
@@ -36,6 +38,6 @@ public class EventDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         // view.setSelectionDrawable(drawable); // 테두리 표시
-        view.addSpan(new DotSpan(5, color)); // 날짜 밑에 점
+        view.addSpan(new DotSpan(8, color)); // 날짜 밑에 점
     }
 }
