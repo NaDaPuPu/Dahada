@@ -479,6 +479,9 @@ Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
  ## 3.1 데이터부분
 
 ## 3.2 계산기
+피연산자 2개를 생성하고 각 연산자 버튼을 생성한다. 
+어떤 연산자가 선택되었는지 확인하기 위해 int형 타입변수를 사용한다.
+
 ```java
     Button add,sub,mul,div,remainder,del;
     Button result;
@@ -497,6 +500,8 @@ Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
     double d1;
     double d2;
 ```
+
+.setOnClickListener(mListener);는 각 연산을 수행하기 위한 리스너이다.
 ```java
 	et_show = findViewById(R.id.et_show);
         et_result = findViewById(R.id.et_result);
@@ -518,6 +523,7 @@ Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
         result.setOnClickListener(mListener);
         del.setOnClickListener(mListener);
 ```
+Clear버튼에는 onClick이벤트를 통해 초기화 하는 메소드를 작성한다.
 ```java
         Button clear = findViewById(R.id.btn_clear);
         clear.setOnClickListener(new View.OnClickListener() {
@@ -547,6 +553,7 @@ Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
         });
     }
 ```
+switch문을 통해 해당 버튼을 눌렀을 때마다 연산기능이 수행된다.
 ```java
 Button.OnClickListener mListener = new Button.OnClickListener() {
         @Override
@@ -656,8 +663,8 @@ Button.OnClickListener mListener = new Button.OnClickListener() {
 
 # 6.추천 운동법
 
-각 카테고리마다 데이터 조사를 거쳐 적절한 데이터를 삽입하여 목록 형식으로 보일 수 있도록 하였습니다.
-탭을 이용하여 섹션을 나눈 후 뷰페이저에 프래그먼트를 넣어 탭을 이동할 때마다 프래그먼트가 바뀌도록 해놓았습니다.
+각 카테고리마다 데이터 조사를 거쳐 적절한 데이터를 삽입하여 목록 형식으로 보일 수 있도록 했다.
+탭을 이용하여 섹션을 나눈 후 뷰페이저에 프래그먼트를 넣어 탭을 이동할 때마다 프래그먼트가 바뀌도록 해놓았다.
 ```java
 @Override
     public Fragment getItem(int position) {
