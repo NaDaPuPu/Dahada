@@ -223,8 +223,6 @@ public class DietItem {
         DietName = dietName;
         DietKcal = dietKcal;
     }
-'''
-
 ```
 getter/setter를 만들어 준다.
 
