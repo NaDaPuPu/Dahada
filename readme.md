@@ -909,6 +909,9 @@ Community Activity에는 액티비티 시작 시 mDatas 리스트가 보이게 �
         startActivity(new Intent(this, PostActivity.class));
     }
 ```
+
+<img src="https://user-images.githubusercontent.com/62593236/85400709-d06f5a80-b593-11ea-88b2-3fa036d8508f.png" ></img>
+
 <div>
 <img src="https://user-images.githubusercontent.com/62593236/85388690-5cc45200-b581-11ea-83cb-5c2f09ad92d6.png" width="30%"></img>
 <img src="https://user-images.githubusercontent.com/62593236/85388704-5fbf4280-b581-11ea-820f-cc7c2e782fb7.png" width="30%"></img>
