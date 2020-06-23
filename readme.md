@@ -659,6 +659,256 @@ Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
         });
 ```
 
+# 5. 내 운동코스
+
+내 운동코스 기능은 Google Map API를 사용하여 제작되었다. 간단한 코스 표시를 할 수 있다.
+
+아래의 내용을 Gradle에 추가한다.
+```java
+	implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+```
+
+아래의 내용은 Manifest에 추가하는 내용이다.
+```java
+	<uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+	<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="(API KEY를 입력하세요)"/>
+
+```
+
+먼저 필요한 변수, 상수들을 private로 선언한다.
+```java
+	private static final String TAG = "MapActivity";
+    private GoogleMap map;
+    private CameraPosition cameraPosition;
+
+    private ConstraintLayout courseEdit;
+    private Button courseButton, saveButton, cancelButton;
+
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    private LatLng defaultLocation = new LatLng(37.56, 126.97); // 서울
+    private LatLng beforeLocation;
+
+    private PolylineOptions polylineOptions;
+    private ArrayList<LatLng> arrayPoints = new ArrayList<>();
+
+    private Animation fab_open, fab_close;
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fab1, fab2;
+
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int DEFAULT_ZOOM = 15;
+    private boolean locationPermissionGranted;
+
+    private Location lastKnownLocation;
+
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
+```
+
+Google Map은 준비되었을 때, onMapReady를 호출한다.
+지도를 표시할 때 권한 확인과 현재 위치로 설정, 지도 터치 이벤트를 추가한다.
+```java
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        getLocationPermission(); // 권한 확인
+
+        updateLocationUI(); //
+
+        getDeviceLocation();
+
+        map.setOnMapClickListener(this);
+    }
+```
+아래는 위치 권한 요청, 요청 응답 결과 확인, 위치 서비스 준비 메서드이다.
+```java
+	private void getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        locationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                    updateLocationUI();
+                }
+            }
+        }
+    }
+
+    private void updateLocationUI() {
+        if (map == null) {
+            return;
+        }
+        try {
+            if (locationPermissionGranted) {
+                map.setMyLocationEnabled(true);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                map.setMyLocationEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(false);
+                lastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+```
+
+위치 권한이 있을 시에 현재 위치를 찾으면, 현재 위치로 지도를 이동시킨다.
+
+```java
+	private void getDeviceLocation() {
+        try {
+            if (locationPermissionGranted) {
+                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // 현재 위치로 지도의 카메라 위치를 변경
+                            lastKnownLocation = task.getResult();
+                            if (lastKnownLocation != null) {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(lastKnownLocation.getLatitude(),
+                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            }
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            map.moveCamera(CameraUpdateFactory
+                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            map.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+```
+
+화면이 꺼지거나, 잠금 상태가 되었을 시에 마지막 위치를 저장하여 다시 표시할 때 위치를 다시 불러오지 않아도 지도 위치를 설정한다.
+```java
+	protected void onSaveInstanceState(Bundle outState) {
+        if (map != null) {
+            outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
+            outState.putParcelable(KEY_LOCATION, lastKnownLocation);
+            super.onSaveInstanceState(outState);
+        }
+    }
+```
+맵을 터치 시 빨간 핀을 표시하도록 하였다.
+또한, 지도 위에 FloatingActionButton을 추가하여 검은 핀을 표시할 수 있도록 하였다.
+검은 핀의 LatLng값은 ArrayList에 추가되며, 핀과 핀 사이를 PolyLine을 그려서 경로 표시를 해주었다.
+FloatingActionButton을 누를 시 애니메이션도 추가하였다.
+```java
+	public void onMapClick(LatLng latLng) {
+        if (courseEdit.getVisibility() == View.VISIBLE) {
+            beforeLocation = latLng;
+            Log.d("onMapClick", beforeLocation + "");
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            map.clear();
+
+            map.addMarker(markerOptions);
+
+            polylineOptions = new PolylineOptions();
+            polylineOptions.color(Color.RED);
+            polylineOptions.width(5);
+            polylineOptions.addAll(arrayPoints);
+            if (arrayPoints.size() > 0) {
+                polylineOptions.add(arrayPoints.get(0));
+            }
+            map.addPolyline(polylineOptions);
+
+            for (int i = 0; i < arrayPoints.size(); i++) {
+                markerOptions.position(arrayPoints.get(i));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.round_location_on_black_24dp));
+                map.addMarker(markerOptions);
+            }
+        }
+    }
+
+	public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.fab1:
+                anim();
+                break;
+            case R.id.fab2:
+                anim();
+                map.clear();
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(beforeLocation);
+                map.addMarker(markerOptions);
+
+                for (int i = 0; i < arrayPoints.size(); i++) {
+                    markerOptions.position(arrayPoints.get(i));
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.round_location_on_black_24dp));
+                    map.addMarker(markerOptions);
+                }
+
+                polylineOptions = new PolylineOptions();
+                polylineOptions.color(Color.RED);
+                polylineOptions.width(5);
+                arrayPoints.add(beforeLocation);
+                polylineOptions.addAll(arrayPoints);
+                polylineOptions.add(arrayPoints.get(0));
+                map.addPolyline(polylineOptions);
+
+                Toast.makeText(this, "추가되었습니다.", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    public void anim() {
+
+        if (isFabOpen) {
+            fab2.startAnimation(fab_close);
+            fab2.setClickable(false);
+            isFabOpen = false;
+        } else {
+            fab2.startAnimation(fab_open);
+            fab2.setClickable(true);
+            isFabOpen = true;
+        }
+    }
+```
+
+<div>
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399902-88036d00-b592-11ea-81bb-04eb8843bc69.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399904-88036d00-b592-11ea-9be9-400ff644a040.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399906-889c0380-b592-11ea-8de4-215b36858bb6.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399907-889c0380-b592-11ea-9c4a-96904d450a13.jpg">
+<img width="280" src="https://user-images.githubusercontent.com/51768326/85399908-89349a00-b592-11ea-97c8-55cc801d4484.jpg">
+</div>
 
 
 
@@ -2957,256 +3207,4 @@ doInBackground에서 실행의 결과로 return하는 l_calendarDay를 onPostExe
 <img width="280" src="https://user-images.githubusercontent.com/51768326/85399894-86d24000-b592-11ea-814b-443596fe275b.jpg">
 <img width="280" src="https://user-images.githubusercontent.com/51768326/85399897-86d24000-b592-11ea-8dc7-1221a4e7dd9e.jpg">
 <img width="280" src="https://user-images.githubusercontent.com/51768326/85399899-876ad680-b592-11ea-80fd-23aa22650029.jpg">
-</div>
-
-
-## 내 운동코스
-
-내 운동코스 기능은 Google Map API를 사용하여 제작되었다. 간단한 코스 표시를 할 수 있다.
-
-아래의 내용을 Gradle에 추가한다.
-```java
-	implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-```
-
-아래의 내용은 Manifest에 추가하는 내용이다.
-```java
-	<uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-	<meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="(API KEY를 입력하세요)"/>
-
-```
-
-먼저 필요한 변수, 상수들을 private로 선언한다.
-```java
-	private static final String TAG = "MapActivity";
-    private GoogleMap map;
-    private CameraPosition cameraPosition;
-
-    private ConstraintLayout courseEdit;
-    private Button courseButton, saveButton, cancelButton;
-
-    private FusedLocationProviderClient fusedLocationProviderClient;
-
-    private LatLng defaultLocation = new LatLng(37.56, 126.97); // 서울
-    private LatLng beforeLocation;
-
-    private PolylineOptions polylineOptions;
-    private ArrayList<LatLng> arrayPoints = new ArrayList<>();
-
-    private Animation fab_open, fab_close;
-    private Boolean isFabOpen = false;
-    private FloatingActionButton fab1, fab2;
-
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 15;
-    private boolean locationPermissionGranted;
-
-    private Location lastKnownLocation;
-
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
-```
-
-Google Map은 준비되었을 때, onMapReady를 호출한다.
-지도를 표시할 때 권한 확인과 현재 위치로 설정, 지도 터치 이벤트를 추가한다.
-```java
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-
-        getLocationPermission(); // 권한 확인
-
-        updateLocationUI(); //
-
-        getDeviceLocation();
-
-        map.setOnMapClickListener(this);
-    }
-```
-아래는 위치 권한 요청, 요청 응답 결과 확인, 위치 서비스 준비 메서드이다.
-```java
-	private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        locationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationPermissionGranted = true;
-                    updateLocationUI();
-                }
-            }
-        }
-    }
-
-    private void updateLocationUI() {
-        if (map == null) {
-            return;
-        }
-        try {
-            if (locationPermissionGranted) {
-                map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                map.setMyLocationEnabled(false);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
-                lastKnownLocation = null;
-                getLocationPermission();
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-```
-
-위치 권한이 있을 시에 현재 위치를 찾으면, 현재 위치로 지도를 이동시킨다.
-
-```java
-	private void getDeviceLocation() {
-        try {
-            if (locationPermissionGranted) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // 현재 위치로 지도의 카메라 위치를 변경
-                            lastKnownLocation = task.getResult();
-                            if (lastKnownLocation != null) {
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            }
-                        } else {
-                            Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s", task.getException());
-                            map.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-                            map.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-```
-
-화면이 꺼지거나, 잠금 상태가 되었을 시에 마지막 위치를 저장하여 다시 표시할 때 위치를 다시 불러오지 않아도 지도 위치를 설정한다.
-```java
-	protected void onSaveInstanceState(Bundle outState) {
-        if (map != null) {
-            outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
-            outState.putParcelable(KEY_LOCATION, lastKnownLocation);
-            super.onSaveInstanceState(outState);
-        }
-    }
-```
-맵을 터치 시 빨간 핀을 표시하도록 하였다.
-또한, 지도 위에 FloatingActionButton을 추가하여 검은 핀을 표시할 수 있도록 하였다.
-검은 핀의 LatLng값은 ArrayList에 추가되며, 핀과 핀 사이를 PolyLine을 그려서 경로 표시를 해주었다.
-FloatingActionButton을 누를 시 애니메이션도 추가하였다.
-```java
-	public void onMapClick(LatLng latLng) {
-        if (courseEdit.getVisibility() == View.VISIBLE) {
-            beforeLocation = latLng;
-            Log.d("onMapClick", beforeLocation + "");
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            map.clear();
-
-            map.addMarker(markerOptions);
-
-            polylineOptions = new PolylineOptions();
-            polylineOptions.color(Color.RED);
-            polylineOptions.width(5);
-            polylineOptions.addAll(arrayPoints);
-            if (arrayPoints.size() > 0) {
-                polylineOptions.add(arrayPoints.get(0));
-            }
-            map.addPolyline(polylineOptions);
-
-            for (int i = 0; i < arrayPoints.size(); i++) {
-                markerOptions.position(arrayPoints.get(i));
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.round_location_on_black_24dp));
-                map.addMarker(markerOptions);
-            }
-        }
-    }
-
-	public void onClick(View v) {
-        int id = v.getId();
-
-        switch (id) {
-            case R.id.fab1:
-                anim();
-                break;
-            case R.id.fab2:
-                anim();
-                map.clear();
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(beforeLocation);
-                map.addMarker(markerOptions);
-
-                for (int i = 0; i < arrayPoints.size(); i++) {
-                    markerOptions.position(arrayPoints.get(i));
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.round_location_on_black_24dp));
-                    map.addMarker(markerOptions);
-                }
-
-                polylineOptions = new PolylineOptions();
-                polylineOptions.color(Color.RED);
-                polylineOptions.width(5);
-                arrayPoints.add(beforeLocation);
-                polylineOptions.addAll(arrayPoints);
-                polylineOptions.add(arrayPoints.get(0));
-                map.addPolyline(polylineOptions);
-
-                Toast.makeText(this, "추가되었습니다.", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    public void anim() {
-
-        if (isFabOpen) {
-            fab2.startAnimation(fab_close);
-            fab2.setClickable(false);
-            isFabOpen = false;
-        } else {
-            fab2.startAnimation(fab_open);
-            fab2.setClickable(true);
-            isFabOpen = true;
-        }
-    }
-```
-
-<div>
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399902-88036d00-b592-11ea-81bb-04eb8843bc69.jpg">
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399904-88036d00-b592-11ea-9be9-400ff644a040.jpg">
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399906-889c0380-b592-11ea-8de4-215b36858bb6.jpg">
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399907-889c0380-b592-11ea-9c4a-96904d450a13.jpg">
-<img width="280" src="https://user-images.githubusercontent.com/51768326/85399908-89349a00-b592-11ea-97c8-55cc801d4484.jpg">
 </div>
