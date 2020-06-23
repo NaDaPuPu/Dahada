@@ -149,6 +149,7 @@ public class RecipeFragment1 extends Fragment  {
 }
 ```
 어댑터에서 인텐트를 생성하여 아이템을 클릭 할 때 그 포지션의 값을 받아준 뒤
+
 ```
     @NonNull
     @Override
@@ -174,8 +175,7 @@ public class RecipeFragment1 extends Fragment  {
         return holder;
     }
     ```
-    
-    디테일 액티비티에서 받아온다.
+
     ```
     Intent intent = getIntent();
         final int position = intent.getIntExtra("position", 0);
