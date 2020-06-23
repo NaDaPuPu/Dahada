@@ -743,7 +743,8 @@ recyclerView = view.findViewById(R.id.rec_ex_2_recyclerview);
 <img src="https://user-images.githubusercontent.com/62593236/85388641-4918eb80-b581-11ea-8beb-234bf0b32775.png"></img>
 
 # 7.커뮤니티
-Post model을 생성한다.
+
+Post model을 생성해 firebase에 데이터가 저장될 틀을 구성한다.
 ```
 public class Post {
 
@@ -811,6 +812,8 @@ public class FirebaseID {
     public static String timestamp = "timestamp";
 }
 ```
+
+Post Activity에 onClick이벤트를 생성하여 저장버튼을 누르면 documentId,title,contents,timestamp 의 데이터가 FirebaseFirestore에 저장되도록 하였다.
 ```
 findViewById(R.id.post_save_button).setOnClickListener(this);
 
@@ -841,8 +844,7 @@ findViewById(R.id.post_save_button).setOnClickListener(this);
     }
 ```
 
-PostAdapter부분
-
+PostAdapter를 통해 데이터를 연결해주고
 ```
  @Override
     public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
@@ -871,6 +873,8 @@ PostAdapter부분
         }
     }
 ```
+
+Community Activity에는 액티비티 시작 시 mDatas 리스트가 보이게 하였다.
 ```
 @Override
     protected void onStart() {
