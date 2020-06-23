@@ -412,6 +412,10 @@ database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
 ```java
 return view;
 ```
+<div>
+<img src="https://user-images.githubusercontent.com/62593277/85403495-6907d980-b598-11ea-8e85-b3f6ee16415a.png"width="30%"></img>
+</div>
+
 
 
 ## 3.2 계산기
@@ -660,6 +664,9 @@ Uri.pars를 사용해 버튼클릭 시 해당 사이트로 연동시켜준다.
             }
         });
 ```
+<div>
+<img src="https://user-images.githubusercontent.com/62593277/85402202-39f06880-b596-11ea-91bf-3e42b5f6615a.png"width="30%"></img>
+</div>
 
 # 5. 내 운동코스
 
