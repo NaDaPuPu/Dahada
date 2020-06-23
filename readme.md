@@ -211,7 +211,7 @@ public class RecipeFragment1 extends Fragment  {
 
 DietItem이라는 자바클래스를 하나 만들어 데이터베이스에 넣어줄 변수들을 넣어준 뒤
 Alt+insert 버튼을 눌러 변수들의 구조체를 만들고
-```
+```java
 public class DietItem {
 
     private String DietImage;
@@ -226,7 +226,7 @@ public class DietItem {
 ```
 getter/setter를 만들어 준다.
 
-```
+```java
     public DietItem() {
 
     }
@@ -262,7 +262,7 @@ getter/setter를 만들어 준다.
 자바클래스로 DietAdapter라는 파일을 만들어주고 Recyclerview.Adapter를 extends해준 뒤
 빨간줄에 alt+insert 버튼을 눌러 필요한 클래스와 메서드들을 만들어 준다.
 그리고 ArrayList로 위에서 만들어준 변수들을 불러와준다.
-```
+```java
 public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHolderDiet> {
     private ArrayList<DietItem> arrayList;
     private Context context;
@@ -279,7 +279,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
 
 그리고 맨 밑에 만들어진 클래스 안에 새 변수들을 만들고
 diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
-```
+```java
     @Override
     public int getItemCount() {
         return arrayList.size();
@@ -304,7 +304,7 @@ diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
 
 onCreateViewHolder는 리스트 아이템에 데이터들을 보여주기 위한 기능이므로
 변수 view를 만들고 diet_lis_item.xml파일을 inflate해준다.
-```
+```java
    @NonNull
     @Override
     public CustomViewHolderDiet onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -328,7 +328,7 @@ onCreateViewHolder는 리스트 아이템에 데이터들을 보여주기 위한
 
 
 마지막으로 onBindViewHolder에 실제 데이터들을 매칭시켜주는 코딩을 해준다.
-```
+```java
 
     @Override
     public void onBindViewHolder(@NonNull DietAdapter.CustomViewHolderDiet holder, int position) {
@@ -343,7 +343,7 @@ onCreateViewHolder는 리스트 아이템에 데이터들을 보여주기 위한
 
 이제 FragmentVeg라는 자바파일에 만들어준 Adapter와 변수들을 불러오고
 파이어베이스 연동을 위한 FirebaseDatabase, DatabaseReference 변수를 선언한다. 
-```
+```java
 public class FragmentVeg extends Fragment {
     private DietAdapter adapter;
 
@@ -359,7 +359,7 @@ public class FragmentVeg extends Fragment {
 
 변수 view에 fragment_diet_veg를, 변수 recyclerview에는 xml파일 안의 recyclerview id값을 넣어준다.
 
-```
+```java
    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_diet_veg, container, false);
@@ -373,7 +373,7 @@ public class FragmentVeg extends Fragment {
 
 FirebaseDatabse.getInstance()를 통해 Firebase의 Database를 연동시켜주고
 database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
-```
+```java
         database = FirebaseDatabase.getInstance(); 
         Log.d("test","check3");
         databaseReference = database.getReference("DietItem");
@@ -401,7 +401,7 @@ database.getReference를 통해 DietItem이라는 DB테이블 만들어준다.
 ```
 
 마지막으로 변수 view를 return해주면 DB가 연동된다.
-```
+```java
 return view;
 ```
 
