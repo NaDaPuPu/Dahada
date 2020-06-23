@@ -210,7 +210,7 @@ public class RecipeFragment1 extends Fragment  {
 # 3.내 레시피
 
 DietItem이라는 자바클래스를 하나 만들어 데이터베이스에 넣어줄 변수들을 넣어준 뒤
-Alt+insert 버튼을 눌러 변수들의 구조체를 만들고
+구조체를 만들고
 ```java
 public class DietItem {
 
@@ -260,10 +260,12 @@ getter/setter를 만들어 준다.
 ```
 
 자바클래스로 DietAdapter라는 파일을 만들어주고 Recyclerview.Adapter를 extends해준 뒤
-빨간줄에 alt+insert 버튼을 눌러 필요한 클래스와 메서드들을 만들어 준다.
-그리고 ArrayList로 위에서 만들어준 변수들을 불러와준다.
+alt+insert 버튼을 눌러 필요한 클래스와 메서드들을 만들어 준다.
 ```java
 public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHolderDiet> {
+```
+그리고 ArrayList로 위에서 만들어준 변수들을 불러와준다.
+```java
     private ArrayList<DietItem> arrayList;
     private Context context;
     private TextView textView_diet;
@@ -277,8 +279,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.CustomViewHold
 ```
 
 
-그리고 맨 밑에 만들어진 클래스 안에 새 변수들을 만들고
-diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
+맨 밑에 만들어진 클래스 안에 새 변수들을 만들고
 ```java
     @Override
     public int getItemCount() {
@@ -290,7 +291,9 @@ diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
         TextView diet_tv_id;
         TextView diet_tv_cal;
         LinearLayout itemLinear_diet;
-
+```
+diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
+```java
         public CustomViewHolderDiet(@NonNull View itemView) {
             super(itemView);
             this.diet_iv_picture = itemView.findViewById(R.id.diet_iv_picture);
@@ -302,7 +305,7 @@ diet_list_item.xml파일에 만들었던 id값들을 가져와준다.
 }
 ```
 
-onCreateViewHolder는 리스트 아이템에 데이터들을 보여주기 위한 기능이므로
+onCreateViewHolder는 리스트 아이템에 데이터들을 보여주기 위한 기능이다.
 변수 view를 만들고 diet_lis_item.xml파일을 inflate해준다.
 ```java
    @NonNull
