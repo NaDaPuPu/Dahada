@@ -827,6 +827,10 @@ PostAdapter부분
         startActivity(new Intent(this, PostActivity.class));
     }
 ```
+<div>
+<img src="https://user-images.githubusercontent.com/62593236/85388690-5cc45200-b581-11ea-83cb-5c2f09ad92d6.png"></img>
+<img src="https://user-images.githubusercontent.com/62593236/85388704-5fbf4280-b581-11ea-820f-cc7c2e782fb7.png"></img>
+</div>
 
 ## 로그인
 
