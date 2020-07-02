@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Project_1.iml" filepath="$PROJECT_DIR$/.idea/Project_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Dahada.iml" filepath="$PROJECT_DIR$/.idea/modules/Dahada.iml" group="Dahada" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="Dahada/app" />
     </modules>
   </component>
 </project>
