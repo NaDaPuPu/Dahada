@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_shop_ssg"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/ssg" />
+
+            <TextView
+                android:id="@+id/text_shop_ssg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="SSG"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="145dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_shop_gmarktet"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/gmarket" />
+
+
+            <TextView
+                android:id="@+id/text_shop_gmarket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:text="지마켓" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="115dp"
+        android:layout_height="145dp"
+        android:layout_marginLeft="275dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="140dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_shop_kurly"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/marketkurly" />
+
+
+            <TextView
+                android:id="@+id/text_shop_kurly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:text="마켓컬리" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>
