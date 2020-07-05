@@ -42,6 +42,9 @@ public class RecipeDetails1 extends AppCompatActivity {
 
         rcpName = findViewById(R.id.rcpDetailname);
         rcpKcal = findViewById(R.id.rcpDetailkcal);
+        rcpGram= findViewById(R.id.rcpDetailgram);
+        rcpEx = findViewById(R.id.rcpDetailex1);
+        rcpEx2 = findViewById(R.id.rcpDetailex2);
 
         int position = intent.getIntExtra("position", 0);
         Log.d("RecipeDetails", "position : " + position);
@@ -54,7 +57,10 @@ public class RecipeDetails1 extends AppCompatActivity {
                 RecipeItem recipeItem = dataSnapshot.getValue(RecipeItem.class);
                 assert recipeItem != null;
                 rcpName.setText(recipeItem.getRecipeName());
-                rcpKcal.setText(recipeItem.getRecipeKcal() + "");
+                rcpKcal.setText(recipeItem.getRecipeKcal() + "kcal");
+                rcpGram.setText(recipeItem.getRecipeGram() + "g");
+                rcpEx.setText(recipeItem.getRecipeEx1());
+                rcpEx2.setText(recipeItem.getRecipeEx2());
             }
 
             @Override
