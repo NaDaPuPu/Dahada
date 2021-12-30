@@ -2,6 +2,7 @@ package com.d2w.dahada.data.activity_main.fragment_calendar;
 
 import android.graphics.Color;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -23,6 +24,7 @@ public class SaturdayDecorator implements DayViewDecorator {
     public boolean shouldDecorate(CalendarDay day) {
         day.copyTo(calendar);
         int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
+        Log.d("Day", calendar.get(Calendar.DAY_OF_WEEK) + "");
         return weekDay == Calendar.SATURDAY;
     }
 
